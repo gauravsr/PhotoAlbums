@@ -68,6 +68,7 @@
 		F4C9AA4114C9197D00E215B3 /* ELCImagePickerDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C9AA3414C9197D00E215B3 /* ELCImagePickerDemoViewController.m */; };
 		F4C9AA4214C9197D00E215B3 /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C9AA3514C9197D00E215B3 /* Overlay.png */; };
 		F4C9AA4314C9197D00E215B3 /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C9AA3614C9197D00E215B3 /* Overlay@2x.png */; };
+		F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -159,6 +160,8 @@
 		F4C9AA3414C9197D00E215B3 /* ELCImagePickerDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerDemoViewController.m; sourceTree = "<group>"; };
 		F4C9AA3514C9197D00E215B3 /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		F4C9AA3614C9197D00E215B3 /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
+		F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoScrollView.h; sourceTree = "<group>"; };
+		F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +269,8 @@
 				34118B4911D1DC4200CFAAA5 /* PageToolBar.m */,
 				34118B4A11D1DC4200CFAAA5 /* PageView.h */,
 				34118B4B11D1DC4200CFAAA5 /* PageView.m */,
+				F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */,
+				F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */,
 				D410E5421266EB6600636EB1 /* XImageView.h */,
 				D410E5431266EB6600636EB1 /* XImageView.m */,
 				34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */,
@@ -509,6 +514,7 @@
 				F4C9AA3E14C9197D00E215B3 /* ELCImagePickerController.m in Sources */,
 				F4C9AA4014C9197D00E215B3 /* ELCImagePickerDemoAppDelegate.m in Sources */,
 				F4C9AA4114C9197D00E215B3 /* ELCImagePickerDemoViewController.m in Sources */,
+				F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,7 +570,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = TalkingPhoto;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Distribution;
@@ -598,7 +604,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = TalkingPhoto;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -614,7 +620,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
 				PRODUCT_NAME = TalkingPhoto;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

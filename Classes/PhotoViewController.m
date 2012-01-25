@@ -9,6 +9,7 @@
 #import "PhotoViewController.h"
 #import "PageView.h"
 #import "PhotoAlbumsAppDelegate.h"
+//#import "PhotoScrollView.h"
 
 @interface NSObject (AnimationPrivateAPIAccess)
 
@@ -96,12 +97,15 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	
 	BOOL pageOrderChanged = NO;
 	PageView *pageView;
+    //PhotoScrollView *photoScrollView;
 	Page *page;
 	
 	for(unsigned i = 0; i < pageViewCount; i++)
 	{
 		pageView = (PageView *)[self.pageViewCollection objectAtIndex:i];
-		page = pageView.page;
+        page = pageView.page;
+        //photoScrollView = (PhotoScrollView *)[self.pageViewCollection objectAtIndex:i];
+		//page = photoScrollView.page;
 		
 		if([page.pageOrder intValue] != i)
 		{
@@ -110,7 +114,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		}
 		
 		//TBD set pageView frame	
-		[pageView setFrame:CGRectMake(i * 320, 0, 320, 480)];
+        [pageView setFrame:CGRectMake(i * 320, 0, 320, 480)];
+		//[photoScrollView setFrame:CGRectMake(i * 320, 0, 320, 480)];
 	}	
 	
 	if(pageOrderChanged)
@@ -150,11 +155,17 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	//currentPageIndex++;
 	
 	PageView *pageView = nil;
-	pageView = [self.pageViewCollection objectAtIndex:index];
+    pageView = [self.pageViewCollection objectAtIndex:index];
 	if([pageView isLoaded]){
 		[self validateAlbum];
 		return;
 	}
+//    PhotoScrollView *photoScrollView;
+//	photoScrollView = [self.pageViewCollection objectAtIndex:index];
+//	if([photoScrollView isLoaded]){
+//		[self validateAlbum];
+//		return;
+//	}
 	
 	// Otherwise load image inside the view
 	if(image == nil)
@@ -166,8 +177,12 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		{
 			UIImage *pageViewImage = [[UIImage alloc] initWithContentsOfFile:imagePath];		
 			pageView = [[[PageView alloc]init] initWithImage:pageViewImage];
-			[pageView setIsLoaded:YES];
-			[pageViewImage release];
+            [pageView setIsLoaded:YES];
+			
+            //photoScrollView = [[PhotoScrollView alloc] init]; 
+            //[photoScrollView displayImage:pageViewImage];
+			//[photoScrollView setIsLoaded:YES];
+            //[pageViewImage release];
 		}
 		else
 		{
@@ -175,22 +190,32 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 			NSLog(@"Error!!! no image at specified imagePath");
 			pageView = [[PageView alloc] init];	
 			[pageView setIsLoaded:NO];
+            //photoScrollView = [[PhotoScrollView alloc] init];	
+            //[photoScrollView setIsLoaded:NO];
 		}		
 	}
 	else
 	{
 		pageView = [[PageView alloc] initWithImage:image];		
+        //photoScrollView = [[PhotoScrollView alloc] init]; 
+        //[photoScrollView displayImage:image];
 	}
-	[pageView setPage:page];	
+    [pageView setPage:page];	
+    //[photoScrollView setPage:page];
 	
 	//[pageViewCollection insertObject:pageView atIndex:currentPageIndex];
-	[pageViewCollection replaceObjectAtIndex:index withObject:pageView];
-	[albumView addSubview:pageView];
+    
+    [pageViewCollection replaceObjectAtIndex:index withObject:pageView];
+    //[pageViewCollection replaceObjectAtIndex:index withObject:photoScrollView];
+    
+    [albumView addSubview:pageView];
+	//[albumView addSubview:photoScrollView];
 	
 	[self validateAlbum];
 	
 	//TBD release pageViewImage 
 	[pageView release];
+    //[photoScrollView release];
 }
 
 - (void)populatePageForSelectedIndex: (int)aSelectedIndex{
@@ -235,7 +260,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		PageView *aPageView = [[PageView alloc] init];
 		aPageView.page = page;
         [aPageView setIsLoaded:NO];
-		[self.pageViewCollection addObject:aPageView];
+        [self.pageViewCollection addObject:aPageView];
+        //PhotoScrollView *photoScrollView = [[PhotoScrollView alloc] init];
+        //photoScrollView.page = page;
+        //[photoScrollView setIsLoaded:NO];
+		//[self.pageViewCollection addObject:photoScrollView];
 	}
 	
 	if(pageCount == 0)
@@ -365,8 +394,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		else
 		{
 			PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
-			//if(![pageView isLoaded]){
-				[self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
+            //PhotoScrollView *photoScrollView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
+			//if(![photoScrollView isLoaded]){
+            [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
+                [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
+				//[self.pageToolBar setAudioAvailable:[photoScrollView.page hasAudioNote]];
 			//}
 			[self.pageToolBar showDefaultToolBar];
 		}

@@ -17,7 +17,7 @@
 }
 
 @property (nonatomic, retain) Page			*page;
-@property (assign) BOOL						isLoaded;
+@property (assign)      BOOL						isLoaded;
 
 
 
