@@ -294,16 +294,37 @@
 //		
 //		[imagePicker release];
 //	}
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"Please select from the following options:" 
+                                                        delegate:self 
+                                                        cancelButtonTitle:@"Cancel" 
+                                                        destructiveButtonTitle:nil 
+                                                        otherButtonTitles:@"Camera", @"Photo Gallery", nil];
+    
+	actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+    actionSheet.delegate = self;
+	[actionSheet showInView:self.view]; 
+	[actionSheet release];
+}
 
-    ELCAlbumPickerController *albumController = [[ELCAlbumPickerController alloc] init];
-	ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:albumController];
-    
-    [albumController setParent:elcPicker];
-	[elcPicker setDelegate:self];
-    
-	[self presentModalViewController:elcPicker animated:YES];
-    [elcPicker release];
-    [albumController release];
+#pragma mark Action Sheet Delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+	if(buttonIndex == 0){
+        [self addPhotoFromCamera];
+	}
+	else if(buttonIndex == 1){
+
+        ELCAlbumPickerController *albumController = [[ELCAlbumPickerController alloc] init];
+        ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:albumController];
+        
+        [albumController setParent:elcPicker];
+        [elcPicker setDelegate:self];
+        
+        [self presentModalViewController:elcPicker animated:YES];
+        [elcPicker release];
+        [albumController release];
+	}
 }
 
 #pragma mark ELCImagePickerControllerDelegate Methods
@@ -385,8 +406,7 @@
 	//[NSThread detachNewThreadSelector:@selector(writeFiles:) toTarget:self withObject:mThreadQueue];
 }
 
-- (IBAction) addPhotoFromCamera: (id) sender
-{
+- (void) addPhotoFromCamera {
     //UIImagePickerControllerMediaMetadata
     
 	//[mThreadQueue removeAllObjects];
@@ -401,7 +421,14 @@
 		
 		[imagePicker release];
 	}else{
-		[self addPhoto:sender];
+		
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Camera not found!"
+                                                          message:@"Your device do not have a Camera."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [message show];
 	}
 }
 
@@ -443,7 +470,12 @@
         [aViewController release];        
     } else 
     {
-        
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"No photos found."
+                                                          message:@"This album contains no photos."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil]; 
+        [message show];
     }
 }
 

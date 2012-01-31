@@ -17,7 +17,8 @@
 
 @interface AlbumViewController : UIViewController <ELCImagePickerControllerDelegate, 
                                                     UINavigationControllerDelegate, 
-                                                    UIScrollViewDelegate>
+                                                    UIScrollViewDelegate,
+                                                    UIActionSheetDelegate>
 {	
 	//model
 	Album								*album;	
@@ -60,5 +61,5 @@
 
 - (IBAction) addPhoto: (id) sender;
 - (IBAction) startSlideShow: (id) sender;
-- (IBAction) addPhotoFromCamera: (id) sender;
+- (void) addPhotoFromCamera;
 @end
