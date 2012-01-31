@@ -43,6 +43,8 @@
 		34E5B674121BB90F008DF821 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
 		34E5B7B3121BED58008DF821 /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B7B1121BED58008DF821 /* AlbumListViewController.m */; };
 		34F04892125EFDBD009A0FD9 /* AlbumThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04891125EFDBD009A0FD9 /* AlbumThumbnailView.m */; };
+		9F8D9DF514D018FB00597BB7 /* slideshow.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8D9DF314D018FB00597BB7 /* slideshow.png */; };
+		9F8D9DF614D018FB00597BB7 /* slideshow2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8D9DF414D018FB00597BB7 /* slideshow2.png */; };
 		B1168231128A7B4500759D68 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B1168230128A7B4500759D68 /* Icon@2x.png */; };
 		B17C210012913DAE009F98A8 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B17C20FF12913DAE009F98A8 /* Default@2x.png */; };
 		B1C6381D128BA8B100BEA3FB /* Sound@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B1C6381C128BA8B100BEA3FB /* Sound@2x.png */; };
@@ -127,6 +129,8 @@
 		34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumThumbnailView.h; sourceTree = "<group>"; };
 		34F04891125EFDBD009A0FD9 /* AlbumThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumThumbnailView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* PhotoAlbums-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PhotoAlbums-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		9F8D9DF314D018FB00597BB7 /* slideshow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slideshow.png; sourceTree = "<group>"; };
+		9F8D9DF414D018FB00597BB7 /* slideshow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slideshow2.png; sourceTree = "<group>"; };
 		B1168230128A7B4500759D68 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "images/Icon@2x.png"; sourceTree = "<group>"; };
 		B17C20FF12913DAE009F98A8 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		B1C6381C128BA8B100BEA3FB /* Sound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Sound@2x.png"; path = "images/Sound@2x.png"; sourceTree = "<group>"; };
@@ -320,6 +324,8 @@
 		34118B3E11D1DBC800CFAAA5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				9F8D9DF314D018FB00597BB7 /* slideshow.png */,
+				9F8D9DF414D018FB00597BB7 /* slideshow2.png */,
 				B1D75BEA128A802900FF7496 /* Icon-72.png */,
 				B1D75BEB128A802900FF7496 /* Icon-Small-50.png */,
 				B1D75BEC128A802900FF7496 /* Icon-Small.png */,
@@ -477,6 +483,8 @@
 				F4C0043514CFDB3C0083D8CC /* ELCImagePickerController.xib in Resources */,
 				F4C0043814CFDB3C0083D8CC /* Overlay.png in Resources */,
 				F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */,
+				9F8D9DF514D018FB00597BB7 /* slideshow.png in Resources */,
+				9F8D9DF614D018FB00597BB7 /* slideshow2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

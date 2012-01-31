@@ -18,6 +18,7 @@
 #import "AudioPlayer.h"
 #import "MessageUI/MFMailComposeViewController.h"
 
+#define kSlideShowTimeInterval	3.0
 
 @interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 {
@@ -32,6 +33,8 @@
 	NSUInteger				selectedIndex;
 	BOOL					interruptedOnPlayback;
 	
+    BOOL					slideshowMode;
+    NSDate                  *previousSlideEndTime;
 	
 	//view 	
 	IBOutlet AlbumView		*albumView;
@@ -41,7 +44,8 @@
 	//utils
 	AudioRecorder			*audioRecorder;
 	AudioPlayer				*audioPlayer;
-	NSTimer					*recordingTimer;	
+	NSTimer					*recordingTimer;
+	NSTimer					*slideShowTimer;
 						
 }
 
@@ -54,7 +58,8 @@
 
 @property (nonatomic) NSUInteger							currentPageIndex;
 @property (nonatomic) BOOL									interruptedOnPlayback;
-
+@property (nonatomic) BOOL									slideshowMode;
+@property (nonatomic, retain) NSDate						*previousSlideEndTime;
 
 //view
 @property (nonatomic, retain) AlbumView						*albumView;
@@ -65,6 +70,7 @@
 @property (nonatomic, retain) AudioRecorder					*audioRecorder;
 @property (nonatomic, retain) AudioPlayer					*audioPlayer;
 @property (nonatomic, retain) NSTimer						*recordingTimer;
+@property (nonatomic, retain) NSTimer						*slideShowTimer;
 @property (assign) NSUInteger								selectedIndex;
 
 //methods
@@ -83,8 +89,11 @@
 -(IBAction) resumeAudioNotePlayback: (id) sender;
 
 -(IBAction) deletePage: (id) sender;
-- (void)populateAlbum;
-- (IBAction)moreOptions: (id)sender;
+-(void)populateAlbum;
+-(IBAction)moreOptions: (id)sender;
+
+-(void)startSlideShow;
+-(void)stopSlideShow;
 
 @end
 

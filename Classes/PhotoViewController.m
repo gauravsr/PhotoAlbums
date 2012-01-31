@@ -9,7 +9,6 @@
 #import "PhotoViewController.h"
 #import "PageView.h"
 #import "PhotoAlbumsAppDelegate.h"
-//#import "PhotoScrollView.h"
 
 @interface NSObject (AnimationPrivateAPIAccess)
 
@@ -19,13 +18,14 @@
 
 @implementation NSObject (AnimationPrivateAPIAccess)
 
-- (void)setAnimationPosition: (CGPoint)point{
-	
+- (void)setAnimationPosition: (CGPoint)point
+{
+    
 }
-
 @end
 
 #pragma mark -
+#pragma mark OS Callback
 
 void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState) 
 {
@@ -57,74 +57,66 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	}
 }
 
+#pragma mark -
 @implementation PhotoViewController
 
 //model
 @synthesize album, albumAudioDirectoryPath, albumPhotoDirectoryPath;
 @synthesize applicationManagedObjectContext;
-@synthesize currentPageIndex, interruptedOnPlayback;
+@synthesize currentPageIndex, interruptedOnPlayback, slideshowMode;
 @synthesize selectedIndex;
+@synthesize previousSlideEndTime;
+
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
 
 //utils
-@synthesize audioRecorder, audioPlayer, recordingTimer;
+@synthesize audioRecorder, audioPlayer, recordingTimer, slideShowTimer;
 
-- (void) saveAlbum
+
+#pragma mark -
+#pragma mark Core Data
+- (void) saveAlbum 
 {
 	// Save the context.
     NSError *error = nil;
     if (![[self applicationManagedObjectContext] save:&error]) 
-	{
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-		 */
+    {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		abort();
     }	
 }
 
-- (void) validateAlbum
+- (void) validateAlbum 
 {
 	unsigned pageViewCount = [self.pageViewCollection count];
 	
-	[self.albumView setContentSize:CGSizeMake(self.albumView.frame.size.width * pageViewCount, 
-											  self.albumView.frame.size.height)];
-	[self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, currentPageIndex), 
-												 0)];
+	[self.albumView setContentSize:CGSizeMake(self.albumView.frame.size.width * pageViewCount, self.albumView.frame.size.height)];
+    
+	[self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, currentPageIndex), 0)];
 	
 	BOOL pageOrderChanged = NO;
 	PageView *pageView;
-    //PhotoScrollView *photoScrollView;
 	Page *page;
 	
-	for(unsigned i = 0; i < pageViewCount; i++)
-	{
+	for(unsigned i = 0; i < pageViewCount; i++) 
+    {
 		pageView = (PageView *)[self.pageViewCollection objectAtIndex:i];
         page = pageView.page;
-        //photoScrollView = (PhotoScrollView *)[self.pageViewCollection objectAtIndex:i];
-		//page = photoScrollView.page;
-		
-		if([page.pageOrder intValue] != i)
-		{
+		if([page.pageOrder intValue] != i) {
 			[page setValue:[NSNumber numberWithInt:i] forKey:@"pageOrder"];
 			pageOrderChanged = YES;
 		}
 		
-		//TBD set pageView frame	
         [pageView setFrame:CGRectMake(i * 320, 0, 320, 480)];
-		//[photoScrollView setFrame:CGRectMake(i * 320, 0, 320, 480)];
 	}	
 	
-	if(pageOrderChanged)
-	{
+	if(pageOrderChanged) 
+    {
 		[self saveAlbum];
 	}
 }
 
-- (void) stopRecording
+- (void) stopRecording 
 {
 	[self.audioRecorder setStopping: YES];				// this flag lets the property listener callback
 	
@@ -142,7 +134,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
  *					Album Operations			*
  ***********************************************/
 
-- (UIImage *)imageForIndex: (int)index{
+- (UIImage *)imageForIndex: (int)index {
 	PageView *aPageView = [pageViewCollection objectAtIndex:index];
 	UIImage *anImage = [aPageView image];
 	return anImage;
@@ -150,7 +142,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 
 - (void) addPageViewForPage: (Page *)page 
 				  withImage: (UIImage *)image 
-					atIndex: (int)index
+					atIndex: (int)index 
 {
 	//currentPageIndex++;
 	
@@ -160,12 +152,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		[self validateAlbum];
 		return;
 	}
-//    PhotoScrollView *photoScrollView;
-//	photoScrollView = [self.pageViewCollection objectAtIndex:index];
-//	if([photoScrollView isLoaded]){
-//		[self validateAlbum];
-//		return;
-//	}
 	
 	// Otherwise load image inside the view
 	if(image == nil)
@@ -177,69 +163,53 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		{
 			UIImage *pageViewImage = [[UIImage alloc] initWithContentsOfFile:imagePath];		
 			pageView = [[[PageView alloc]init] initWithImage:pageViewImage];
-            [pageView setIsLoaded:YES];
-			
-            //photoScrollView = [[PhotoScrollView alloc] init]; 
-            //[photoScrollView displayImage:pageViewImage];
-			//[photoScrollView setIsLoaded:YES];
-            //[pageViewImage release];
+            [pageView setIsLoaded:YES];			
 		}
 		else
 		{
-			//TBD error no image at specified imagePath
 			NSLog(@"Error!!! no image at specified imagePath");
 			pageView = [[PageView alloc] init];	
 			[pageView setIsLoaded:NO];
-            //photoScrollView = [[PhotoScrollView alloc] init];	
-            //[photoScrollView setIsLoaded:NO];
 		}		
 	}
 	else
 	{
 		pageView = [[PageView alloc] initWithImage:image];		
-        //photoScrollView = [[PhotoScrollView alloc] init]; 
-        //[photoScrollView displayImage:image];
 	}
     [pageView setPage:page];	
-    //[photoScrollView setPage:page];
-	
-	//[pageViewCollection insertObject:pageView atIndex:currentPageIndex];
-    
     [pageViewCollection replaceObjectAtIndex:index withObject:pageView];
-    //[pageViewCollection replaceObjectAtIndex:index withObject:photoScrollView];
     
     [albumView addSubview:pageView];
-	//[albumView addSubview:photoScrollView];
 	
-	[self validateAlbum];
-	
-	//TBD release pageViewImage 
+	[self validateAlbum];	
 	[pageView release];
-    //[photoScrollView release];
 }
 
-- (void)populatePageForSelectedIndex: (int)aSelectedIndex{
+- (void)populatePageForSelectedIndex: (int)aSelectedIndex
+{
 	NSArray *pages = [self.pageViewCollection valueForKey:@"page"];
 	unsigned totalPages = [pages count];
 	int startIndex = 0; // Initialize
 	int endIndex = 0; // Initialize
-	if(aSelectedIndex > 0){
+	if(aSelectedIndex > 0)
+    {
 		startIndex = aSelectedIndex - 1;
 		endIndex = aSelectedIndex + 1;
-	}else{
+	} else
+    {
 		startIndex = 0;
 		endIndex = aSelectedIndex + 1;
 	}
 	
-	if(endIndex == totalPages)
-		endIndex--;
+	if(endIndex >= totalPages)
+		endIndex = totalPages - 1;
 	
 	int i = startIndex;
-	for(; i <= endIndex; i++){
+	for(; i <= endIndex; i++)
+    {
 		Page *page = [pages objectAtIndex:i];
 		[self addPageViewForPage:page withImage:nil atIndex: i];
-	}
-	
+	}	
 }
 
 - (void) populateAlbum
@@ -256,35 +226,31 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	for(unsigned i = 0; i < pageCount; i++)
 	{
 		page = [pages objectAtIndex:i];
-		//[self addPageViewForPage:page withImage:nil atIndex: i];
 		PageView *aPageView = [[PageView alloc] init];
 		aPageView.page = page;
         [aPageView setIsLoaded:NO];
         [self.pageViewCollection addObject:aPageView];
-        //PhotoScrollView *photoScrollView = [[PhotoScrollView alloc] init];
-        //photoScrollView.page = page;
-        //[photoScrollView setIsLoaded:NO];
-		//[self.pageViewCollection addObject:photoScrollView];
 	}
 	
 	if(pageCount == 0)
 	{
 		self.currentPageIndex = -1;
-	}else
+	} else
 		self.currentPageIndex = self.selectedIndex;
 	
 	[self validate];
 }
 
-- (NSInteger)currentIndex{
+- (NSInteger)currentIndex 
+{
 	NSUInteger pageWidth = albumView.frame.size.width;	
 	NSUInteger pageIndex = floor((albumView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
 	return pageIndex;
 }
 
-#pragma mark View Methods
+#pragma mark -
+#pragma mark View Lifecycle
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void) viewDidLoad 
 {
     [super viewDidLoad];
@@ -292,8 +258,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	pageViewCollection = [[NSMutableArray alloc] init];
 	
 	// initialize the audio session object for this application,
-	//		registering the callback that Audio Session Services will invoke 
-	//		when there's an interruption
+	// registering the callback that Audio Session Services will invoke 
+	// when there's an interruption
 	AudioSessionInitialize (
 							NULL,
 							NULL,
@@ -311,8 +277,16 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	[self populateAlbum];
 	[self populatePageForSelectedIndex:self.selectedIndex];
 	self.currentPageIndex = self.selectedIndex;
-//	slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(slideShowTimerCallback:) userInfo:nil repeats:YES];
-//	[self playAudioNote:nil];
+    
+    if(self.slideshowMode == YES) 
+    {
+        [self startSlideShow];
+    } else 
+    {
+        [self.pageToolBar setHidden:NO];
+        [self.navigationController setNavigationBarHidden:NO];
+    }
+    [self playAudioNote:(id) self];
 }
 
 - (void) viewWillDisappear: (BOOL)animated
@@ -330,14 +304,14 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	
 }
 
-/*
+
  // Override to allow orientations other than the default portrait orientation.
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
  {
  // Return YES for supported orientations
  return YES;
  }
- */
+ 
 
 - (void) didReceiveMemoryWarning 
 {
@@ -353,15 +327,14 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	// e.g. self.myOutlet = nil;
 }
 
-#pragma mark State related
-
+#pragma mark -
+#pragma mark View State
 - (BOOL) isValidState
 {
 	if(self.currentPageIndex >= 0 && self.currentPageIndex < [self.pageViewCollection count])
 	{
 		return YES;
-	}
-	else
+	} else
 	{
 		return NO;
 	}
@@ -372,8 +345,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	if([self isValidState])
 	{
 		self.title = [NSString stringWithFormat:@"%d of %d",currentPageIndex + 1,[self.pageViewCollection count]];		
-	}
-	else
+	} else
 	{
 		self.title = @"";
 	}
@@ -386,24 +358,17 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		if(self.audioPlayer)
 		{
 			[self.pageToolBar showPlayAudioNoteToolBar];
-		}
-		else if(self.audioRecorder)
+		} else if(self.audioRecorder)
 		{
 			[self.pageToolBar showRecordAudioNoteToolBar];
-		}
-		else
+		} else
 		{
 			PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
-            //PhotoScrollView *photoScrollView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
-			//if(![photoScrollView isLoaded]){
             [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
-                [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
-				//[self.pageToolBar setAudioAvailable:[photoScrollView.page hasAudioNote]];
-			//}
+            [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
 			[self.pageToolBar showDefaultToolBar];
 		}
-	}
-	else
+	} else
 	{
 		[self.pageToolBar setAudioAvailable:NO];	
 		[self.pageToolBar showDefaultToolBar];
@@ -411,12 +376,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 }
 
 
-
 - (void) validate
 {
 	[self validateAlbum];
 	[self validatePageToolBar];
-	[self refreshTitle];
+	[self refreshTitle];    
 }
 
 #pragma mark Scroll View delegate
@@ -444,27 +408,12 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		[pageToolBar showDefaultToolBar];
 		
 		[self playAudioNote:(id) self];
+        self.previousSlideEndTime = [NSDate date];
 	}
-}
-
-- (void)slideShowTimerCallback: (NSTimer *)aTimer{
-	int aCurrentPhotoIndex = [self currentIndex];
-	if(aCurrentPhotoIndex == [album.pages count] - 2){
-		aCurrentPhotoIndex = 0;
-	}
-	[self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, ++aCurrentPhotoIndex), 0)];
-	currentPageIndex = aCurrentPhotoIndex-1;
-	NSLog(@"Current index = %d Photo Index = %d", currentPageIndex, aCurrentPhotoIndex);
-	
-	[self validatePageToolBar];	
-	[self refreshTitle];
-
-	[self populatePageForSelectedIndex:[self currentIndex]];
-
 }
 
 #pragma mark -
-#pragma mark		Add / Play Audio Note			
+#pragma mark Add/Play Audio Note			
 
 - (void) initAudioRecorderWithURL: (NSURL *) fileURL
 {	
@@ -716,6 +665,74 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		[self validatePageToolBar]; 
 	}
 }
+
+#pragma mark -
+#pragma mark Slideshow
+
+- (void)startSlideShow
+{
+    [self.pageToolBar setHidden:YES];
+    [self.navigationController setNavigationBarHidden:YES];
+
+    self.previousSlideEndTime = [NSDate date];
+    slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(slideShowTimerCallback:) userInfo:nil repeats:YES];
+}
+
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if(slideShowTimer != nil && [slideShowTimer isValid])
+    {
+        [self stopSlideShow];
+    }
+}
+
+- (void)stopSlideShow
+{
+    if(self.audioPlayer != nil)
+    {
+        [self stopAudioNotePlayback:self];
+    }
+    
+    self.slideshowMode = NO;
+    
+    [self.pageToolBar setHidden:NO];
+    [self.navigationController setNavigationBarHidden:NO];
+    [slideShowTimer invalidate];
+}
+
+- (void)slideShowTimerCallback: (NSTimer *)aTimer{
+	int aCurrentPhotoIndex = [self currentPageIndex];
+    
+    if(self.audioPlayer == nil) 
+    {
+        NSDate *currentDate = [NSDate date];
+        NSTimeInterval interval = 4.0;
+        if(self.previousSlideEndTime != nil)
+        {
+            interval = [currentDate timeIntervalSinceDate:self.previousSlideEndTime];
+        }
+        
+        if(aCurrentPhotoIndex == [album.pages count] - 1)
+        {
+            [self stopSlideShow];
+        } else if(interval > kSlideShowTimeInterval)
+        {
+            self.previousSlideEndTime = currentDate;
+            [self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, ++aCurrentPhotoIndex), 0)];
+            currentPageIndex = aCurrentPhotoIndex-1;
+            NSLog(@"Current index = %d Photo Index = %d", currentPageIndex, aCurrentPhotoIndex);
+            
+            [self validatePageToolBar];	
+            [self refreshTitle];
+            
+            [self populatePageForSelectedIndex:[self currentPageIndex]];
+            [self playAudioNote:(id) self];
+            
+        }        
+    }
+}
+
+
 
 #pragma mark -
 #pragma mark Other Actions

@@ -33,5 +33,13 @@
     [super dealloc];
 }
 
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if([self delegate] != nil)
+    {
+        [[self delegate] touchesEnded: touches withEvent: event];
+    }
+}
+
 
 @end

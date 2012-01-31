@@ -119,7 +119,7 @@ static NSInteger THUMBNAIL_PADDING	= 4;
 #pragma mark XImageView delegate implementation
 
 - (void)imageViewDidSelected: (XImageView *)imageView atIndex: (int)index{
-	[mEventDelegate thumbnailViewDidSelected:self atIndex:index];
+	[mEventDelegate thumbnailViewDidSelectedIndex: index];
 }
 
 @end
@@ -129,7 +129,7 @@ static NSInteger THUMBNAIL_PADDING	= 4;
 @implementation NSObject (AlbumThumbnailViewDelegate)
 
 // Method called when a thumbnail gets selected.
-- (void)thumbnailViewDidSelected: (AlbumThumbnailView *)thumbnailView atIndex: (int)index{
+- (void)thumbnailViewDidSelectedIndex: (int)index{
 
 }
 

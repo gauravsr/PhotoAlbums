@@ -26,11 +26,11 @@
 
 @end
 
-#pragma mark AlbumThumbnailView delegare
+#pragma mark AlbumThumbnailView delegate
 
 @interface NSObject (AlbumThumbnailViewDelegate)
 
 // Method called when a thumbnail gets selected.
-- (void)thumbnailViewDidSelected: (AlbumThumbnailView *)thumbnailView atIndex: (int)index;
+- (void)thumbnailViewDidSelectedIndex: (int)index;
 
 @end

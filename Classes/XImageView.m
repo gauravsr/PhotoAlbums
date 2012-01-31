@@ -18,6 +18,7 @@
     if (self = [super initWithFrame:frame]) {
         // Initialization code
     }
+    
     return self;
 }
 
@@ -31,7 +32,11 @@
     [super dealloc];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    self.highlighted = YES;
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	if(mDelegate){
 		[mDelegate imageViewDidSelected: self atIndex: mIndex];
 	}

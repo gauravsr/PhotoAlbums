@@ -56,7 +56,6 @@
  */
 - (NSString *) albumAudioDirectoryPath 
 {
-	//NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]; 
 	NSString *audioDirectoryPath = [NSString stringWithFormat:@"%@/audio", /*VJ - documentsDirectoryPath,*/album.albumID];
 	
 	
@@ -68,8 +67,7 @@
  */
 - (NSString *) albumPhotoDirectoryPath 
 {
-	//NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]; 
-	NSString *photoDirectoryPath = [NSString stringWithFormat:@"%@/photo", /*VJ - documentsDirectoryPath,*/ album.albumID];
+	NSString *photoDirectoryPath = [NSString stringWithFormat:@"%@/photo", album.albumID];
 	return photoDirectoryPath;
 }
 
@@ -81,31 +79,6 @@
 	PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];	
 	return [appDelegate managedObjectContext];
 }
-
-/************************************************
- *					Getter Setter				*
- ***********************************************/
-
-//- (PhotoViewController *) photoViewController
-//{
-//	if(photoViewController == nil)
-//	{
-//		photoViewController = [[PhotoViewController alloc] init];
-//		
-//		photoViewController.album = self.album;
-//		NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
-//		NSString *imageDirectoryPath = 	[NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, [self albumPhotoDirectoryPath]];
-//		NSString *audioDirectoryPath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, [self albumAudioDirectoryPath]];
-//		[self createDirectoryAtpath:imageDirectoryPath];
-//		[self createDirectoryAtpath:audioDirectoryPath];
-//		photoViewController.albumAudioDirectoryPath = imageDirectoryPath;
-//		photoViewController.albumPhotoDirectoryPath = audioDirectoryPath;
-//		
-//		photoViewController.applicationManagedObjectContext = [self applicationManagedObjectContext];		
-//	}
-//	
-//	return photoViewController;
-//}
 
 /************************************************
  *					View Operations				*
@@ -441,16 +414,10 @@
  *					SlideShow Operations		*
  ***********************************************/
 
-- (IBAction) startSlideShow: (id) sender
-{
-	//[self.navigationController pushViewController:self.photoViewController animated:YES];	
-}
-
-- (void)thumbnailViewDidSelected: (AlbumThumbnailView *)thumbnailView atIndex: (int)index{
-	
+- (PhotoViewController *) preparePhotoViewController {
 	PhotoViewController *aViewController = [[PhotoViewController alloc] init];
 	aViewController.album = self.album;
-
+    
 	NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
 	NSString *imageDirectoryPath = 	[NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, [self albumPhotoDirectoryPath]];
 	NSString *audioDirectoryPath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, [self albumAudioDirectoryPath]];
@@ -459,11 +426,35 @@
 	aViewController.albumAudioDirectoryPath = imageDirectoryPath;
 	aViewController.albumPhotoDirectoryPath = audioDirectoryPath;
 	aViewController.applicationManagedObjectContext = [self applicationManagedObjectContext];		
-	aViewController.selectedIndex = index;
+
+    aViewController.slideshowMode = NO;
+    
+    return aViewController;
+}
+
+- (IBAction) startSlideShow: (id) sender {
+    if([[self.album pages] count] > 0)
+    {
+        PhotoViewController *aViewController = [self preparePhotoViewController];
+        aViewController.selectedIndex = 0;
+        aViewController.slideshowMode = YES;
+        
+        [self.navigationController pushViewController:aViewController animated:YES];
+        [aViewController release];        
+    } else 
+    {
+        
+    }
+}
+
+
+
+- (void)thumbnailViewDidSelectedIndex: (int)index {
+	PhotoViewController *aViewController = [self preparePhotoViewController];
+    aViewController.selectedIndex = index;
 	
 	[self.navigationController pushViewController:aViewController animated:YES];
 	[aViewController release];
 }
-
 
 @end
