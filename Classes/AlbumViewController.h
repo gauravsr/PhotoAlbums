@@ -18,7 +18,8 @@
 @interface AlbumViewController : UIViewController <ELCImagePickerControllerDelegate, 
                                                     UINavigationControllerDelegate, 
                                                     UIScrollViewDelegate,
-                                                    UIActionSheetDelegate>
+                                                    UIActionSheetDelegate,
+                                                    UIImagePickerControllerDelegate>
 {	
 	//model
 	Album								*album;	

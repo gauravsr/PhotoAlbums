@@ -22,9 +22,9 @@
 #pragma mark View lifecycle
 
 -(void)editTableView:(UIBarButtonItem *)sender {
-    if([[sender title] isEqualToString:@"EDIT"]) {
+    if([[sender title] isEqualToString:@"Edit"]) {
         [self.tableView setEditing:YES animated:YES];
-        [sender setTitle:@"DONE"];
+        [sender setTitle:@"Done"];
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     else {
@@ -32,7 +32,7 @@
         [self.tableView setEditing:NO animated:YES];
         id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
         unsigned count =  [sectionInfo numberOfObjects];
-        [sender setTitle:@"EDIT"];
+        [sender setTitle:@"Edit"];
         if(count > 0) {
             [sender setEnabled:YES];
         }

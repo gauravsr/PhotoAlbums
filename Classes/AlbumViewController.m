@@ -413,7 +413,7 @@
 	if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
 	{
 		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-		//imagePicker.delegate = self;
+		imagePicker.delegate = self;
 		imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
 		imagePicker.allowsEditing = NO;
 		mPhotoSourceType = UIImagePickerControllerSourceTypeCamera;
