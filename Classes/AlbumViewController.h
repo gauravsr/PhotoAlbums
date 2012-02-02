@@ -33,6 +33,7 @@
 	IBOutlet UIActivityIndicatorView	*mActivityView;
 	IBOutlet UIScrollView               *scrollview;
 	IBOutlet AlbumThumbnailView			*albumThumbnailView;
+    
 	//NSMutableArray						*mThreadQueue;
 	int									mPhotoSourceType;
     BOOL                                isPhotoAlreadyPresentInTheAlbum;
@@ -42,11 +43,12 @@
 @property (assign) Album						*album;
 
 //view
-@property (nonatomic, retain) UIImageView				*noPhotoView;
-@property (nonatomic, retain) UILabel					*noPhotoHeader;
-@property (nonatomic, retain) UILabel					*noPhotoDescription;
-@property (nonatomic, retain) AlbumThumbnailView		*albumThumbnailView;
-@property (nonatomic, retain) IBOutlet UIScrollView     *scrollview;
+@property (nonatomic, retain) UIImageView                   *noPhotoView;
+@property (nonatomic, retain) UILabel                       *noPhotoHeader;
+@property (nonatomic, retain) UILabel                       *noPhotoDescription;
+@property (nonatomic, retain) AlbumThumbnailView            *albumThumbnailView;
+@property (nonatomic, retain) IBOutlet UIScrollView         *scrollview;
+
 // data
 @property (nonatomic, retain) NSMutableArray            *referenceURLArray;
 

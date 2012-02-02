@@ -718,8 +718,13 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
         } else if(interval > kSlideShowTimeInterval)
         {
             self.previousSlideEndTime = currentDate;
+            
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:2.0];
             [self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, ++aCurrentPhotoIndex), 0)];
             currentPageIndex = aCurrentPhotoIndex-1;
+            [UIView commitAnimations];
+            
             NSLog(@"Current index = %d Photo Index = %d", currentPageIndex, aCurrentPhotoIndex);
             
             [self validatePageToolBar];	
@@ -727,12 +732,10 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
             
             [self populatePageForSelectedIndex:[self currentPageIndex]];
             [self playAudioNote:(id) self];
-            
         }        
     }
 }
-
-
+ 
 
 #pragma mark -
 #pragma mark Other Actions

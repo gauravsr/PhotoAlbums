@@ -14,7 +14,6 @@
 #import "ELCAlbumPickerController.h"
 #import "PhotoAlbumsAppDelegate.h"
 
-
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
 
@@ -34,6 +33,7 @@
 @synthesize albumThumbnailView;
 @synthesize scrollview;
 @synthesize referenceURLArray;
+
 
 /************************************************
  *					Globals						*
@@ -264,6 +264,7 @@
 	
 	[self saveAlbum];
 	[self validate];
+    
 	//TBD release objects
 }
 
@@ -282,19 +283,6 @@
 
 - (IBAction) addPhoto: (id) sender
 {
-	//[mThreadQueue removeAllObjects];
-//	if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
-//	{
-//		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-//		imagePicker.delegate = self;
-//		imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//		imagePicker.allowsEditing = NO;
-//		mPhotoSourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//		[self presentModalViewController:imagePicker animated:YES];
-//		
-//		[imagePicker release];
-//	}
-    
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"Please select from the following options:" 
                                                         delegate:self 
                                                         cancelButtonTitle:@"Cancel" 
@@ -307,50 +295,37 @@
 	[actionSheet release];
 }
 
-#pragma mark Action Sheet Delegate
+-(void)addPhotoFromPhotoGallery {
+    ELCAlbumPickerController *albumController = [[ELCAlbumPickerController alloc] init];
+    ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:albumController];
+
+    [albumController setParent:elcPicker];
+    [elcPicker setDelegate:self];
+
+    [self presentModalViewController:elcPicker animated:YES];
+    [elcPicker release];
+    [albumController release];
+}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
 	if(buttonIndex == 0){
         [self addPhotoFromCamera];
 	}
 	else if(buttonIndex == 1){
-
-        ELCAlbumPickerController *albumController = [[ELCAlbumPickerController alloc] init];
-        ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:albumController];
-        
-        [albumController setParent:elcPicker];
-        [elcPicker setDelegate:self];
-        
-        [self presentModalViewController:elcPicker animated:YES];
-        [elcPicker release];
-        [albumController release];
+        [self addPhotoFromPhotoGallery];
 	}
 }
 
 #pragma mark ELCImagePickerControllerDelegate Methods
 
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
-	
-	[self dismissModalViewControllerAnimated:YES];
-	
-    for (UIView *v in [scrollview subviews]) {
-        [v removeFromSuperview];
-    }
+
+    NSLog(@"START");
     
-	//CGRect workingFrame = scrollview.frame;
-	//workingFrame.origin.x = 0;
+    [self dismissModalViewControllerAnimated:YES];
     
 	for(NSDictionary *dict in info) {
-        
-        //UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
-		//UIImageView *imageview = [[UIImageView alloc] initWithImage:image];
-		//[imageview setContentMode:UIViewContentModeScaleAspectFit];
-		//imageview.frame = workingFrame;
-		
-		//[scrollview addSubview:imageview];
-        //workingFrame.origin.x = workingFrame.origin.x + workingFrame.size.width;
-        
-        NSURL *referenceURL = [dict objectForKey:@"UIImagePickerControllerReferenceURL"];
+                NSURL *referenceURL = [dict objectForKey:@"UIImagePickerControllerReferenceURL"];
         
         if([referenceURLArray containsObject:referenceURL]) {
             isPhotoAlreadyPresentInTheAlbum = YES;
@@ -359,8 +334,13 @@
         
         UIImage *image = [dict objectForKey:UIImagePickerControllerOriginalImage];
         UIImage *selectedImage = [[UIImage alloc] initWithCGImage:image.CGImage];
+        
         [self addPageForImage:selectedImage];
+
 	}
+    
+    NSLog(@"OVER");    
+    
     
     if(isPhotoAlreadyPresentInTheAlbum) {
 	
@@ -372,12 +352,6 @@
     
         [message show];
     }
-    
-    
-	//[scrollview setPagingEnabled:YES];
-	//[scrollview setContentSize:CGSizeMake(workingFrame.origin.x, workingFrame.size.height)];
-
-    
 }
 
 - (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker {
