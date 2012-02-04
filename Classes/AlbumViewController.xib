@@ -151,6 +151,7 @@
 						<object class="NSMutableArray" key="IBUIItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBUIBarButtonItem" id="5101198">
+								<int key="IBUITag">1</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="383164648"/>
 								<int key="IBUISystemItemIdentifier">9</int>
@@ -161,6 +162,7 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="418663482">
+								<int key="IBUITag">2</int>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">slideshow.png</string>
@@ -174,6 +176,7 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="701929665">
+								<int key="IBUITag">3</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="383164648"/>
 								<int key="IBUISystemItemIdentifier">4</int>
@@ -244,6 +247,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">toolbar</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="383164648"/>
+					</object>
+					<int key="connectionID">43</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="981462837"/>
 						<reference key="destination" ref="372490531"/>
@@ -257,6 +268,14 @@
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">33</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">handleBulkOperations:</string>
+						<reference key="source" ref="5101198"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">41</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -418,7 +437,7 @@
 				<reference key="dict.values" ref="341013720"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">40</int>
+			<int key="maxID">43</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -439,7 +458,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addPhoto:</string>
-							<string>addPhotoFromCamera:</string>
+							<string>handleBulkOperations:</string>
 							<string>startSlideShow:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -454,7 +473,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addPhoto:</string>
-							<string>addPhotoFromCamera:</string>
+							<string>handleBulkOperations:</string>
 							<string>startSlideShow:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -464,7 +483,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">addPhotoFromCamera:</string>
+								<string key="name">handleBulkOperations:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -477,43 +496,39 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>activityIndicatorView</string>
 							<string>albumThumbnailView</string>
 							<string>mActivityView</string>
 							<string>noPhotoDescription</string>
 							<string>noPhotoHeader</string>
 							<string>noPhotoView</string>
 							<string>scrollview</string>
+							<string>toolbar</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UIActivityIndicatorView</string>
 							<string>AlbumThumbnailView</string>
 							<string>UIActivityIndicatorView</string>
 							<string>UILabel</string>
 							<string>UILabel</string>
 							<string>UIImageView</string>
 							<string>UIScrollView</string>
+							<string>UIToolbar</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>activityIndicatorView</string>
 							<string>albumThumbnailView</string>
 							<string>mActivityView</string>
 							<string>noPhotoDescription</string>
 							<string>noPhotoHeader</string>
 							<string>noPhotoView</string>
 							<string>scrollview</string>
+							<string>toolbar</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">activityIndicatorView</string>
-								<string key="candidateClassName">UIActivityIndicatorView</string>
-							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">albumThumbnailView</string>
 								<string key="candidateClassName">AlbumThumbnailView</string>
@@ -537,6 +552,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">scrollview</string>
 								<string key="candidateClassName">UIScrollView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">toolbar</string>
+								<string key="candidateClassName">UIToolbar</string>
 							</object>
 						</object>
 					</object>

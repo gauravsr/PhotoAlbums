@@ -13,6 +13,8 @@
 #import "PhotoRepository.h"
 #import "ELCAlbumPickerController.h"
 #import "PhotoAlbumsAppDelegate.h"
+#import "PageView.h"
+#import "XImageView.h"
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
@@ -33,7 +35,10 @@
 @synthesize albumThumbnailView;
 @synthesize scrollview;
 @synthesize referenceURLArray;
-
+@synthesize isDeleteModeActive;
+@synthesize toolbar;
+@synthesize existingToolbarItems;
+@synthesize selectedPagesWhileDoingBulkOperations;
 
 /************************************************
  *					Globals						*
@@ -96,6 +101,8 @@
 	self.albumThumbnailView.eventDelegate = self;
     self.referenceURLArray = [NSMutableArray array];
     isPhotoAlreadyPresentInTheAlbum = NO;
+    isDeleteModeActive = NO;
+    selectedPagesWhileDoingBulkOperations = [[NSMutableArray array] retain];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -161,54 +168,10 @@
     NSError *error = nil;
     if (![[self applicationManagedObjectContext] save:&error]) 
 	{
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-		 */
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }	
 }
-
-//- (void)writeFiles: (NSArray *)threadQueue{
-//	NSAutoreleasePool *aPool = [NSAutoreleasePool new];
-//	unsigned i = 0;
-//	
-//	for (; i < [threadQueue count]; i++) {
-//		NSArray *threadArgs = [threadQueue objectAtIndex: i];
-//		UIImage *image = [threadArgs objectAtIndex:0];
-//		NSString *imageThumbnailPath = [threadArgs objectAtIndex:1];
-//		NSString *imagePath = [threadArgs objectAtIndex: 2];
-//		NSString *localImageThumbnailPath = [threadArgs objectAtIndex:3];
-//		
-//		UIImage *thumbnailImage = [PhotoUtil createThumbnail:image];	
-//		NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(thumbnailImage)];	
-//		BOOL thumbnailWriteSuccessFul = [thumbnailData writeToFile:imageThumbnailPath atomically:NO];
-//		
-//		if(thumbnailWriteSuccessFul)
-//		{
-//			[[PhotoRepository instance] addPhoto:thumbnailImage withPhotoID:localImageThumbnailPath];
-//		}else {
-//			NSLog(@"Thumbnail Write Failed");
-//		}
-//		
-//		
-//		NSData *imageData = [NSData dataWithData:UIImagePNGRepresentation(image)];
-//		BOOL writeSuccessFul = [imageData writeToFile:imagePath atomically:NO];
-//		if(writeSuccessFul)
-//			NSLog(@"Write Passed.");
-//		else 
-//			NSLog(@"Write Failed.");
-//	
-//		//[NSThread sleepForTimeInterval:1];
-//	}
-//	
-//	[self performSelectorOnMainThread:@selector(fileWriteThreadDidEndExecution:) withObject:nil waitUntilDone:YES];
-//	
-//	[aPool release];
-//}
-
 
 - (void) addPageForImage: (UIImage *)image
 {
@@ -230,11 +193,6 @@
 	NSString *imageThumbnailPath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, localImageThumbnailPath];
 
 	[self createDirectoryAtpath: imageDirectoryPath];
-	
-	//NSArray *threadArgs = [NSArray arrayWithObjects:image, imageThumbnailPath, imagePath, localImageThumbnailPath, nil];
-	//[mThreadQueue addObject: threadArgs];
-	
-	//[NSThread detachNewThreadSelector:@selector(writeFiles:) toTarget:self withObject:threadArgs];
 	
 	UIImage *thumbnailImage = [PhotoUtil createThumbnail:image];	
 	NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(thumbnailImage)];	
@@ -277,6 +235,8 @@
     [albumInformationController release];	
 }
 
+#pragma mark ELCImagePickerControllerDelegate Methods
+
 /************************************************
  *					Add Photo Operations		*
  ***********************************************/
@@ -316,12 +276,10 @@
 	}
 }
 
-#pragma mark ELCImagePickerControllerDelegate Methods
+
 
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
 
-    NSLog(@"START");
-    
     [self dismissModalViewControllerAnimated:YES];
     
 	for(NSDictionary *dict in info) {
@@ -338,9 +296,6 @@
         [self addPageForImage:selectedImage];
 
 	}
-    
-    NSLog(@"OVER");    
-    
     
     if(isPhotoAlreadyPresentInTheAlbum) {
 	
@@ -377,13 +332,11 @@
 	[imagePicker dismissModalViewControllerAnimated:YES];
 	[mActivityView setHidden:NO];
 	[mActivityView startAnimating];
-	//[NSThread detachNewThreadSelector:@selector(writeFiles:) toTarget:self withObject:mThreadQueue];
 }
 
 - (void) addPhotoFromCamera {
     //UIImagePickerControllerMediaMetadata
     
-	//[mThreadQueue removeAllObjects];
 	if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
 	{
 		UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -411,6 +364,7 @@
 	[mActivityView stopAnimating];
 }
 
+#pragma mark Slide show methods
 /************************************************
  *					SlideShow Operations		*
  ***********************************************/
@@ -453,14 +407,95 @@
     }
 }
 
+- (void)thumbnailView:(XImageView *)image didSelectedIndex:(int)index {
+    if(isDeleteModeActive) {
+        
+        NSArray *pages = [self.album.pages allObjects];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+		pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+		[sortDescriptor release];
+        Page *page = [pages objectAtIndex:index];
+        
+        [selectedPagesWhileDoingBulkOperations addObject:page];
+    }
+    else {
+        PhotoViewController *photoViewController = [self preparePhotoViewController];
+        photoViewController.selectedIndex = index;
+        
+        [self.navigationController pushViewController:photoViewController animated:YES];
+        [photoViewController release];
+    }
+}
+
+#pragma mark Bulk operations
+
+-(void)deleteSelectedPhotoOnCurrentPage:(Page *)currentPage {
+    
+    NSFileManager* fileManager = [NSFileManager defaultManager];	
+    NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
+    NSString *imagePath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, currentPage.imagePath];
+    NSString *tnImagePath = [NSString stringWithFormat:@"%@/%@.thumbnail",applicationDocumentDirPath, currentPage.imagePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) 
+    {
+        [fileManager removeItemAtPath:imagePath error:nil];
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:tnImagePath]) 
+    {
+        [fileManager removeItemAtPath:tnImagePath error:nil];
+    }
+    
+    
+    [currentPage setValue:nil forKey:@"imagePath"];
+    
+    [self.album removePagesObject:currentPage];
+    [[self applicationManagedObjectContext] deleteObject:currentPage];
+    
+    [self saveAlbum];
+    [self validate];
+}
 
 
-- (void)thumbnailViewDidSelectedIndex: (int)index {
-	PhotoViewController *aViewController = [self preparePhotoViewController];
-    aViewController.selectedIndex = index;
-	
-	[self.navigationController pushViewController:aViewController animated:YES];
-	[aViewController release];
+-(void)deleteSelectedPhotos:(id)sender {
+    for(Page *page in selectedPagesWhileDoingBulkOperations) {
+        [self deleteSelectedPhotoOnCurrentPage:page];
+    }
+    [selectedPagesWhileDoingBulkOperations removeAllObjects];
+}
+
+-(void)sharePhotos:(id)sender {
+    
+}
+
+-(void)exitFromBulkOperations:(id)sender {
+    isDeleteModeActive = NO;
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editAlbum)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+    
+    [self.toolbar setItems:existingToolbarItems];
+    [existingToolbarItems release];
+}
+
+-(void)manageToolbar {
+    existingToolbarItems = [[self.toolbar items] retain];
+    
+    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStyleDone target:self action:@selector(deleteSelectedPhotos:)];
+    
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleDone target:self action:@selector(sharePhotos:)];
+    
+    [self.toolbar setItems:[NSArray arrayWithObjects:deleteButton, shareButton, nil]];
+}
+
+-(IBAction)handleBulkOperations:(id)sender {
+    isDeleteModeActive = YES;    
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(exitFromBulkOperations:)];
+    self.navigationItem.rightBarButtonItem = cancelButton;
+    
+    [self manageToolbar];
 }
 
 @end

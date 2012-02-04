@@ -86,6 +86,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     }	
 }
 
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    PageView *pageView = (PageView *)[self.pageViewCollection objectAtIndex:currentPageIndex];
+    return pageView;
+}
+
 - (void) validateAlbum 
 {
 	unsigned pageViewCount = [self.pageViewCollection count];
@@ -93,6 +98,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	[self.albumView setContentSize:CGSizeMake(self.albumView.frame.size.width * pageViewCount, self.albumView.frame.size.height)];
     
 	[self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, currentPageIndex), 0)];
+    [self.albumView setDelegate:self];
 	
 	BOOL pageOrderChanged = NO;
 	PageView *pageView;
@@ -720,7 +726,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
             self.previousSlideEndTime = currentDate;
             
             [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationDuration:2.0];
+            [UIView setAnimationDuration:0.5];
             [self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, ++aCurrentPhotoIndex), 0)];
             currentPageIndex = aCurrentPhotoIndex-1;
             [UIView commitAnimations];

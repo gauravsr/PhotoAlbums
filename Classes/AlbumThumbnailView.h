@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Album.h"
 #import "PhotoRepository.h"
+#import "XImageView.h"
 
 @interface AlbumThumbnailView : UIScrollView {
 	
@@ -31,6 +32,6 @@
 @interface NSObject (AlbumThumbnailViewDelegate)
 
 // Method called when a thumbnail gets selected.
-- (void)thumbnailViewDidSelectedIndex: (int)index;
+- (void)thumbnailView:(XImageView *)image didSelectedIndex:(int)index;
 
 @end

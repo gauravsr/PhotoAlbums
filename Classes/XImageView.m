@@ -46,24 +46,4 @@
 	return YES;
 }
 
-
-
-//#pragma mark Public
-//
-//- (int)index{
-//	return mIndex;
-//}
-//- (void)setIndex: (int)index{
-//	mIndex = index;
-//
-//}
-//
-//- (id)delegate{
-//	return mDelegate;
-//}
-//
-//- (void)setDelegate: (id)delegate{
-//	mDelegate = delegate;
-//}
-
 @end

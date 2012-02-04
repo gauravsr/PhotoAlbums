@@ -24,6 +24,7 @@
 	//model
 	Album								*album;	
     NSMutableArray                      *referenceURLArray;
+    NSMutableArray                      *selectedPagesWhileDoingBulkOperations;
 //	PhotoViewController					*photoViewController;	
 	
 	//view
@@ -33,10 +34,12 @@
 	IBOutlet UIActivityIndicatorView	*mActivityView;
 	IBOutlet UIScrollView               *scrollview;
 	IBOutlet AlbumThumbnailView			*albumThumbnailView;
-    
+    IBOutlet UIToolbar                  *toolbar;
+    NSArray                             *existingToolbarItems;
 	//NSMutableArray						*mThreadQueue;
 	int									mPhotoSourceType;
     BOOL                                isPhotoAlreadyPresentInTheAlbum;
+    BOOL                                isDeleteModeActive;
 }
 
 //model
@@ -48,9 +51,13 @@
 @property (nonatomic, retain) UILabel                       *noPhotoDescription;
 @property (nonatomic, retain) AlbumThumbnailView            *albumThumbnailView;
 @property (nonatomic, retain) IBOutlet UIScrollView         *scrollview;
+@property (nonatomic, retain) IBOutlet UIToolbar            *toolbar;
+@property (nonatomic, assign) NSArray                       *existingToolbarItems;
+@property (nonatomic, assign) BOOL                          isDeleteModeActive;
 
 // data
 @property (nonatomic, retain) NSMutableArray            *referenceURLArray;
+@property (nonatomic, retain) NSMutableArray            *selectedPagesWhileDoingBulkOperations;
 
 
 //globals
@@ -64,5 +71,6 @@
 
 - (IBAction) addPhoto: (id) sender;
 - (IBAction) startSlideShow: (id) sender;
+-(IBAction)handleBulkOperations:(id)sender;
 - (void) addPhotoFromCamera;
 @end
