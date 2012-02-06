@@ -411,12 +411,19 @@
     if(isDeleteModeActive) {
         
         NSArray *pages = [self.album.pages allObjects];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
-		pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+        pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        [sortDescriptor release];
         Page *page = [pages objectAtIndex:index];
         
-        [selectedPagesWhileDoingBulkOperations addObject:page];
+        BOOL isSelected = [image doToggling:index];
+        
+        if(isSelected) {
+            [selectedPagesWhileDoingBulkOperations addObject:page];
+        }
+        else {
+            [selectedPagesWhileDoingBulkOperations removeObject:page];
+        }
     }
     else {
         PhotoViewController *photoViewController = [self preparePhotoViewController];
@@ -465,7 +472,7 @@
 }
 
 -(void)sharePhotos:(id)sender {
-    
+
 }
 
 -(void)exitFromBulkOperations:(id)sender {

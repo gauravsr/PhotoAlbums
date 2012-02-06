@@ -13,12 +13,14 @@
 
 @synthesize delegate = mDelegate;
 @synthesize index = mIndex;
+@synthesize isPhotoSelectedForTheFirstTime;
+@synthesize overlayOverTheSelectedImage;
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         // Initialization code
     }
-    
+    isPhotoSelectedForTheFirstTime = @"YES";  
     return self;
 }
 
@@ -44,6 +46,25 @@
 
 - (BOOL)canBecomeFirstResponder{
 	return YES;
+}
+
+-(BOOL)doToggling :(int)index {
+    BOOL isSelected;
+    if([isPhotoSelectedForTheFirstTime isEqualToString:@"YES"]) {
+        isPhotoSelectedForTheFirstTime = @"NO";
+        CGRect viewFrames = CGRectMake(0, 0, 75, 75);
+        overlayOverTheSelectedImage = [[UIImageView alloc] initWithFrame:viewFrames];
+        [overlayOverTheSelectedImage setImage:[UIImage imageNamed:@"Overlay.png"]];
+        [self addSubview:overlayOverTheSelectedImage];
+        isSelected = YES;
+    }
+    else {
+        isPhotoSelectedForTheFirstTime = @"YES";
+        [overlayOverTheSelectedImage removeFromSuperview];
+        isSelected = NO;
+    }
+    
+    return isSelected;
 }
 
 @end

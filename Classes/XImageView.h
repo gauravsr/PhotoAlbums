@@ -10,10 +10,16 @@
 @interface XImageView : UIImageView {
 	NSUInteger mIndex;
 	id mDelegate;
+    NSString *isPhotoSelectedForTheFirstTime;
+    UIImageView *overlayOverTheSelectedImage;
 }
 
 @property (assign) NSUInteger index;
 @property (assign) id delegate;
+@property (nonatomic, retain) NSString *isPhotoSelectedForTheFirstTime;
+@property (nonatomic, retain) UIImageView *overlayOverTheSelectedImage;
+
+-(BOOL)doToggling:(int)index;
 
 @end
 
