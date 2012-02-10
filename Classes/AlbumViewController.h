@@ -36,6 +36,8 @@
 	IBOutlet AlbumThumbnailView			*albumThumbnailView;
     IBOutlet UIToolbar                  *toolbar;
     NSArray                             *existingToolbarItems;
+    UIBarButtonItem                     *deleteButton;
+    
 	//NSMutableArray						*mThreadQueue;
 	int									mPhotoSourceType;
     BOOL                                isPhotoAlreadyPresentInTheAlbum;
@@ -54,11 +56,10 @@
 @property (nonatomic, retain) IBOutlet UIToolbar            *toolbar;
 @property (nonatomic, assign) NSArray                       *existingToolbarItems;
 @property (nonatomic, assign) BOOL                          isDeleteModeActive;
-
+@property (nonatomic, retain) UIBarButtonItem               *deleteButton;
 // data
 @property (nonatomic, retain) NSMutableArray            *referenceURLArray;
 @property (nonatomic, retain) NSMutableArray            *selectedPagesWhileDoingBulkOperations;
-
 
 //globals
 - (NSString *) albumAudioDirectoryPath;

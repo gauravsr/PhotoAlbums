@@ -39,6 +39,7 @@
 @synthesize toolbar;
 @synthesize existingToolbarItems;
 @synthesize selectedPagesWhileDoingBulkOperations;
+@synthesize deleteButton;
 
 /************************************************
  *					Globals						*
@@ -424,6 +425,17 @@
         else {
             [selectedPagesWhileDoingBulkOperations removeObject:page];
         }
+        NSString *numberOfItemsSelected = [NSString stringWithFormat:@"%d", [selectedPagesWhileDoingBulkOperations count]];
+        NSMutableString *deleteButtonLabel = [NSMutableString stringWithString:@"Delete ("];
+        [deleteButtonLabel appendString:numberOfItemsSelected];
+        [deleteButtonLabel appendString:@")"];
+        
+        [deleteButton setTitle:deleteButtonLabel];
+                
+        if([numberOfItemsSelected isEqualToString:@"0"]) {
+            [deleteButton setTitle:@"Delete"];
+        }
+        
     }
     else {
         PhotoViewController *photoViewController = [self preparePhotoViewController];
@@ -469,6 +481,7 @@
         [self deleteSelectedPhotoOnCurrentPage:page];
     }
     [selectedPagesWhileDoingBulkOperations removeAllObjects];
+    [deleteButton setTitle:@"Delete"];
 }
 
 -(void)sharePhotos:(id)sender {
@@ -489,9 +502,13 @@
 -(void)manageToolbar {
     existingToolbarItems = [[self.toolbar items] retain];
     
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStyleDone target:self action:@selector(deleteSelectedPhotos:)];
+    deleteButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStyleDone target:self action:@selector(deleteSelectedPhotos:)];
+    
+    deleteButton.tintColor = [UIColor redColor];
     
     UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleDone target:self action:@selector(sharePhotos:)];
+    
+    deleteButton.width = shareButton.width = self.view.frame.size.width/2 - 10;
     
     [self.toolbar setItems:[NSArray arrayWithObjects:deleteButton, shareButton, nil]];
 }
@@ -500,6 +517,7 @@
     isDeleteModeActive = YES;    
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(exitFromBulkOperations:)];
+    cancelButton.tintColor = [UIColor blueColor];
     self.navigationItem.rightBarButtonItem = cancelButton;
     
     [self manageToolbar];

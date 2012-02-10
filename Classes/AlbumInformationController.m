@@ -56,6 +56,8 @@
 - (IBAction) save: (id) sender
 {	
 	NSString *text = [nameTextField text];
+    text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+   
 	if( [text isEqualToString:@""])
 	{
 		return;
