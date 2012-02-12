@@ -112,7 +112,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	for(unsigned i = 0; i < pageViewCount; i++) 
     {
 		scrollViewForPageView = (ScrollViewForPageView *)[self.pageViewCollection objectAtIndex:i];
-        page = scrollViewForPageView.pageView.page;
+        page = [[[self pageViewCollection] objectAtIndex:i] valueForKey:@"page"];
 		if([page.pageOrder intValue] != i) {
 			[page setValue:[NSNumber numberWithInt:i] forKey:@"pageOrder"];
 			pageOrderChanged = YES;
@@ -199,7 +199,9 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 
 - (void)populatePageForSelectedIndex: (int)aSelectedIndex
 {
-	NSArray *pages = [self.pageViewCollection valueForKey:@"pageView"];
+	NSArray *pageViews = [self.pageViewCollection valueForKey:@"pageView"];
+    NSArray *pages = [pageViews valueForKey:@"page"];
+
 	unsigned totalPages = [pages count];
 	int startIndex = 0; // Initialize
 	int endIndex = 0; // Initialize
@@ -238,18 +240,21 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	for(unsigned i = 0; i < pageCount; i++)
 	{
 		page = [pages objectAtIndex:i];
-//		PageView *aPageView = [[PageView alloc] init];
-//		aPageView.page = page;
-//        [aPageView setIsLoaded:NO];
-//        [self.pageViewCollection addObject:aPageView];
+		PageView *aPageView = [[PageView alloc] init];
+		aPageView.page = page;
+        [aPageView setIsLoaded:NO];
+        //[self.pageViewCollection addObject:aPageView];
         
         ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
-        scrollViewForPageView.pageView.page = page;
-        [scrollViewForPageView.pageView setIsLoaded:NO];
+        scrollViewForPageView.pageView = aPageView;
         [self.pageViewCollection addObject:scrollViewForPageView];
         
 	}
 	
+    for(id key in self.pageViewCollection) {
+        NSLog(@"%@", key);
+    }
+    
 	if(pageCount == 0)
 	{
 		self.currentPageIndex = -1;
