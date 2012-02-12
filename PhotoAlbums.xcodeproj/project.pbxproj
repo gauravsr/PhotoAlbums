@@ -56,6 +56,7 @@
 		D410E5441266EB6600636EB1 /* XImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D410E5431266EB6600636EB1 /* XImageView.m */; };
 		D45B7010127563FC0097357F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45B700F127563FC0097357F /* MessageUI.framework */; };
 		D46A70F6126C0B7F0014A0D8 /* Sound.png in Resources */ = {isa = PBXBuildFile; fileRef = D46A70F5126C0B7F0014A0D8 /* Sound.png */; };
+		F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */; };
 		F4BA46BB14DE536700C04F8D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BA46BA14DE536700C04F8D /* AVFoundation.framework */; };
 		F4BDBEAF14C8860300F76350 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */; };
 		F4C0042D14CFDB3C0083D8CC /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0041A14CFDB3C0083D8CC /* ELCAlbumPickerController.m */; };
@@ -144,6 +145,8 @@
 		D410E5431266EB6600636EB1 /* XImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XImageView.m; sourceTree = "<group>"; };
 		D45B700F127563FC0097357F /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D46A70F5126C0B7F0014A0D8 /* Sound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sound.png; path = images/Sound.png; sourceTree = "<group>"; };
+		F47A1CB814E83E2700A8DC0D /* ScrollViewForPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewForPageView.h; sourceTree = "<group>"; };
+		F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewForPageView.m; sourceTree = "<group>"; };
 		F4BA46BA14DE536700C04F8D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F4C0041914CFDB3C0083D8CC /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 				D410E5431266EB6600636EB1 /* XImageView.m */,
 				34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */,
 				34F04891125EFDBD009A0FD9 /* AlbumThumbnailView.m */,
+				F47A1CB814E83E2700A8DC0D /* ScrollViewForPageView.h */,
+				F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -526,6 +531,7 @@
 				F4C0043414CFDB3C0083D8CC /* ELCImagePickerController.m in Sources */,
 				F4C0043614CFDB3C0083D8CC /* ELCImagePickerDemoAppDelegate.m in Sources */,
 				F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */,
+				F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

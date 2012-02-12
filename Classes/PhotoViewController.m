@@ -9,6 +9,7 @@
 #import "PhotoViewController.h"
 #import "PageView.h"
 #import "PhotoAlbumsAppDelegate.h"
+#import "ScrollViewForPageView.h"
 
 @interface NSObject (AnimationPrivateAPIAccess)
 
@@ -86,9 +87,12 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     }	
 }
 
--(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    PageView *pageView = (PageView *)[self.pageViewCollection objectAtIndex:currentPageIndex];
-    return pageView;
+-(CGRect)frameForScrollViewForZooming:(int)index {
+    CGRect bounds = self.albumView.bounds;
+    CGRect pageFrame = bounds;
+    pageFrame.size.width -= (2 * 10);
+    pageFrame.origin.x = (bounds.size.width * index) + 10;
+    return pageFrame;
 }
 
 - (void) validateAlbum 
@@ -96,24 +100,25 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	unsigned pageViewCount = [self.pageViewCollection count];
 	
 	[self.albumView setContentSize:CGSizeMake(self.albumView.frame.size.width * pageViewCount, self.albumView.frame.size.height)];
-    
+    [self.albumView setPagingEnabled:YES];
 	[self.albumView setContentOffset:CGPointMake(self.albumView.frame.size.width * MAX(0, currentPageIndex), 0)];
     [self.albumView setDelegate:self];
 	
 	BOOL pageOrderChanged = NO;
-	PageView *pageView;
+	//PageView *pageView;
+    ScrollViewForPageView *scrollViewForPageView;
 	Page *page;
 	
 	for(unsigned i = 0; i < pageViewCount; i++) 
     {
-		pageView = (PageView *)[self.pageViewCollection objectAtIndex:i];
-        page = pageView.page;
+		scrollViewForPageView = (ScrollViewForPageView *)[self.pageViewCollection objectAtIndex:i];
+        page = scrollViewForPageView.pageView.page;
 		if([page.pageOrder intValue] != i) {
 			[page setValue:[NSNumber numberWithInt:i] forKey:@"pageOrder"];
 			pageOrderChanged = YES;
 		}
 		
-        [pageView setFrame:CGRectMake(i * 320, 0, 320, 480)];
+        [scrollViewForPageView setFrame:[self frameForScrollViewForZooming:i]];
 	}	
 	
 	if(pageOrderChanged) 
@@ -152,9 +157,10 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 {
 	//currentPageIndex++;
 	
-	PageView *pageView = nil;
-    pageView = [self.pageViewCollection objectAtIndex:index];
-	if([pageView isLoaded]){
+	//PageView *pageView = nil;
+    ScrollViewForPageView *scrollViewForPageView;
+    scrollViewForPageView = [self.pageViewCollection objectAtIndex:index];
+	if([scrollViewForPageView.pageView isLoaded]){
 		[self validateAlbum];
 		return;
 	}
@@ -168,32 +174,32 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) 
 		{
 			UIImage *pageViewImage = [[UIImage alloc] initWithContentsOfFile:imagePath];		
-			pageView = [[[PageView alloc]init] initWithImage:pageViewImage];
-            [pageView setIsLoaded:YES];			
+			scrollViewForPageView = [[[ScrollViewForPageView alloc]init] addImage:pageViewImage];
+            [scrollViewForPageView.pageView setIsLoaded:YES];			
 		}
 		else
 		{
 			NSLog(@"Error!!! no image at specified imagePath");
-			pageView = [[PageView alloc] init];	
-			[pageView setIsLoaded:NO];
+			scrollViewForPageView = [[ScrollViewForPageView alloc] init];	
+			[scrollViewForPageView.pageView setIsLoaded:NO];
 		}		
 	}
 	else
 	{
-		pageView = [[PageView alloc] initWithImage:image];		
+		scrollViewForPageView = [[ScrollViewForPageView alloc] addImage:image];		
 	}
-    [pageView setPage:page];	
-    [pageViewCollection replaceObjectAtIndex:index withObject:pageView];
+    [scrollViewForPageView.pageView setPage:page];	
+    [pageViewCollection replaceObjectAtIndex:index withObject:scrollViewForPageView.pageView];
     
-    [albumView addSubview:pageView];
+    [albumView addSubview:scrollViewForPageView];
 	
 	[self validateAlbum];	
-	[pageView release];
+	[scrollViewForPageView release];
 }
 
 - (void)populatePageForSelectedIndex: (int)aSelectedIndex
 {
-	NSArray *pages = [self.pageViewCollection valueForKey:@"page"];
+	NSArray *pages = [self.pageViewCollection valueForKey:@"pageView"];
 	unsigned totalPages = [pages count];
 	int startIndex = 0; // Initialize
 	int endIndex = 0; // Initialize
@@ -232,10 +238,16 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	for(unsigned i = 0; i < pageCount; i++)
 	{
 		page = [pages objectAtIndex:i];
-		PageView *aPageView = [[PageView alloc] init];
-		aPageView.page = page;
-        [aPageView setIsLoaded:NO];
-        [self.pageViewCollection addObject:aPageView];
+//		PageView *aPageView = [[PageView alloc] init];
+//		aPageView.page = page;
+//        [aPageView setIsLoaded:NO];
+//        [self.pageViewCollection addObject:aPageView];
+        
+        ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
+        scrollViewForPageView.pageView.page = page;
+        [scrollViewForPageView.pageView setIsLoaded:NO];
+        [self.pageViewCollection addObject:scrollViewForPageView];
+        
 	}
 	
 	if(pageCount == 0)
@@ -372,9 +384,10 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 			[self.pageToolBar showRecordAudioNoteToolBar];
 		} else
 		{
-			PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
-            [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
-            [self.pageToolBar setAudioAvailable:[pageView.page hasAudioNote]];
+			//PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
+            ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
+            [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
+            [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
 			[self.pageToolBar showDefaultToolBar];
 		}
 	} else
