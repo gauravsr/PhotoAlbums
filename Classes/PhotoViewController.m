@@ -112,7 +112,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	for(unsigned i = 0; i < pageViewCount; i++) 
     {
 		scrollViewForPageView = (ScrollViewForPageView *)[self.pageViewCollection objectAtIndex:i];
-        page = [[[self pageViewCollection] objectAtIndex:i] valueForKey:@"page"];
+        //page = [[[self pageViewCollection] objectAtIndex:i] valueForKey:@"page"];
+        page = scrollViewForPageView.pageView.page;
 		if([page.pageOrder intValue] != i) {
 			[page setValue:[NSNumber numberWithInt:i] forKey:@"pageOrder"];
 			pageOrderChanged = YES;
