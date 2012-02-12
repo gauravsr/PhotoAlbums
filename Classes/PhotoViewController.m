@@ -147,8 +147,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
  ***********************************************/
 
 - (UIImage *)imageForIndex: (int)index {
-	PageView *aPageView = [pageViewCollection objectAtIndex:index];
-	UIImage *anImage = [aPageView image];
+	ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    UIImage *anImage = scrollViewForPageView.pageView.image;
 	return anImage;
 }
 
@@ -190,7 +190,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		scrollViewForPageView = [[ScrollViewForPageView alloc] addImage:image];		
 	}
     [scrollViewForPageView.pageView setPage:page];	
-    [pageViewCollection replaceObjectAtIndex:index withObject:scrollViewForPageView.pageView];
+    [pageViewCollection replaceObjectAtIndex:index withObject:scrollViewForPageView];
     
     [albumView addSubview:scrollViewForPageView];
 	
@@ -252,10 +252,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
         
 	}
 	
-    for(id key in self.pageViewCollection) {
-        NSLog(@"%@", key);
-    }
-    
 	if(pageCount == 0)
 	{
 		self.currentPageIndex = -1;
@@ -413,6 +409,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 
 #pragma mark Scroll View delegate
 
+-(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    scrollViewForPageView.zoomScale = 0.5;
+}
+
 - (void) scrollViewDidEndDecelerating:(UIScrollView *)sender 
 {
 	NSInteger pageIndex = [self currentIndex];
@@ -431,7 +432,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		{
 			[self stopAudioNotePlayback:self];
 		}
-		
+        
 		[self validatePageToolBar];	
 		[pageToolBar showDefaultToolBar];
 		
@@ -482,8 +483,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog(@"addAudioNote:");
 	if([self isValidState])
 	{
-		PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
-		Page *currentPage = currentPageView.page;
+		ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+		Page *currentPage = scrollViewForPageView.pageView.page;
 		NSString *audioLocalPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] relativeAudioPathForAlbumId: self.album.albumID];
 		NSString *audioNotePath = [NSString stringWithFormat:@"%@/%@", audioLocalPath, currentPage.pageID];
  		[currentPage setValue:audioNotePath forKey:@"audioNotePath"];
@@ -507,8 +508,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog(@"deleteAudioNote:");
 	if([self isValidState])
 	{
-		PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
-		Page *currentPage = currentPageView.page;
+		ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+		Page *currentPage = scrollViewForPageView.pageView.page;
 		
 		if([currentPage hasAudioNote])
 		{
@@ -586,8 +587,9 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog (@"playAudioNote:");
 	if([self isValidState])
 	{
-		PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
-		Page *currentPage = currentPageView.page;
+		//PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
+        ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+		Page *currentPage = scrollViewForPageView.pageView.page;
 		if([currentPage hasAudioNote])
 		{
 			[self initAudioPlayerWithURL: currentPage.audioNoteURL];
@@ -773,8 +775,9 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog(@"deletePage");
 	if(currentPageIndex >= 0 && currentPageIndex < [pageViewCollection count])
 	{
-		PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
-		Page *currentPage = currentPageView.page;
+		//PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
+        ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+		Page *currentPage = scrollViewForPageView.pageView.page;
 		
 		//remove pageView
 		[UIView beginAnimations:@"suck" context:NULL];
@@ -783,7 +786,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		if([UIView respondsToSelector:@selector(setAnimationPosition:)])
 			[UIView setAnimationPosition:CGPointMake(290, 450)];
 		
-		[currentPageView removeFromSuperview];
+		[scrollViewForPageView removeFromSuperview];
 		[UIView commitAnimations];
 		
 		//delete audio note if there
@@ -843,8 +846,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSData *imageData = UIImageJPEGRepresentation(imageToShare, 1);
 	[controller addAttachmentData:imageData mimeType:@"image/jpg" fileName:@"Talking Picture.jpg"];
 	NSData *audioData = nil;
-	PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
-	Page *currentPage = currentPageView.page;
+	ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *currentPage = scrollViewForPageView.pageView.page;
 	if([currentPage hasAudioNote])
 	{
 		if(self.audioPlayer)
