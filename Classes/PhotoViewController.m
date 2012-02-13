@@ -105,14 +105,12 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     [self.albumView setDelegate:self];
 	
 	BOOL pageOrderChanged = NO;
-	//PageView *pageView;
     ScrollViewForPageView *scrollViewForPageView;
 	Page *page;
 	
 	for(unsigned i = 0; i < pageViewCount; i++) 
     {
 		scrollViewForPageView = (ScrollViewForPageView *)[self.pageViewCollection objectAtIndex:i];
-        //page = [[[self pageViewCollection] objectAtIndex:i] valueForKey:@"page"];
         page = scrollViewForPageView.pageView.page;
 		if([page.pageOrder intValue] != i) {
 			[page setValue:[NSNumber numberWithInt:i] forKey:@"pageOrder"];
@@ -156,9 +154,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 				  withImage: (UIImage *)image 
 					atIndex: (int)index 
 {
-	//currentPageIndex++;
-	
-	//PageView *pageView = nil;
     ScrollViewForPageView *scrollViewForPageView;
     scrollViewForPageView = [self.pageViewCollection objectAtIndex:index];
 	if([scrollViewForPageView.pageView isLoaded]){
@@ -244,7 +239,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		PageView *aPageView = [[PageView alloc] init];
 		aPageView.page = page;
         [aPageView setIsLoaded:NO];
-        //[self.pageViewCollection addObject:aPageView];
         
         ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
         scrollViewForPageView.pageView = aPageView;
@@ -329,11 +323,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation  
 {
     // Return YES for supported orientations
-    return YES;
-}
- 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-
+    return NO;
 }
 
 - (void) didReceiveMemoryWarning 
@@ -587,7 +577,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog (@"playAudioNote:");
 	if([self isValidState])
 	{
-		//PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
         ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
 		Page *currentPage = scrollViewForPageView.pageView.page;
 		if([currentPage hasAudioNote])
@@ -775,7 +764,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	NSLog(@"deletePage");
 	if(currentPageIndex >= 0 && currentPageIndex < [pageViewCollection count])
 	{
-		//PageView *currentPageView = [pageViewCollection objectAtIndex:currentPageIndex];
         ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
 		Page *currentPage = scrollViewForPageView.pageView.page;
 		
@@ -811,7 +799,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		
 		[currentPage setValue:nil forKey:@"imagePath"];
 		
-		//[self saveAlbum];		
 		[album removePagesObject:currentPage];
 		[[self applicationManagedObjectContext] deleteObject:currentPage];
 		
@@ -832,7 +819,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 															 delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
 													otherButtonTitles:@"Send as Email", @"Cancel", nil];
 	actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
-	//actionSheet.destructiveButtonIndex = 1;	// make the second button red (destructive)
 	[actionSheet showInView:self.view]; // show from our table view (pops up in the middle of the table)
 	[actionSheet release];
 } 
