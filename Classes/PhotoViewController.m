@@ -68,6 +68,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 @synthesize selectedIndex;
 @synthesize previousSlideEndTime;
 @synthesize tagsView;
+@synthesize scrollViewForShowingAndDeletingTags;
 
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
@@ -423,12 +424,19 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     return CGSizeMake(TAG_WIDTH * 20, SCROLL_VIEW_HEIGHT);
 }
 
+-(void)handleScrollViewForPageViewTapped:(id)sender {
+    [tagsView removeFromSuperview];
+    [scrollViewForShowingAndDeletingTags removeFromSuperview];
+}
+
 -(void)showHideTags {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScrollViewForPageViewTapped:) name:@"ScrollViewForPageViewTapped" object:nil];
+    
     tagsView = [[UIView alloc] initWithFrame:[self frameForTagsView]];
     tagsView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:tagsView];
     
-    UIScrollView *scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
+    scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
     
     scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView];
     scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];

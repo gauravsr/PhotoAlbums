@@ -72,7 +72,6 @@
 		F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */; };
 		F4C0043814CFDB3C0083D8CC /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042B14CFDB3C0083D8CC /* Overlay.png */; };
 		F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */; };
-		F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */; };
 		F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -172,8 +171,6 @@
 		F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerDemoViewController.m; sourceTree = "<group>"; };
 		F4C0042B14CFDB3C0083D8CC /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
-		F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoScrollView.h; sourceTree = "<group>"; };
-		F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,8 +280,6 @@
 				34118B4911D1DC4200CFAAA5 /* PageToolBar.m */,
 				34118B4A11D1DC4200CFAAA5 /* PageView.h */,
 				34118B4B11D1DC4200CFAAA5 /* PageView.m */,
-				F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */,
-				F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */,
 				D410E5421266EB6600636EB1 /* XImageView.h */,
 				D410E5431266EB6600636EB1 /* XImageView.m */,
 				34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */,
@@ -527,7 +522,6 @@
 				34E0F221125839FD002C97B2 /* PhotoRepository.m in Sources */,
 				34F04892125EFDBD009A0FD9 /* AlbumThumbnailView.m in Sources */,
 				D410E5441266EB6600636EB1 /* XImageView.m in Sources */,
-				F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */,
 				F4C0042D14CFDB3C0083D8CC /* ELCAlbumPickerController.m in Sources */,
 				F4C0042F14CFDB3C0083D8CC /* ELCAsset.m in Sources */,
 				F4C0043014CFDB3C0083D8CC /* ELCAssetCell.m in Sources */,

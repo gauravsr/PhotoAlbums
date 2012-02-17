@@ -43,6 +43,7 @@
 	IBOutlet PageToolBar	*pageToolBar;
 	NSMutableArray			*pageViewCollection;
 	UIView                  *tagsView;
+    UIScrollView            *scrollViewForShowingAndDeletingTags;
 	//utils
 	AudioRecorder			*audioRecorder;
 	AudioPlayer				*audioPlayer;
@@ -67,6 +68,7 @@
 @property (nonatomic, retain) PageToolBar					*pageToolBar;
 @property (nonatomic, retain) NSMutableArray				*pageViewCollection;
 @property (nonatomic, retain) UIView                        *tagsView;
+@property (nonatomic, retain) UIScrollView                  *scrollViewForShowingAndDeletingTags;
 //utils
 @property (nonatomic, retain) AudioRecorder					*audioRecorder;
 @property (nonatomic, retain) AudioPlayer					*audioPlayer;

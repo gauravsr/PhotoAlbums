@@ -55,6 +55,7 @@
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     isTouched = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ScrollViewForPageViewTapped" object:@"ScrollViewForPageViewTapped"];
 }
 
 @end
