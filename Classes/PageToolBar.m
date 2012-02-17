@@ -37,6 +37,7 @@
 
 - (void) validateDefaultToolBar
 {
+
 	[addAudioNoteButton setHidden:audioAvailable];
 	[playAudioNoteButton setHidden:!audioAvailable];
 }

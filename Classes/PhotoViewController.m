@@ -67,6 +67,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 @synthesize currentPageIndex, interruptedOnPlayback, slideshowMode;
 @synthesize selectedIndex;
 @synthesize previousSlideEndTime;
+@synthesize tagsView;
 
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
@@ -90,8 +91,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 -(CGRect)frameForScrollViewForZooming:(int)index {
     CGRect bounds = self.albumView.bounds;
     CGRect pageFrame = bounds;
-    pageFrame.size.width -= (2 * 10);
-    pageFrame.origin.x = (bounds.size.width * index) + 10;
+    pageFrame.size.width -= 5;
+    pageFrame.origin.x = (bounds.size.width * index) + 5;
     return pageFrame;
 }
 
@@ -243,7 +244,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
         ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
         scrollViewForPageView.pageView = aPageView;
         [self.pageViewCollection addObject:scrollViewForPageView];
-        
+        NSLog(@"%@", [scrollViewForPageView isTouched]);
 	}
 	
 	if(pageCount == 0)
@@ -376,7 +377,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 			[self.pageToolBar showRecordAudioNoteToolBar];
 		} else
 		{
-			//PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
             ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
             [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
             [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
@@ -395,6 +395,82 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	[self validateAlbum];
 	[self validatePageToolBar];
 	[self refreshTitle];    
+}
+
+
+
+#pragma mark Tag
+
+#define SCROLL_VIEW_HEIGHT 60
+#define TAG_WIDTH 60
+#define TAG_HEIGHT 20
+
+-(CGRect)frameForTagsView {
+    CGSize viewSize = [self.view bounds].size;
+    return CGRectMake(viewSize.width * currentPageIndex, 
+                      viewSize.height/2, 
+                      viewSize.width, 
+                      viewSize.height/2);
+}
+
+-(CGRect)frameForShowingAndDeletingTags {
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    CGRect viewBounds = [scrollViewForPageView bounds];
+    return CGRectMake(viewBounds.origin.x, viewBounds.size.height/2 + 10, viewBounds.size.width - 10, SCROLL_VIEW_HEIGHT);
+}
+
+-(CGSize)contentSizeForTagScrollView {
+    return CGSizeMake(TAG_WIDTH * 20, SCROLL_VIEW_HEIGHT);
+}
+
+-(void)showHideTags {
+    tagsView = [[UIView alloc] initWithFrame:[self frameForTagsView]];
+    tagsView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:tagsView];
+    
+    UIScrollView *scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
+    
+    scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView];
+    scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];
+    [self.view addSubview:scrollViewForShowingAndDeletingTags];
+    
+    for(int i=0; i<20; i++) {
+        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH, TAG_HEIGHT);
+        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
+        NSString *index = [NSString stringWithFormat:@"%d", i];
+        label.text = [NSString stringWithFormat:@"Tag%@", index];
+        [scrollViewForShowingAndDeletingTags addSubview:label];
+    }
+}
+
+
+//-(void)showHideTags {    
+//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Add/Remove Tag" 
+//                                                        delegate:self 
+//                                                        cancelButtonTitle:@"Cancel" 
+//                                                        destructiveButtonTitle:nil 
+//                                                        otherButtonTitles:@"Save", nil];
+//    
+//    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+//    [actionSheet showInView:self.view]; 
+//    [actionSheet release];
+//    
+//    
+//    textFieldInActionSheet = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+//    [textFieldInActionSheet setBackgroundColor:[UIColor whiteColor]];
+//    textFieldInActionSheet.delegate = self;
+//    textFieldInActionSheet.tag = 999;
+//    
+//    [actionSheet addSubview:textFieldInActionSheet];
+//    [self performSelector:@selector(acceptInput:) withObject: actionSheet];
+//}
+//
+//-(void)acceptInput:(id)sender {
+//    
+//}
+
+-(IBAction)manageTagForThePhoto:(id)sender {
+    [self showHideTags];
 }
 
 #pragma mark Scroll View delegate
@@ -428,6 +504,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		
 		[self playAudioNote:(id) self];
         self.previousSlideEndTime = [NSDate date];
+        
+        [self showHideTags];
 	}
 }
 

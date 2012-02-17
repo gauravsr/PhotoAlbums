@@ -161,16 +161,30 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
 {
-    return [[fetchedResultsController sections] count];
+    return 2;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    NSInteger numberOfRows;
+    
+    if(section == 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+        numberOfRows = [sectionInfo numberOfObjects];
+    }
+    else {
+        numberOfRows = 1;
+    }
+    
+    return numberOfRows;
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if(section == 0)
+        return @"Albums";
+    else
+        return @"Tags";
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView: (UITableView *)tableView cellForRowAtIndexPath: (NSIndexPath *)indexPath 
@@ -185,43 +199,47 @@
 	}
     
 	// Configure the cell.
-	NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
-	NSUInteger count = [[managedObject valueForKey:@"pages"] count];
-    
-	//cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[managedObject valueForKey:@"title"], count];
-	cell.textLabel.text = [managedObject valueForKey:@"title"];
-	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
-    
-	UIImage *cellIcon;
-	if(count > 0)
-	{
-		NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
-		pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
-		
-		Page *lastPage = [pages objectAtIndex:(count - 1)];
-		
-		cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
-		if(!cellIcon)
-		{
-			cellIcon = [photoRepository getPhoto: lastPage.imagePath];
-			cellIcon =  [PhotoUtil createThumbnail:cellIcon];
-			[photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+    if(indexPath.section == 0) {
+        NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
+        NSUInteger count = [[managedObject valueForKey:@"pages"] count];
+        
+        cell.textLabel.text = [managedObject valueForKey:@"title"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
+        
+        UIImage *cellIcon;
+        if(count > 0)
+        {
+            NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+            pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            [sortDescriptor release];
             
-			//creting thumbnail image if its already not there
-			NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
-			[thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
-		}		
-	}
-	else
-	{
-		//This is cached by system, so no need to implement separate cache for it
-		cellIcon = [UIImage imageNamed:@"frame_small.png"];
-	}
-    
-	[cell.imageView setImage:cellIcon];	
+            Page *lastPage = [pages objectAtIndex:(count - 1)];
+            
+            cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
+            if(!cellIcon)
+            {
+                cellIcon = [photoRepository getPhoto: lastPage.imagePath];
+                cellIcon =  [PhotoUtil createThumbnail:cellIcon];
+                [photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+                
+                //creting thumbnail image if its already not there
+                NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
+                [thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
+            }		
+        }
+        else
+        {
+            //This is cached by system, so no need to implement separate cache for it
+            cellIcon = [UIImage imageNamed:@"frame_small.png"];
+        }
+        
+        [cell.imageView setImage:cellIcon];	
+    }
+    else if(indexPath.section == 1) {
+       cell.textLabel.text = @"welcome"; 
+    }
     return cell;
 }
 

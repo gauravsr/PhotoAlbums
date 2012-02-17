@@ -20,7 +20,9 @@
 
 #define kSlideShowTimeInterval	3.0
 
-@interface PhotoViewController : UIViewController <UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface PhotoViewController : UIViewController <UIScrollViewDelegate, 
+                                                    UIActionSheetDelegate, 
+                                                    MFMailComposeViewControllerDelegate>
 {
 	//model
 	Album					*album;
@@ -40,13 +42,12 @@
 	IBOutlet AlbumView		*albumView;
 	IBOutlet PageToolBar	*pageToolBar;
 	NSMutableArray			*pageViewCollection;
-	
+	UIView                  *tagsView;
 	//utils
 	AudioRecorder			*audioRecorder;
 	AudioPlayer				*audioPlayer;
 	NSTimer					*recordingTimer;
 	NSTimer					*slideShowTimer;
-						
 }
 
 //model
@@ -65,7 +66,7 @@
 @property (nonatomic, retain) AlbumView						*albumView;
 @property (nonatomic, retain) PageToolBar					*pageToolBar;
 @property (nonatomic, retain) NSMutableArray				*pageViewCollection;
-
+@property (nonatomic, retain) UIView                        *tagsView;
 //utils
 @property (nonatomic, retain) AudioRecorder					*audioRecorder;
 @property (nonatomic, retain) AudioPlayer					*audioPlayer;
@@ -79,18 +80,19 @@
 
 -(IBAction) addCaption: (id) sender;
 
--(IBAction) addAudioNote: (id) sender;
--(IBAction) saveRecordedAudioNote: (id) sender;
--(IBAction) deleteAudioNote: (id) sender;
+-(IBAction) addAudioNote:(id)sender;
+-(IBAction) saveRecordedAudioNote:(id)sender;
+-(IBAction) deleteAudioNote:(id)sender;
 
--(IBAction) playAudioNote: (id) sender;
--(IBAction) stopAudioNotePlayback: (id) sender;
--(IBAction) pauseAudioNotePlayback: (id) sender;
--(IBAction) resumeAudioNotePlayback: (id) sender;
+-(IBAction) playAudioNote:(id)sender;
+-(IBAction) stopAudioNotePlayback:(id)sender;
+-(IBAction) pauseAudioNotePlayback:(id)sender;
+-(IBAction) resumeAudioNotePlayback:(id)sender;
 
--(IBAction) deletePage: (id) sender;
+-(IBAction) deletePage:(id) sender;
 -(void)populateAlbum;
--(IBAction)moreOptions: (id)sender;
+-(IBAction)moreOptions:(id)sender;
+-(IBAction)manageTagForThePhoto:(id)sender;
 
 -(void)startSlideShow;
 -(void)stopSlideShow;

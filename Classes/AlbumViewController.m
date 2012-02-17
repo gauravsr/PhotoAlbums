@@ -182,7 +182,6 @@
 	//configure the new managed object.
 	[newPage setValue:self.album forKey:@"album"];
 	[newPage setValue:[NSDate date] forKey:@"creationDate"];	
-	//[self saveAlbum];
 	
 	UIImage *scaledImage = [PhotoUtil createSnapshot:image];
 	image = scaledImage;
@@ -218,7 +217,6 @@
 			NSLog(@"Thumbnail Write Failed");
 		}
 		
-	//	[self saveAlbum];
 	}
 	
 	[self saveAlbum];
