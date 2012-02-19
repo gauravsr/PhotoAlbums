@@ -173,7 +173,8 @@
         numberOfRows = [sectionInfo numberOfObjects];
     }
     else {
-        numberOfRows = 1;
+        //id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsControllerForTags sections] objectAtIndex:section];
+        //numberOfRows = [sectionInfo numberOfObjects];
     }
     
     return numberOfRows;
@@ -238,7 +239,7 @@
         [cell.imageView setImage:cellIcon];	
     }
     else if(indexPath.section == 1) {
-       cell.textLabel.text = @"welcome"; 
+        
     }
     return cell;
 }
@@ -323,15 +324,15 @@
 	// Create the fetch request for the entity.
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	// Edit the entity name as appropriate.
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Album" inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"ListOfAlbumsAndTags" inManagedObjectContext:managedObjectContext];
 	[fetchRequest setEntity:entity];
 	
 	// Set the batch size to a suitable number.
 	[fetchRequest setFetchBatchSize:20];
-	[fetchRequest setPredicate:	[NSPredicate predicateWithFormat:@"hidden = %@", [NSNumber numberWithInt:0]]];
+	[fetchRequest setPredicate:	[NSPredicate predicateWithFormat:@"self = %@", [NSNumber numberWithInt:0]]];
 	
 	// Edit the sort key as appropriate.
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:NO];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	// Edit the section name key path and cache name if appropriate.
