@@ -69,6 +69,10 @@
 		F4C0043814CFDB3C0083D8CC /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042B14CFDB3C0083D8CC /* Overlay.png */; };
 		F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */; };
 		F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
+		F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */; };
+		F4F76B4714F1866B0022CB68 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4614F1866B0022CB68 /* Page.m */; };
+		F4F76B4A14F1866C0022CB68 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4914F1866C0022CB68 /* Album.m */; };
+		F4F76B5014F186F40022CB68 /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4F14F186F40022CB68 /* Tag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -160,6 +164,13 @@
 		F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerDemoViewController.m; sourceTree = "<group>"; };
 		F4C0042B14CFDB3C0083D8CC /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
+		F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PhotoAlbums.xcdatamodel; sourceTree = "<group>"; };
+		F4F76B4514F1866B0022CB68 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
+		F4F76B4614F1866B0022CB68 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
+		F4F76B4814F1866C0022CB68 /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
+		F4F76B4914F1866C0022CB68 /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
+		F4F76B4E14F186F40022CB68 /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
+		F4F76B4F14F186F40022CB68 /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +244,7 @@
 				34118B3E11D1DBC800CFAAA5 /* Images */,
 				34118B3D11D1DBB000CFAAA5 /* Nibs */,
 				8D1107310486CEB800E47090 /* PhotoAlbums-Info.plist */,
+				F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -281,6 +293,12 @@
 		34118B3311D1DB5800CFAAA5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				F4F76B4814F1866C0022CB68 /* Album.h */,
+				F4F76B4914F1866C0022CB68 /* Album.m */,
+				F4F76B4514F1866B0022CB68 /* Page.h */,
+				F4F76B4614F1866B0022CB68 /* Page.m */,
+				F4F76B4E14F186F40022CB68 /* Tag.h */,
+				F4F76B4F14F186F40022CB68 /* Tag.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -510,6 +528,10 @@
 				F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */,
 				F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */,
 				F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */,
+				F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */,
+				F4F76B4714F1866B0022CB68 /* Page.m in Sources */,
+				F4F76B4A14F1866C0022CB68 /* Album.m in Sources */,
+				F4F76B5014F186F40022CB68 /* Tag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
