@@ -12,6 +12,8 @@
 
 @implementation Page
 
+@synthesize pageID, audioNoteURL;
+
 @dynamic audioNotePath;
 @dynamic textCaption;
 @dynamic creationDate;

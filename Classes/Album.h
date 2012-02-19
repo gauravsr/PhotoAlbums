@@ -19,6 +19,8 @@
 @property (nonatomic, retain) NSNumber * albumOrder;
 @property (nonatomic, retain) NSNumber * hidden;
 @property (nonatomic, retain) NSSet *pages;
+@property (nonatomic, retain) NSString *albumID;
+
 @end
 
 @interface Album (CoreDataGeneratedAccessors)

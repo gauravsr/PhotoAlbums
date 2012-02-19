@@ -12,6 +12,8 @@
 
 @implementation Album
 
+@synthesize albumID;
+
 @dynamic coverImagePath;
 @dynamic title;
 @dynamic creationDate;

@@ -20,5 +20,7 @@
 @property (nonatomic, retain) NSNumber * pageOrder;
 @property (nonatomic, retain) NSString * imagePath;
 @property (nonatomic, retain) Album *album;
+@property (nonatomic) NSInteger pageID;
+@property (nonatomic, retain) NSURL *audioNoteURL;
 
 @end
