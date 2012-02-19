@@ -68,7 +68,9 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 @synthesize selectedIndex;
 @synthesize previousSlideEndTime;
 @synthesize tagsView;
+@synthesize textFieldForEnteringTag;
 @synthesize scrollViewForShowingAndDeletingTags;
+@synthesize tag;
 
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
@@ -92,8 +94,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 -(CGRect)frameForScrollViewForZooming:(int)index {
     CGRect bounds = self.albumView.bounds;
     CGRect pageFrame = bounds;
-    pageFrame.size.width -= 5;
-    pageFrame.origin.x = (bounds.size.width * index) + 5;
+    pageFrame.size.width -= 20;
+    pageFrame.origin.x = (bounds.size.width * index) + 10;
     return pageFrame;
 }
 
@@ -245,7 +247,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
         ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
         scrollViewForPageView.pageView = aPageView;
         [self.pageViewCollection addObject:scrollViewForPageView];
-        NSLog(@"%@", [scrollViewForPageView isTouched]);
 	}
 	
 	if(pageCount == 0)
@@ -408,77 +409,93 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 
 -(CGRect)frameForTagsView {
     CGSize viewSize = [self.view bounds].size;
-    return CGRectMake(viewSize.width * currentPageIndex, 
-                      viewSize.height/2, 
-                      viewSize.width, 
-                      viewSize.height/2);
+    CGRect frame = CGRectMake(0, 
+                              viewSize.height/2, 
+                              viewSize.width, 
+                              viewSize.height/2);
+    return frame;
 }
 
 -(CGRect)frameForShowingAndDeletingTags {
-    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
-    CGRect viewBounds = [scrollViewForPageView bounds];
-    return CGRectMake(viewBounds.origin.x, viewBounds.size.height/2 + 10, viewBounds.size.width - 10, SCROLL_VIEW_HEIGHT);
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    frame.size.height = SCROLL_VIEW_HEIGHT;
+    return frame;
 }
 
 -(CGSize)contentSizeForTagScrollView {
     return CGSizeMake(TAG_WIDTH * 20, SCROLL_VIEW_HEIGHT);
 }
 
--(void)handleScrollViewForPageViewTapped:(id)sender {
+-(void)scrollViewForPageViewTapped:(id)sender {
     [tagsView removeFromSuperview];
     [scrollViewForShowingAndDeletingTags removeFromSuperview];
 }
 
+-(void)addTagHandler:(id)sender {
+    PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];	
+	NSManagedObjectContext *context = [appDelegate managedObjectContext];
+	NSError *error = nil;
+	
+    Tag *tagManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Tag" inManagedObjectContext:context];
+    [tagManagedObject setValue:[textFieldForEnteringTag text] forKey:@"title"];
+	
+    if (![context save:&error]) {
+		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		abort();
+    }
+}
+
+-(void)addScrollViewForShowingAndDeletingTags {
+    scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
+    
+    scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView];
+    scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];
+    [tagsView addSubview:scrollViewForShowingAndDeletingTags];
+}
+
 -(void)showHideTags {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScrollViewForPageViewTapped:) name:@"ScrollViewForPageViewTapped" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                            selector:@selector(scrollViewForPageViewTapped:) 
+                                            name:@"ScrollViewForPageViewTapped" 
+                                            object:nil];
     
     tagsView = [[UIView alloc] initWithFrame:[self frameForTagsView]];
     tagsView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:tagsView];
     
-    scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
+    [self addScrollViewForShowingAndDeletingTags];
     
-    scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView];
-    scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];
-    [self.view addSubview:scrollViewForShowingAndDeletingTags];
+//    for(int i=0; i<20; i++) {
+//        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH, TAG_HEIGHT);
+//        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
+//        NSString *index = [NSString stringWithFormat:@"%d", i];
+//        label.text = [NSString stringWithFormat:@"Tag%@", index];
+//        [scrollViewForShowingAndDeletingTags addSubview:label];
+//    }
     
-    for(int i=0; i<20; i++) {
-        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH, TAG_HEIGHT);
-        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
-        NSString *index = [NSString stringWithFormat:@"%d", i];
-        label.text = [NSString stringWithFormat:@"Tag%@", index];
-        [scrollViewForShowingAndDeletingTags addSubview:label];
-    }
+    CGRect mainScreenFrame = [[UIScreen mainScreen] bounds];
+    CGRect frameForTextFieldForEnteringTag = CGRectMake(20, SCROLL_VIEW_HEIGHT + 20, mainScreenFrame.size.width/2, 30);
+    textFieldForEnteringTag = [[UITextField alloc] initWithFrame:frameForTextFieldForEnteringTag];
+    textFieldForEnteringTag.placeholder = @"Enter a tag";
+    textFieldForEnteringTag.delegate = self;
+    textFieldForEnteringTag.backgroundColor = [UIColor purpleColor];
+    [tagsView addSubview:textFieldForEnteringTag];
+    
+    CGRect frameForAddTagButton = CGRectMake(220, 80, 50, 30);
+    UIButton *addTagButton = [[UIButton alloc] initWithFrame:frameForAddTagButton];
+    [addTagButton setTitle:@"Add" forState:UIControlStateNormal];
+    [addTagButton setBackgroundColor:[UIColor blackColor]];
+    [addTagButton addTarget:self action:@selector(addTagHandler:) forControlEvents:UIControlEventTouchUpInside];
+    [tagsView addSubview:addTagButton];
 }
 
-
-//-(void)showHideTags {    
-//    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Add/Remove Tag" 
-//                                                        delegate:self 
-//                                                        cancelButtonTitle:@"Cancel" 
-//                                                        destructiveButtonTitle:nil 
-//                                                        otherButtonTitles:@"Save", nil];
-//    
-//    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-//    [actionSheet showInView:self.view]; 
-//    [actionSheet release];
-//    
-//    
-//    textFieldInActionSheet = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
-//    [textFieldInActionSheet setBackgroundColor:[UIColor whiteColor]];
-//    textFieldInActionSheet.delegate = self;
-//    textFieldInActionSheet.tag = 999;
-//    
-//    [actionSheet addSubview:textFieldInActionSheet];
-//    [self performSelector:@selector(acceptInput:) withObject: actionSheet];
-//}
-//
-//-(void)acceptInput:(id)sender {
-//    
-//}
-
--(IBAction)manageTagForThePhoto:(id)sender {
+-(IBAction)manageTagForThePhoto:(id)sender {    
     [self showHideTags];
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textFieldForEnteringTag resignFirstResponder];
+    return YES;
 }
 
 #pragma mark Scroll View delegate
@@ -513,8 +530,10 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		[self playAudioNote:(id) self];
         self.previousSlideEndTime = [NSDate date];
         
-        [self showHideTags];
-	}
+        [tagsView removeFromSuperview];
+        [scrollViewForShowingAndDeletingTags removeFromSuperview];
+
+    }
 }
 
 #pragma mark -
@@ -783,7 +802,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(slideShowTimerCallback:) userInfo:nil repeats:YES];
 }
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if(slideShowTimer != nil && [slideShowTimer isValid])
     {

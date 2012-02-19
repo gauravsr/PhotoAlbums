@@ -552,8 +552,8 @@
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
-				PROVISIONING_PROFILE = "1AA58192-E35A-4948-8650-DDCE194DA313";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1AA58192-E35A-4948-8650-DDCE194DA313";
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
@@ -564,12 +564,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PhotoAlbums_Prefix.pch;
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
@@ -596,14 +600,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PhotoAlbums_Prefix.pch;
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;

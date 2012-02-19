@@ -12,6 +12,7 @@
 #import "Page.h"
 #import "PageToolBar.h"
 #import "AlbumView.h"
+#import "Tag.h"
 
 #import "AudioQueueObject.h"
 #import "AudioRecorder.h"
@@ -22,7 +23,9 @@
 
 @interface PhotoViewController : UIViewController <UIScrollViewDelegate, 
                                                     UIActionSheetDelegate, 
-                                                    MFMailComposeViewControllerDelegate>
+                                                    MFMailComposeViewControllerDelegate,
+                                                    UITextFieldDelegate,
+                                                    NSFetchedResultsControllerDelegate>
 {
 	//model
 	Album					*album;
@@ -37,13 +40,16 @@
 	
     BOOL					slideshowMode;
     NSDate                  *previousSlideEndTime;
-	
+    Tag                     *tag;
+    
 	//view 	
 	IBOutlet AlbumView		*albumView;
 	IBOutlet PageToolBar	*pageToolBar;
 	NSMutableArray			*pageViewCollection;
 	UIView                  *tagsView;
+    UITextField             *textFieldForEnteringTag;
     UIScrollView            *scrollViewForShowingAndDeletingTags;
+    
 	//utils
 	AudioRecorder			*audioRecorder;
 	AudioPlayer				*audioPlayer;
@@ -62,12 +68,15 @@
 @property (nonatomic) BOOL									interruptedOnPlayback;
 @property (nonatomic) BOOL									slideshowMode;
 @property (nonatomic, retain) NSDate						*previousSlideEndTime;
+@property (nonatomic, retain) Tag                           *tag;
 
 //view
 @property (nonatomic, retain) AlbumView						*albumView;
 @property (nonatomic, retain) PageToolBar					*pageToolBar;
 @property (nonatomic, retain) NSMutableArray				*pageViewCollection;
 @property (nonatomic, retain) UIView                        *tagsView;
+@property (nonatomic, retain) UITextField                   *textFieldForEnteringTag;
+
 @property (nonatomic, retain) UIScrollView                  *scrollViewForShowingAndDeletingTags;
 //utils
 @property (nonatomic, retain) AudioRecorder					*audioRecorder;
