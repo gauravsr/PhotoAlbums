@@ -404,7 +404,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 #pragma mark Tag
 
 #define SCROLL_VIEW_HEIGHT 60
-#define TAG_WIDTH 60
+#define TAG_WIDTH 100
 #define TAG_HEIGHT 20
 
 -(CGRect)frameForTagsView {
@@ -431,18 +431,62 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     [scrollViewForShowingAndDeletingTags removeFromSuperview];
 }
 
+
+-(NSMutableArray *)listOfTagLabels {
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    NSError *error;
+    PhotoAlbumsAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Tag" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *currentPage = scrollViewForPageView.pageView.page;
+    
+    for (NSManagedObject *info in fetchedObjects) {
+        Page *page = [info valueForKey:@"currentPage"];
+        if([page isEqual:currentPage]) {
+            NSLog(@"Name: %@", [info valueForKey:@"title"]);
+            [list addObject:[info valueForKey:@"title"]];
+        }
+    }        
+    [fetchRequest release];
+    
+    
+    return list;
+}
+
+-(void)showTags {
+    NSMutableArray *list = [self listOfTagLabels];
+    
+    for(int i=0; i<[list count]; i++) {
+        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH + 10, TAG_HEIGHT);
+        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
+        label.text = [list objectAtIndex:i];
+        [scrollViewForShowingAndDeletingTags addSubview:label];
+    }
+}
+
 -(void)addTagHandler:(id)sender {
     PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];	
 	NSManagedObjectContext *context = [appDelegate managedObjectContext];
 	NSError *error = nil;
-	
+    
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *currentPage = scrollViewForPageView.pageView.page;
+    
     Tag *tagManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Tag" inManagedObjectContext:context];
     [tagManagedObject setValue:[textFieldForEnteringTag text] forKey:@"title"];
+    [tagManagedObject setValue:currentPage forKey:@"currentPage"];
 	
     if (![context save:&error]) {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }
+    
+    [self showTags];
 }
 
 -(void)addScrollViewForShowingAndDeletingTags {
@@ -465,13 +509,9 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     
     [self addScrollViewForShowingAndDeletingTags];
     
-//    for(int i=0; i<20; i++) {
-//        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH, TAG_HEIGHT);
-//        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
-//        NSString *index = [NSString stringWithFormat:@"%d", i];
-//        label.text = [NSString stringWithFormat:@"Tag%@", index];
-//        [scrollViewForShowingAndDeletingTags addSubview:label];
-//    }
+    [self showTags];
+    
+    //[self listOfTagLabels];
     
     CGRect mainScreenFrame = [[UIScreen mainScreen] bounds];
     CGRect frameForTextFieldForEnteringTag = CGRectMake(20, SCROLL_VIEW_HEIGHT + 20, mainScreenFrame.size.width/2, 30);
