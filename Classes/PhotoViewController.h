@@ -40,7 +40,7 @@
 	
     BOOL					slideshowMode;
     NSDate                  *previousSlideEndTime;
-    Tag                     *tag;
+    NSArray          *fetchedTagsFromCoredata;
     
 	//view 	
 	IBOutlet AlbumView		*albumView;
@@ -68,7 +68,7 @@
 @property (nonatomic) BOOL									interruptedOnPlayback;
 @property (nonatomic) BOOL									slideshowMode;
 @property (nonatomic, retain) NSDate						*previousSlideEndTime;
-@property (nonatomic, retain) Tag                           *tag;
+@property (nonatomic, retain) NSArray                *fetchedTagsFromCoredata;
 
 //view
 @property (nonatomic, retain) AlbumView						*albumView;

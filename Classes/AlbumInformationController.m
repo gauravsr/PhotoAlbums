@@ -14,6 +14,7 @@
 
 @synthesize titleLabel, hiddenSwitch, nameTextField;
 @synthesize	album;
+@synthesize tableView;
 
 - (void)viewWillAppear:(BOOL)animated 
 {
@@ -83,6 +84,7 @@
 		
 		[newManagedObject setValue:[nameTextField text] forKey:@"title"];
 		[newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden" ];		
+        [newManagedObject setValue:@"A" forKey:@"sorter"];
 	}
 	
     if (![context save:&error]) 
@@ -95,8 +97,10 @@
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }
-	
+
 	[self dismissModalViewControllerAnimated:true]; 
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadAlbumViewController" object:@"ReloadAlbumViewController"];
 }
 
 - (IBAction) cancel: (id) sender

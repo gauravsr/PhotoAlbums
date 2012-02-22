@@ -70,7 +70,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 @synthesize tagsView;
 @synthesize textFieldForEnteringTag;
 @synthesize scrollViewForShowingAndDeletingTags;
-@synthesize tag;
+@synthesize fetchedTagsFromCoredata;
 
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
@@ -283,7 +283,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 							interruptionListenerCallback,
 							self
 							);
-	
 }
 
 - (void) viewWillAppear: (BOOL) animated
@@ -435,18 +434,17 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 -(NSMutableArray *)listOfTagLabels {
     NSMutableArray *list = [[NSMutableArray alloc] init];
     NSError *error;
-    PhotoAlbumsAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = [appDelegate managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Tag" inManagedObjectContext:context];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Tag" 
+                                                        inManagedObjectContext:applicationManagedObjectContext];
     [fetchRequest setEntity:entity];
-    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    fetchedTagsFromCoredata = [applicationManagedObjectContext executeFetchRequest:fetchRequest error:&error];
     
     ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
     Page *currentPage = scrollViewForPageView.pageView.page;
     
-    for (NSManagedObject *info in fetchedObjects) {
-        Page *page = [info valueForKey:@"currentPage"];
+    for (NSManagedObject *info in fetchedTagsFromCoredata) {
+        Page *page = [info valueForKey:@"page"];
         if([page isEqual:currentPage]) {
             NSLog(@"Name: %@", [info valueForKey:@"title"]);
             [list addObject:[info valueForKey:@"title"]];
@@ -470,18 +468,18 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 }
 
 -(void)addTagHandler:(id)sender {
-    PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];	
-	NSManagedObjectContext *context = [appDelegate managedObjectContext];
 	NSError *error = nil;
     
     ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
     Page *currentPage = scrollViewForPageView.pageView.page;
     
-    Tag *tagManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Tag" inManagedObjectContext:context];
+    Tag *tagManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Tag" 
+                                                inManagedObjectContext:applicationManagedObjectContext];
     [tagManagedObject setValue:[textFieldForEnteringTag text] forKey:@"title"];
-    [tagManagedObject setValue:currentPage forKey:@"currentPage"];
-	
-    if (![context save:&error]) {
+    [tagManagedObject setValue:currentPage forKey:@"page"];
+	[tagManagedObject setValue:[NSDate date] forKey:@"creationDate"];
+    [tagManagedObject setValue:@"B" forKey:@"sorter"];
+    if (![applicationManagedObjectContext save:&error]) {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }

@@ -15,7 +15,7 @@
 	UILabel											*titleLabel;
 	UITextField										*nameTextField;
 	UISwitch										*hiddenSwitch;
-	
+	UITableView                                     *tableView;
 	//model
 	Album											*album;	
 	
@@ -28,7 +28,7 @@
 @property(nonatomic, retain) IBOutlet UISwitch		*hiddenSwitch;
 
 @property(nonatomic, assign) Album					*album;
-
+@property(nonatomic, assign) UITableView                                     *tableView;
 - (IBAction) save: (id) sender;
 - (IBAction) cancel: (id) sender;
 
