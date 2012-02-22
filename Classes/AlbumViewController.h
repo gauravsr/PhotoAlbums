@@ -14,6 +14,7 @@
 #import "Page.h"
 #import "AlbumThumbnailView.h"
 #import "ELCImagePickerController.h"
+#import "VideoUtil.h"
 
 @interface AlbumViewController : UIViewController <ELCImagePickerControllerDelegate, 
                                                     UINavigationControllerDelegate, 
@@ -37,6 +38,7 @@
     IBOutlet UIToolbar                  *toolbar;
     NSArray                             *existingToolbarItems;
     UIBarButtonItem                     *deleteButton;
+    UIBarButtonItem                     *shareButton;
     
 	//NSMutableArray						*mThreadQueue;
 	int									mPhotoSourceType;
@@ -57,6 +59,8 @@
 @property (nonatomic, assign) NSArray                       *existingToolbarItems;
 @property (nonatomic, assign) BOOL                          isDeleteModeActive;
 @property (nonatomic, retain) UIBarButtonItem               *deleteButton;
+@property (nonatomic, retain) UIBarButtonItem               *shareButton;
+
 // data
 @property (nonatomic, retain) NSMutableArray            *referenceURLArray;
 @property (nonatomic, retain) NSMutableArray            *selectedPagesWhileDoingBulkOperations;
@@ -69,9 +73,11 @@
 //methods
 - (void) validate;
 - (void) addPageForImage: (UIImage *) image;
+- (void) addPhotoFromCamera;
 
 - (IBAction) addPhoto: (id) sender;
 - (IBAction) startSlideShow: (id) sender;
--(IBAction)handleBulkOperations:(id)sender;
-- (void) addPhotoFromCamera;
+- (IBAction) handleBulkOperations:(id)sender;
+- (IBAction) sharePhotos:(id)sender;
+
 @end

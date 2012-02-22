@@ -28,6 +28,9 @@
 
 @implementation AlbumViewController
 
+#pragma mark -
+#pragma mark Properties
+
 @synthesize album;
 //@synthesize photoViewController;
 @synthesize noPhotoView;
@@ -39,8 +42,11 @@
 @synthesize toolbar;
 @synthesize existingToolbarItems;
 @synthesize selectedPagesWhileDoingBulkOperations;
-@synthesize deleteButton;
+@synthesize deleteButton, shareButton;
 
+
+#pragma mark -
+#pragma mark Globals
 /************************************************
  *					Globals						*
  ***********************************************/
@@ -62,9 +68,7 @@
  */
 - (NSString *) albumAudioDirectoryPath 
 {
-	NSString *audioDirectoryPath = [NSString stringWithFormat:@"%@/audio", /*VJ - documentsDirectoryPath,*/album.albumID];
-	
-	
+	NSString *audioDirectoryPath = [NSString stringWithFormat:@"%@/audio", /*VJ - documentsDirectoryPath,*/album.albumID];	
 	return audioDirectoryPath;
 }
 
@@ -86,6 +90,9 @@
 	return [appDelegate managedObjectContext];
 }
 
+
+#pragma mark -
+#pragma mark View Life Cycle methods
 /************************************************
  *					View Operations				*
  ***********************************************/
@@ -137,9 +144,16 @@
 	[noPhotoHeader release];
 	[albumThumbnailView release];
     //[photoViewController release];
-	[super dealloc];
+    
+    [selectedPagesWhileDoingBulkOperations removeAllObjects];
+    [selectedPagesWhileDoingBulkOperations release];
+	
+    [super dealloc];
 }
 
+
+#pragma mark -
+#pragma mark Album methods
 /************************************************
  *					Album Operations			*
  ***********************************************/
@@ -365,6 +379,7 @@
 	[mActivityView stopAnimating];
 }
 
+#pragma mark -
 #pragma mark Slide show methods
 /************************************************
  *					SlideShow Operations		*
@@ -408,9 +423,127 @@
     }
 }
 
-- (void)thumbnailView:(XImageView *)image didSelectedIndex:(int)index {
-    if(isDeleteModeActive) {
+#pragma mark -
+#pragma mark Bulk operations
+-(void)manageToolbar {
+    existingToolbarItems = [[self.toolbar items] retain];
+    
+    deleteButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStyleDone target:self action:@selector(deleteSelectedPhotos:)];
+    
+    deleteButton.tintColor = [UIColor redColor];
+    
+    shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleDone target:self action:@selector(sharePhotos:)];
+    
+    deleteButton.width = shareButton.width = self.view.frame.size.width/2 - 10;
+    
+    [self.toolbar setItems:[NSArray arrayWithObjects:deleteButton, shareButton, nil]];
+}
+
+-(void) validateToolBar {
+    NSString *numberOfItemsSelected = [NSString stringWithFormat:@"%d", [selectedPagesWhileDoingBulkOperations count]];
+    
+    //Validate Delete Button Label
+    if(deleteButton != nil) {
+        NSMutableString *deleteButtonLabel = [NSMutableString stringWithString:@"Delete ("];
+        [deleteButtonLabel appendString:numberOfItemsSelected];
+        [deleteButtonLabel appendString:@")"];
         
+        [deleteButton setTitle:deleteButtonLabel];
+        
+        if([numberOfItemsSelected isEqualToString:@"0"]) {
+            [deleteButton setTitle:@"Delete"];
+        }        
+    }
+    
+    //Validate Share Button Label
+    if(shareButton != nil) {
+        NSMutableString *shareButtonLabel = [NSMutableString stringWithString:@"Share ("];
+        [shareButtonLabel appendString:numberOfItemsSelected];
+        [shareButtonLabel appendString:@")"];
+        
+        [shareButton setTitle:shareButtonLabel];
+        
+        if([numberOfItemsSelected isEqualToString:@"0"]) {
+            [shareButton setTitle:@"Share"];
+        }    
+    }        
+}
+
+- (void) deletePage:(Page *)currentPage {    
+    NSFileManager* fileManager = [NSFileManager defaultManager];	
+    NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
+    NSString *imagePath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, currentPage.imagePath];
+    NSString *tnImagePath = [NSString stringWithFormat:@"%@/%@.thumbnail",applicationDocumentDirPath, currentPage.imagePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) 
+    {
+        [fileManager removeItemAtPath:imagePath error:nil];
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:tnImagePath]) 
+    {
+        [fileManager removeItemAtPath:tnImagePath error:nil];
+    }    
+    
+    [currentPage setValue:nil forKey:@"imagePath"];
+    
+    [self.album removePagesObject:currentPage];
+    [[self applicationManagedObjectContext] deleteObject:currentPage];
+    
+    [self saveAlbum];
+    [self validate];
+}
+
+-(void)deleteSelectedPhotos:(id)sender {
+    for(Page *page in selectedPagesWhileDoingBulkOperations) {
+        [self deletePage:page];
+    }
+    
+    [selectedPagesWhileDoingBulkOperations removeAllObjects];
+    [self validateToolBar];
+}
+
+- (IBAction) sharePhotos:(id)sender {     
+    [VideoUtil createVideoForPages:(NSArray *)selectedPagesWhileDoingBulkOperations];    
+}
+
+- (void) clearSelectedImages {
+    NSArray *thumbnailImageViews = self.albumThumbnailView.subviews;
+    for(XImageView *imageView in thumbnailImageViews) {
+        if([imageView.isPhotoSelectedForTheFirstTime isEqualToString:@"NO"]) {
+            [imageView doToggling:0];
+        }
+    }
+    
+    [selectedPagesWhileDoingBulkOperations removeAllObjects];
+}
+
+- (void)exitFromBulkOperations:(id)sender {
+    isDeleteModeActive = NO;
+    [self clearSelectedImages];    
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editAlbum)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+    
+    [self.toolbar setItems:existingToolbarItems];
+    [existingToolbarItems release];
+}
+
+- (IBAction)handleBulkOperations: (id)sender {
+    isDeleteModeActive = YES;    
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(exitFromBulkOperations:)];
+    cancelButton.tintColor = [UIColor blueColor];
+    self.navigationItem.rightBarButtonItem = cancelButton;
+    
+    [self manageToolbar];
+}
+
+#pragma mark -
+#pragma mark Grid View methods
+- (void)thumbnailView:(XImageView *)image didSelectedIndex:(int)index {
+    if(isDeleteModeActive) {        
         NSArray *pages = [self.album.pages allObjects];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
         pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -425,17 +558,8 @@
         else {
             [selectedPagesWhileDoingBulkOperations removeObject:page];
         }
-        NSString *numberOfItemsSelected = [NSString stringWithFormat:@"%d", [selectedPagesWhileDoingBulkOperations count]];
-        NSMutableString *deleteButtonLabel = [NSMutableString stringWithString:@"Delete ("];
-        [deleteButtonLabel appendString:numberOfItemsSelected];
-        [deleteButtonLabel appendString:@")"];
         
-        [deleteButton setTitle:deleteButtonLabel];
-                
-        if([numberOfItemsSelected isEqualToString:@"0"]) {
-            [deleteButton setTitle:@"Delete"];
-        }
-        
+        [self validateToolBar];
     }
     else {
         PhotoViewController *photoViewController = [self preparePhotoViewController];
@@ -444,83 +568,6 @@
         [self.navigationController pushViewController:photoViewController animated:YES];
         [photoViewController release];
     }
-}
-
-#pragma mark Bulk operations
-
--(void)deleteSelectedPhotoOnCurrentPage:(Page *)currentPage {
-    
-    NSFileManager* fileManager = [NSFileManager defaultManager];	
-    NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
-    NSString *imagePath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, currentPage.imagePath];
-    NSString *tnImagePath = [NSString stringWithFormat:@"%@/%@.thumbnail",applicationDocumentDirPath, currentPage.imagePath];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) 
-    {
-        [fileManager removeItemAtPath:imagePath error:nil];
-    }
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:tnImagePath]) 
-    {
-        [fileManager removeItemAtPath:tnImagePath error:nil];
-    }
-    
-    
-    [currentPage setValue:nil forKey:@"imagePath"];
-    
-    [self.album removePagesObject:currentPage];
-    [[self applicationManagedObjectContext] deleteObject:currentPage];
-    
-    [self saveAlbum];
-    [self validate];
-}
-
-
--(void)deleteSelectedPhotos:(id)sender {
-    for(Page *page in selectedPagesWhileDoingBulkOperations) {
-        [self deleteSelectedPhotoOnCurrentPage:page];
-    }
-    [selectedPagesWhileDoingBulkOperations removeAllObjects];
-    [deleteButton setTitle:@"Delete"];
-}
-
--(void)sharePhotos:(id)sender {
-
-}
-
--(void)exitFromBulkOperations:(id)sender {
-    isDeleteModeActive = NO;
-    
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editAlbum)];
-    self.navigationItem.rightBarButtonItem = editButton;
-    [editButton release];
-    
-    [self.toolbar setItems:existingToolbarItems];
-    [existingToolbarItems release];
-}
-
--(void)manageToolbar {
-    existingToolbarItems = [[self.toolbar items] retain];
-    
-    deleteButton = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStyleDone target:self action:@selector(deleteSelectedPhotos:)];
-    
-    deleteButton.tintColor = [UIColor redColor];
-    
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleDone target:self action:@selector(sharePhotos:)];
-    
-    deleteButton.width = shareButton.width = self.view.frame.size.width/2 - 10;
-    
-    [self.toolbar setItems:[NSArray arrayWithObjects:deleteButton, shareButton, nil]];
-}
-
--(IBAction)handleBulkOperations:(id)sender {
-    isDeleteModeActive = YES;    
-    
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(exitFromBulkOperations:)];
-    cancelButton.tintColor = [UIColor blueColor];
-    self.navigationItem.rightBarButtonItem = cancelButton;
-    
-    [self manageToolbar];
 }
 
 @end
