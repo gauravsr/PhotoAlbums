@@ -67,6 +67,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 @synthesize currentPageIndex, interruptedOnPlayback, slideshowMode;
 @synthesize selectedIndex;
 @synthesize previousSlideEndTime;
+@synthesize tagsView;
+@synthesize textFieldForEnteringTag;
+@synthesize scrollViewForShowingAndDeletingTags;
+@synthesize fetchedTagsFromCoredata;
+@synthesize albumOfTypeTag;
 
 //view
 @synthesize albumView, pageViewCollection, pageToolBar;
@@ -90,7 +95,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 -(CGRect)frameForScrollViewForZooming:(int)index {
     CGRect bounds = self.albumView.bounds;
     CGRect pageFrame = bounds;
-    pageFrame.size.width -= (2 * 10);
+    pageFrame.size.width -= 20;
     pageFrame.origin.x = (bounds.size.width * index) + 10;
     return pageFrame;
 }
@@ -243,7 +248,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
         ScrollViewForPageView *scrollViewForPageView = [[ScrollViewForPageView alloc] init];
         scrollViewForPageView.pageView = aPageView;
         [self.pageViewCollection addObject:scrollViewForPageView];
-        
 	}
 	
 	if(pageCount == 0)
@@ -280,7 +284,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 							interruptionListenerCallback,
 							self
 							);
-	
 }
 
 - (void) viewWillAppear: (BOOL) animated
@@ -376,7 +379,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 			[self.pageToolBar showRecordAudioNoteToolBar];
 		} else
 		{
-			//PageView *pageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
             ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:self.currentPageIndex];
             [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
             [self.pageToolBar setAudioAvailable:[scrollViewForPageView.pageView.page hasAudioNote]];
@@ -395,6 +397,221 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	[self validateAlbum];
 	[self validatePageToolBar];
 	[self refreshTitle];    
+}
+
+
+
+#pragma mark Tag
+
+#define SCROLL_VIEW_HEIGHT 60
+#define TAG_WIDTH 100
+#define TAG_HEIGHT 20
+
+-(CGRect)frameForTagsView {
+    CGSize viewSize = [self.view bounds].size;
+    CGRect frame = CGRectMake(0, 
+                              viewSize.height/2, 
+                              viewSize.width, 
+                              viewSize.height/2);
+    return frame;
+}
+
+-(CGRect)frameForShowingAndDeletingTags {
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    frame.size.height = SCROLL_VIEW_HEIGHT;
+    return frame;
+}
+
+-(CGSize)contentSizeForTagScrollView {
+    return CGSizeMake(TAG_WIDTH * 20, SCROLL_VIEW_HEIGHT);
+}
+
+-(void)scrollViewForPageViewTapped:(id)sender {
+    [tagsView removeFromSuperview];
+    [scrollViewForShowingAndDeletingTags removeFromSuperview];
+}
+
+
+-(NSMutableArray *)listOfTagLabels {
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    NSError *error;
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Album" 
+                                                        inManagedObjectContext:applicationManagedObjectContext];
+    [fetchRequest setEntity:entity];
+    fetchedTagsFromCoredata = [[applicationManagedObjectContext executeFetchRequest:fetchRequest error:&error] retain];
+    
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *currentPage = scrollViewForPageView.pageView.page;   
+     
+    for(Album *albumsOfTypeTag in fetchedTagsFromCoredata) {
+        if(albumsOfTypeTag.isTag == [NSNumber numberWithInt:1]) {
+            for(Page *page in albumsOfTypeTag.pages) {
+                if([page isEqual:currentPage]) {
+                    [list addObject:albumsOfTypeTag.title];
+                }
+            }
+        }
+        
+    }
+    
+    [fetchRequest release];
+    
+    
+    return list;
+}
+
+-(void)showTags {
+    NSMutableArray *list = [self listOfTagLabels];
+    
+    for(int i=0; i<[list count]; i++) {
+        CGRect frameForUILabel = CGRectMake(i * TAG_WIDTH, 0, TAG_WIDTH + 10, TAG_HEIGHT);
+        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
+        label.text = [list objectAtIndex:i];
+        [scrollViewForShowingAndDeletingTags addSubview:label];
+    }
+}
+
+-(NSMutableArray *)filterAlbumsOfTypeTag {
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    
+    for(Album *currentAlbum in self.fetchedTagsFromCoredata) {
+        if([currentAlbum.isTag isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            [list addObject:currentAlbum];
+        }
+    }
+    
+    return list;
+}
+
+-(void)addTagHandler:(id)sender {
+	NSError *error = nil;
+    BOOL isTagAlreadyPresent = NO;
+    Album *a;
+    ScrollViewForPageView *scrollViewForPageView = [self.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *page = scrollViewForPageView.pageView.page;
+    
+    NSMutableArray *listOfAlbumsOfTypeTag = [self filterAlbumsOfTypeTag];
+    
+    if([listOfAlbumsOfTypeTag count] == 0) {
+        albumOfTypeTag = [NSEntityDescription insertNewObjectForEntityForName:@"Album" 
+                                                       inManagedObjectContext:applicationManagedObjectContext];
+        [albumOfTypeTag setValue:[textFieldForEnteringTag text] forKey:@"title"];
+        [albumOfTypeTag addPagesObject:page];
+        [albumOfTypeTag setValue:[NSDate date] forKey:@"creationDate"];
+        [albumOfTypeTag setValue:[NSNumber numberWithBool:1] forKey:@"isTag"];
+        
+        if (![applicationManagedObjectContext save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+    else {
+        for(Album *currentAlbum in listOfAlbumsOfTypeTag) {
+            if([[currentAlbum valueForKey:@"title"] isEqualToString:[textFieldForEnteringTag text]]) {
+                isTagAlreadyPresent = YES;
+                a = currentAlbum;
+                break;
+                
+            }
+            else {
+                isTagAlreadyPresent = NO;
+            }
+        }
+        if(isTagAlreadyPresent) {
+            [a addPagesObject:page];
+        }
+        else {
+            albumOfTypeTag = [NSEntityDescription insertNewObjectForEntityForName:@"Album" 
+                                                           inManagedObjectContext:applicationManagedObjectContext];
+            [albumOfTypeTag setValue:[textFieldForEnteringTag text] forKey:@"title"];
+            [albumOfTypeTag addPagesObject:page];
+            [albumOfTypeTag setValue:[NSDate date] forKey:@"creationDate"];
+            [albumOfTypeTag setValue:[NSNumber numberWithBool:1] forKey:@"isTag"];
+            
+            if (![applicationManagedObjectContext save:&error]) {
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                abort();
+            }
+        }
+    }
+
+    
+//    BOOL isItemAlreadyPresent= NO;
+//    
+//    for(Album *currentAlbum in self.fetchedTagsFromCoredata) {
+//        NSLog(@"%@", [currentAlbum valueForKey:@"title"]);
+//        if([[currentAlbum valueForKey:@"title"] isEqualToString:[textFieldForEnteringTag text]]) {
+//            isItemAlreadyPresent = YES;
+//        }
+//    }
+//    if(!isItemAlreadyPresent) {
+//        album = [NSEntityDescription insertNewObjectForEntityForName:@"Album" 
+//                                              inManagedObjectContext:applicationManagedObjectContext];
+//        [album setValue:[textFieldForEnteringTag text] forKey:@"title"];
+//        [album addPagesObject:page];
+//        [album setValue:[NSDate date] forKey:@"creationDate"];
+//        [album setValue:[NSNumber numberWithBool:1] forKey:@"isTag"];
+//        
+//        if (![applicationManagedObjectContext save:&error]) {
+//            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+//            abort();
+//        }
+//    }
+//    
+//    else {
+//        [album addPagesObject:page];    
+//        [album setValue:[NSNumber numberWithBool:1] forKey:@"isTag"];
+//    }
+    
+    [self showTags];
+}
+
+-(void)addScrollViewForShowingAndDeletingTags {
+    scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
+    
+    scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView];
+    scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];
+    [tagsView addSubview:scrollViewForShowingAndDeletingTags];
+}
+
+-(void)showHideTags {
+    [[NSNotificationCenter defaultCenter] addObserver:self 
+                                            selector:@selector(scrollViewForPageViewTapped:) 
+                                            name:@"ScrollViewForPageViewTapped" 
+                                            object:nil];
+    
+    tagsView = [[UIView alloc] initWithFrame:[self frameForTagsView]];
+    tagsView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:tagsView];
+    
+    [self addScrollViewForShowingAndDeletingTags];
+    
+    [self showTags];
+
+    CGRect mainScreenFrame = [[UIScreen mainScreen] bounds];
+    CGRect frameForTextFieldForEnteringTag = CGRectMake(20, SCROLL_VIEW_HEIGHT + 20, mainScreenFrame.size.width/2, 30);
+    textFieldForEnteringTag = [[UITextField alloc] initWithFrame:frameForTextFieldForEnteringTag];
+    textFieldForEnteringTag.placeholder = @"Enter a tag";
+    textFieldForEnteringTag.delegate = self;
+    textFieldForEnteringTag.backgroundColor = [UIColor purpleColor];
+    [tagsView addSubview:textFieldForEnteringTag];
+    
+    CGRect frameForAddTagButton = CGRectMake(220, 80, 50, 30);
+    UIButton *addTagButton = [[UIButton alloc] initWithFrame:frameForAddTagButton];
+    [addTagButton setTitle:@"Add" forState:UIControlStateNormal];
+    [addTagButton setBackgroundColor:[UIColor blackColor]];
+    [addTagButton addTarget:self action:@selector(addTagHandler:) forControlEvents:UIControlEventTouchUpInside];
+    [tagsView addSubview:addTagButton];
+}
+
+-(IBAction)manageTagForThePhoto:(id)sender {    
+    [self showHideTags];
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textFieldForEnteringTag resignFirstResponder];
+    return YES;
 }
 
 #pragma mark Scroll View delegate
@@ -428,7 +645,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 		
 		[self playAudioNote:(id) self];
         self.previousSlideEndTime = [NSDate date];
-	}
+        
+        [tagsView removeFromSuperview];
+        [scrollViewForShowingAndDeletingTags removeFromSuperview];
+
+    }
 }
 
 #pragma mark -
@@ -697,7 +918,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(slideShowTimerCallback:) userInfo:nil repeats:YES];
 }
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if(slideShowTimer != nil && [slideShowTimer isValid])
     {

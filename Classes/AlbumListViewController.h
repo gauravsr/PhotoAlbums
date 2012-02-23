@@ -2,21 +2,23 @@
 //  AlbumListViewController.h
 //  PhotoAlbums
 //
-//  Created by raheja on 23/06/10.
-//  Copyright Xebia IT Architects India Private Limited 2010. All rights reserved.
+//  Created by Gaurav on 20/02/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-@interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource> 
-{
-	NSFetchedResultsController				*fetchedResultsController;
-	NSManagedObjectContext					*managedObjectContext;
+#import <UIKit/UIKit.h>
+#import "Album.h"
 
-	NSMutableDictionary						*albumControllerDictionary;	
-	UILabel									*mHelpertextLabel;
+@interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+    NSFetchedResultsController *fetchedResultsController;
+    NSManagedObjectContext *managedObjectContext;
+    UILabel *mHelpertextLabel;
+    Album                   *albumOfTypeTag;
 }
 
-@property (nonatomic, retain) NSFetchedResultsController	*fetchedResultsController;
-@property (nonatomic, retain) NSManagedObjectContext		*managedObjectContext;
-@property (nonatomic, retain) NSMutableDictionary			*albumControllerDictionary;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) 	Album                   *albumOfTypeTag;
+
 
 @end

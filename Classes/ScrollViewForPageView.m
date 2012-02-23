@@ -11,6 +11,8 @@
 @implementation ScrollViewForPageView
 
 @synthesize pageView;
+@synthesize photoViewController;
+@synthesize isTouched;
 
 -(id)addImage:(UIImage *)image {
     pageView = [[PageView alloc] initWithImage:image];
@@ -51,6 +53,9 @@
     pageView.frame = frameToCenter;
 }
 
-
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    isTouched = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ScrollViewForPageViewTapped" object:@"ScrollViewForPageViewTapped"];
+}
 
 @end

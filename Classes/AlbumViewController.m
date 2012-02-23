@@ -44,6 +44,7 @@
 @synthesize selectedPagesWhileDoingBulkOperations;
 @synthesize deleteButton, shareButton;
 
+@synthesize albumOfTypeTag;
 
 #pragma mark -
 #pragma mark Globals
@@ -194,9 +195,8 @@
 	Page *newPage = [NSEntityDescription insertNewObjectForEntityForName:@"Page" inManagedObjectContext:context];
 	
 	//configure the new managed object.
-	[newPage setValue:self.album forKey:@"album"];
+	[newPage addAlbumObject:self.album];
 	[newPage setValue:[NSDate date] forKey:@"creationDate"];	
-	//[self saveAlbum];
 	
 	UIImage *scaledImage = [PhotoUtil createSnapshot:image];
 	image = scaledImage;
@@ -232,7 +232,6 @@
 			NSLog(@"Thumbnail Write Failed");
 		}
 		
-	//	[self saveAlbum];
 	}
 	
 	[self saveAlbum];
@@ -439,7 +438,7 @@
     [self.toolbar setItems:[NSArray arrayWithObjects:deleteButton, shareButton, nil]];
 }
 
--(void) validateToolBar {
+-(void) validateToolBar:(NSUInteger)index {
     NSString *numberOfItemsSelected = [NSString stringWithFormat:@"%d", [selectedPagesWhileDoingBulkOperations count]];
     
     //Validate Delete Button Label
@@ -454,12 +453,19 @@
             [deleteButton setTitle:@"Delete"];
         }        
     }
+
     
     //Validate Share Button Label
+    NSMutableString *shareButtonLabel;
     if(shareButton != nil) {
-        NSMutableString *shareButtonLabel = [NSMutableString stringWithString:@"Share ("];
+        shareButtonLabel = [NSMutableString stringWithString:@"Share ("];
         [shareButtonLabel appendString:numberOfItemsSelected];
         [shareButtonLabel appendString:@")"];
+    }
+    else {
+        PhotoViewController *photoViewController = [self preparePhotoViewController];
+        photoViewController.selectedIndex = index;
+        photoViewController.albumOfTypeTag = self.albumOfTypeTag;
         
         [shareButton setTitle:shareButtonLabel];
         
@@ -500,11 +506,11 @@
     }
     
     [selectedPagesWhileDoingBulkOperations removeAllObjects];
-    [self validateToolBar];
+    [self validateToolBar:0];
 }
 
 - (IBAction) sharePhotos:(id)sender {     
-    [VideoUtil createVideoForPages:(NSArray *)selectedPagesWhileDoingBulkOperations];    
+    //[VideoUtil createVideoForPages:(NSArray *)selectedPagesWhileDoingBulkOperations];    
 }
 
 - (void) clearSelectedImages {
@@ -559,7 +565,7 @@
             [selectedPagesWhileDoingBulkOperations removeObject:page];
         }
         
-        [self validateToolBar];
+        [self validateToolBar:index];
     }
     else {
         PhotoViewController *photoViewController = [self preparePhotoViewController];

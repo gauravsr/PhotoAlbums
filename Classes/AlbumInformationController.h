@@ -15,7 +15,8 @@
 	UILabel											*titleLabel;
 	UITextField										*nameTextField;
 	UISwitch										*hiddenSwitch;
-	
+    UISegmentedControl                              *typeControl;
+    
 	//model
 	Album											*album;	
 	
@@ -26,6 +27,7 @@
 @property(nonatomic, retain) IBOutlet UILabel		*titleLabel;
 @property(nonatomic, retain) IBOutlet UITextField	*nameTextField;
 @property(nonatomic, retain) IBOutlet UISwitch		*hiddenSwitch;
+@property(nonatomic, retain) IBOutlet UISegmentedControl *typeControl;
 
 @property(nonatomic, assign) Album					*album;
 

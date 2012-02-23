@@ -11,7 +11,6 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		28860B770F44E54D00985440 /* PhotoAlbums.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 28860B760F44E54D00985440 /* PhotoAlbums.xcdatamodel */; };
 		28860BE50F44EE6400985440 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28860BE40F44EE6400985440 /* CoreData.framework */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
@@ -30,18 +29,13 @@
 		344C8E3A1255B52900F1B29A /* PhotoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 344C8E391255B52900F1B29A /* PhotoUtil.m */; };
 		3456D78711E493E8009C349C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3456D78611E493E8009C349C /* Icon.png */; };
 		345A81B01255160F002AEA1F /* AlbumInformationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345A81AE1255160F002AEA1F /* AlbumInformationController.m */; };
-		345A81B11255160F002AEA1F /* AlbumInformationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345A81AF1255160F002AEA1F /* AlbumInformationController.xib */; };
 		349486AB121C6A260071D505 /* AlbumListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349486AA121C6A260071D505 /* AlbumListViewController.xib */; };
-		34DD5BE111D9EFAE00683601 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DD5BDE11D9EFAE00683601 /* Album.m */; };
-		34DD5BE211D9EFAE00683601 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DD5BE011D9EFAE00683601 /* Page.m */; };
 		34E0F1E012571ED3002C97B2 /* frame_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 34E0F1DE12571ED3002C97B2 /* frame_small.png */; };
 		34E0F1E112571ED3002C97B2 /* frame_medium.png in Resources */ = {isa = PBXBuildFile; fileRef = 34E0F1DF12571ED3002C97B2 /* frame_medium.png */; };
 		34E0F221125839FD002C97B2 /* PhotoRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E0F220125839FD002C97B2 /* PhotoRepository.m */; };
 		34E5B662121BB7D9008DF821 /* PhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E5B660121BB7D9008DF821 /* PhotoViewController.xib */; };
 		34E5B66F121BB901008DF821 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B66D121BB901008DF821 /* AlbumViewController.m */; };
 		34E5B670121BB901008DF821 /* AlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E5B66E121BB901008DF821 /* AlbumViewController.xib */; };
-		34E5B674121BB90F008DF821 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
-		34E5B7B3121BED58008DF821 /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B7B1121BED58008DF821 /* AlbumListViewController.m */; };
 		34F04892125EFDBD009A0FD9 /* AlbumThumbnailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04891125EFDBD009A0FD9 /* AlbumThumbnailView.m */; };
 		9F8D9DF514D018FB00597BB7 /* slideshow.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8D9DF314D018FB00597BB7 /* slideshow.png */; };
 		9F8D9DF614D018FB00597BB7 /* slideshow2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8D9DF414D018FB00597BB7 /* slideshow2.png */; };
@@ -56,7 +50,11 @@
 		D410E5441266EB6600636EB1 /* XImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D410E5431266EB6600636EB1 /* XImageView.m */; };
 		D45B7010127563FC0097357F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45B700F127563FC0097357F /* MessageUI.framework */; };
 		D46A70F6126C0B7F0014A0D8 /* Sound.png in Resources */ = {isa = PBXBuildFile; fileRef = D46A70F5126C0B7F0014A0D8 /* Sound.png */; };
+		F404243514F4D71E0043B90E /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = F404243214F4D71E0043B90E /* Album.m */; };
+		F404243614F4D71E0043B90E /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = F404243414F4D71E0043B90E /* Page.m */; };
+		F404243814F4D78B0043B90E /* AlbumInformationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F404243714F4D78B0043B90E /* AlbumInformationController.xib */; };
 		F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */; };
+		F4976E1C14F258700054FD2D /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4976E1B14F258700054FD2D /* AlbumListViewController.m */; };
 		F4BA46BB14DE536700C04F8D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BA46BA14DE536700C04F8D /* AVFoundation.framework */; };
 		F4BDBEAF14C8860300F76350 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */; };
 		F4C0042D14CFDB3C0083D8CC /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0041A14CFDB3C0083D8CC /* ELCAlbumPickerController.m */; };
@@ -72,7 +70,8 @@
 		F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */; };
 		F4C0043814CFDB3C0083D8CC /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042B14CFDB3C0083D8CC /* Overlay.png */; };
 		F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */; };
-		F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */; };
+		F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
+		F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,7 +80,6 @@
 		1D3623250D0F684500981E51 /* PhotoAlbumsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAlbumsAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* TalkingPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkingPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		28860B760F44E54D00985440 /* PhotoAlbums.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = PhotoAlbums.xcdatamodel; sourceTree = "<group>"; };
 		28860BE40F44EE6400985440 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* PhotoAlbums_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbums_Prefix.pch; sourceTree = "<group>"; };
@@ -110,12 +108,7 @@
 		3456D78611E493E8009C349C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = images/Icon.png; sourceTree = "<group>"; };
 		345A81AD1255160F002AEA1F /* AlbumInformationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumInformationController.h; sourceTree = "<group>"; };
 		345A81AE1255160F002AEA1F /* AlbumInformationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumInformationController.m; sourceTree = "<group>"; };
-		345A81AF1255160F002AEA1F /* AlbumInformationController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumInformationController.xib; path = Classes/AlbumInformationController.xib; sourceTree = "<group>"; };
 		349486AA121C6A260071D505 /* AlbumListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumListViewController.xib; sourceTree = "<group>"; };
-		34DD5BDD11D9EFAE00683601 /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
-		34DD5BDE11D9EFAE00683601 /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
-		34DD5BDF11D9EFAE00683601 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
-		34DD5BE011D9EFAE00683601 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		34E0F1DE12571ED3002C97B2 /* frame_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = frame_small.png; path = images/frame_small.png; sourceTree = "<group>"; };
 		34E0F1DF12571ED3002C97B2 /* frame_medium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = frame_medium.png; path = images/frame_medium.png; sourceTree = "<group>"; };
 		34E0F21F125839FD002C97B2 /* PhotoRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoRepository.h; sourceTree = "<group>"; };
@@ -126,8 +119,6 @@
 		34E5B66E121BB901008DF821 /* AlbumViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlbumViewController.xib; path = Classes/AlbumViewController.xib; sourceTree = "<group>"; };
 		34E5B671121BB90F008DF821 /* PhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewController.h; sourceTree = "<group>"; };
 		34E5B672121BB90F008DF821 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoViewController.m; sourceTree = "<group>"; };
-		34E5B7B0121BED58008DF821 /* AlbumListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumListViewController.h; sourceTree = "<group>"; };
-		34E5B7B1121BED58008DF821 /* AlbumListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumListViewController.m; sourceTree = "<group>"; };
 		34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumThumbnailView.h; sourceTree = "<group>"; };
 		34F04891125EFDBD009A0FD9 /* AlbumThumbnailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumThumbnailView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* PhotoAlbums-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PhotoAlbums-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -145,8 +136,15 @@
 		D410E5431266EB6600636EB1 /* XImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XImageView.m; sourceTree = "<group>"; };
 		D45B700F127563FC0097357F /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		D46A70F5126C0B7F0014A0D8 /* Sound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sound.png; path = images/Sound.png; sourceTree = "<group>"; };
+		F404243114F4D71E0043B90E /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
+		F404243214F4D71E0043B90E /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
+		F404243314F4D71E0043B90E /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
+		F404243414F4D71E0043B90E /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
+		F404243714F4D78B0043B90E /* AlbumInformationController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumInformationController.xib; sourceTree = "<group>"; };
 		F47A1CB814E83E2700A8DC0D /* ScrollViewForPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewForPageView.h; sourceTree = "<group>"; };
 		F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewForPageView.m; sourceTree = "<group>"; };
+		F4976E1A14F258700054FD2D /* AlbumListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumListViewController.h; sourceTree = "<group>"; };
+		F4976E1B14F258700054FD2D /* AlbumListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumListViewController.m; sourceTree = "<group>"; };
 		F4BA46BA14DE536700C04F8D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F4C0041914CFDB3C0083D8CC /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
@@ -169,8 +167,7 @@
 		F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerDemoViewController.m; sourceTree = "<group>"; };
 		F4C0042B14CFDB3C0083D8CC /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
-		F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoScrollView.h; sourceTree = "<group>"; };
-		F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoScrollView.m; sourceTree = "<group>"; };
+		F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PhotoAlbums.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,8 +240,8 @@
 			children = (
 				34118B3E11D1DBC800CFAAA5 /* Images */,
 				34118B3D11D1DBB000CFAAA5 /* Nibs */,
-				28860B760F44E54D00985440 /* PhotoAlbums.xcdatamodel */,
 				8D1107310486CEB800E47090 /* PhotoAlbums-Info.plist */,
+				F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -280,8 +277,6 @@
 				34118B4911D1DC4200CFAAA5 /* PageToolBar.m */,
 				34118B4A11D1DC4200CFAAA5 /* PageView.h */,
 				34118B4B11D1DC4200CFAAA5 /* PageView.m */,
-				F4E3648914CEFD3500ABF6DE /* PhotoScrollView.h */,
-				F4E3648A14CEFD3500ABF6DE /* PhotoScrollView.m */,
 				D410E5421266EB6600636EB1 /* XImageView.h */,
 				D410E5431266EB6600636EB1 /* XImageView.m */,
 				34F04890125EFDBD009A0FD9 /* AlbumThumbnailView.h */,
@@ -295,10 +290,10 @@
 		34118B3311D1DB5800CFAAA5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				34DD5BDF11D9EFAE00683601 /* Page.h */,
-				34DD5BE011D9EFAE00683601 /* Page.m */,
-				34DD5BDD11D9EFAE00683601 /* Album.h */,
-				34DD5BDE11D9EFAE00683601 /* Album.m */,
+				F404243114F4D71E0043B90E /* Album.h */,
+				F404243214F4D71E0043B90E /* Album.m */,
+				F404243314F4D71E0043B90E /* Page.h */,
+				F404243414F4D71E0043B90E /* Page.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -312,8 +307,8 @@
 				34E5B66D121BB901008DF821 /* AlbumViewController.m */,
 				345A81AD1255160F002AEA1F /* AlbumInformationController.h */,
 				345A81AE1255160F002AEA1F /* AlbumInformationController.m */,
-				34E5B7B0121BED58008DF821 /* AlbumListViewController.h */,
-				34E5B7B1121BED58008DF821 /* AlbumListViewController.m */,
+				F4976E1A14F258700054FD2D /* AlbumListViewController.h */,
+				F4976E1B14F258700054FD2D /* AlbumListViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -321,7 +316,7 @@
 		34118B3D11D1DBB000CFAAA5 /* Nibs */ = {
 			isa = PBXGroup;
 			children = (
-				345A81AF1255160F002AEA1F /* AlbumInformationController.xib */,
+				F404243714F4D78B0043B90E /* AlbumInformationController.xib */,
 				34E5B66E121BB901008DF821 /* AlbumViewController.xib */,
 				34E5B660121BB7D9008DF821 /* PhotoViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
@@ -474,7 +469,6 @@
 				34E5B662121BB7D9008DF821 /* PhotoViewController.xib in Resources */,
 				34E5B670121BB901008DF821 /* AlbumViewController.xib in Resources */,
 				349486AB121C6A260071D505 /* AlbumListViewController.xib in Resources */,
-				345A81B11255160F002AEA1F /* AlbumInformationController.xib in Resources */,
 				34E0F1E012571ED3002C97B2 /* frame_small.png in Resources */,
 				34E0F1E112571ED3002C97B2 /* frame_medium.png in Resources */,
 				D46A70F6126C0B7F0014A0D8 /* Sound.png in Resources */,
@@ -494,6 +488,7 @@
 				F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */,
 				9F8D9DF514D018FB00597BB7 /* slideshow.png in Resources */,
 				9F8D9DF614D018FB00597BB7 /* slideshow2.png in Resources */,
+				F404243814F4D78B0043B90E /* AlbumInformationController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,24 +501,18 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* PhotoAlbumsAppDelegate.m in Sources */,
-				28860B770F44E54D00985440 /* PhotoAlbums.xcdatamodel in Sources */,
 				34118B4E11D1DC4200CFAAA5 /* AlbumView.m in Sources */,
 				34118B4F11D1DC4200CFAAA5 /* AudioPlayer.m in Sources */,
 				34118B5011D1DC4200CFAAA5 /* AudioQueueObject.m in Sources */,
 				34118B5111D1DC4200CFAAA5 /* AudioRecorder.m in Sources */,
 				34118B5211D1DC4200CFAAA5 /* PageToolBar.m in Sources */,
 				34118B5311D1DC4200CFAAA5 /* PageView.m in Sources */,
-				34DD5BE111D9EFAE00683601 /* Album.m in Sources */,
-				34DD5BE211D9EFAE00683601 /* Page.m in Sources */,
 				34E5B66F121BB901008DF821 /* AlbumViewController.m in Sources */,
-				34E5B674121BB90F008DF821 /* PhotoViewController.m in Sources */,
-				34E5B7B3121BED58008DF821 /* AlbumListViewController.m in Sources */,
 				345A81B01255160F002AEA1F /* AlbumInformationController.m in Sources */,
 				344C8E3A1255B52900F1B29A /* PhotoUtil.m in Sources */,
 				34E0F221125839FD002C97B2 /* PhotoRepository.m in Sources */,
 				34F04892125EFDBD009A0FD9 /* AlbumThumbnailView.m in Sources */,
 				D410E5441266EB6600636EB1 /* XImageView.m in Sources */,
-				F4E3648B14CEFD3500ABF6DE /* PhotoScrollView.m in Sources */,
 				F4C0042D14CFDB3C0083D8CC /* ELCAlbumPickerController.m in Sources */,
 				F4C0042F14CFDB3C0083D8CC /* ELCAsset.m in Sources */,
 				F4C0043014CFDB3C0083D8CC /* ELCAssetCell.m in Sources */,
@@ -532,6 +521,11 @@
 				F4C0043614CFDB3C0083D8CC /* ELCImagePickerDemoAppDelegate.m in Sources */,
 				F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */,
 				F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */,
+				F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */,
+				F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */,
+				F4976E1C14F258700054FD2D /* AlbumListViewController.m in Sources */,
+				F404243514F4D71E0043B90E /* Album.m in Sources */,
+				F404243614F4D71E0043B90E /* Page.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,11 +546,12 @@
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
-				PROVISIONING_PROFILE = "1AA58192-E35A-4948-8650-DDCE194DA313";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1AA58192-E35A-4948-8650-DDCE194DA313";
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Debug;
 		};
@@ -564,15 +559,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PhotoAlbums_Prefix.pch;
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Release;
 		};
@@ -596,17 +596,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sourabh Raheja (EUUQEPL8FY)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = PhotoAlbums_Prefix.pch;
 				INFOPLIST_FILE = "PhotoAlbums-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = TalkingPhoto;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "47EDE612-13C5-464D-874B-0400A7387A55";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47EDE612-13C5-464D-874B-0400A7387A55";
 				SDKROOT = iphoneos5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Distribution;
 		};

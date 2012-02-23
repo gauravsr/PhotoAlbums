@@ -16,7 +16,7 @@
 @implementation AlbumListViewController
 
 @synthesize fetchedResultsController, managedObjectContext;
-@synthesize albumControllerDictionary;
+@synthesize albumOfTypeTag;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -42,24 +42,24 @@
     }
 }
 
--(void)handleVisibilityOfEditButton {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
-    unsigned count =  [sectionInfo numberOfObjects];
-	if(count > 0) {
-        if([self.tableView isEditing]) {
-            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
-        }
-        else {
-            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
-        }
-    }
-    else {
-        NSLog(@"count == 0");
-    }
-}
+//-(void)handleVisibilityOfEditButton {
+//    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+//    unsigned count =  [sectionInfo numberOfObjects];
+//    if(count > 0) {
+//        if([self.tableView isEditing]) {
+//            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
+//        }
+//        else {
+//            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
+//        }
+//    }
+//    else {
+//        NSLog(@"count == 0");
+//    }
+//}
 
 - (void)drawHelperTexts{
-	id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
     unsigned count =  [sectionInfo numberOfObjects];
 	if(count == 0){
 		if(mHelpertextLabel == nil)
@@ -82,12 +82,7 @@
 {
     [super viewDidLoad];
 	
-	if(!albumControllerDictionary)
-	{
-		albumControllerDictionary = [[NSMutableDictionary alloc] init];
-	}	
     [[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
-    //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject)];
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewAlbum)];
 	self.navigationItem.rightBarButtonItem = addButton;
     [addButton release];
@@ -96,17 +91,12 @@
 	self.tableView.rowHeight = 70;
 	NSError *error = nil;
 	if (![[self fetchedResultsController] performFetch:&error])  	{
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-		 */
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
 	
-	[self drawHelperTexts];
-    [self handleVisibilityOfEditButton];
+	//[self drawHelperTexts];
+    //[self handleVisibilityOfEditButton];
 }
 
 
@@ -120,30 +110,9 @@
     
     //update cellIcons
 }
-/*
- - (void) viewWillDisappear:(BOOL)animated {
- [super viewWillDisappear:animated];
- }
- */
-/*
- - (void) viewDidDisappear:(BOOL)animated {
- [super viewDidDisappear:animated];
- }
- */
 
-- (void) viewDidUnload 
-{
-	// Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-	// For example: self.myOutlet = nil;
+- (void) viewDidUnload {
 }
-
-/*
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations.
- return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
 
 #pragma mark -
 #pragma mark Add a new object
@@ -153,15 +122,24 @@
 	AlbumInformationController *albumInformationController = [[AlbumInformationController alloc] init];
 	[self presentModalViewController:albumInformationController animated:true];
     [albumInformationController release];
-	[self drawHelperTexts];
+	//[self drawHelperTexts];
 }
 
 #pragma mark -
 #pragma mark Table view methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
-{
-    return [[fetchedResultsController sections] count];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    NSInteger count = [[fetchedResultsController sections] count];
+    return count;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if(section == 0) {
+        return @"Albums";
+    }
+    else {
+        return @"Tags";
+    }
 }
 
 
@@ -236,10 +214,8 @@
 	{
 		albumViewController = [[AlbumViewController alloc] init];
 		albumViewController.album = selectedObject;
+        albumViewController.albumOfTypeTag = self.albumOfTypeTag;
 		[albumViewController validate];
-		// VJ Removed caching.
-		//[albumControllerDictionary setObject:albumViewController forKey:selectedObject.albumID];
-		//[albumViewController release];
 	}			
 	
 	[self.navigationController pushViewController:albumViewController animated:YES];
@@ -266,19 +242,13 @@
 		
 		// Save the context.
 		NSError *error = nil;
-		if (![context save:&error]) 
-		{
-			/*
-			 Replace this implementation with code to handle the error appropriately.
-			 
-			 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-			 */
+		if (![context save:&error]) {
 			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			abort();
 		}
 	}
 	
-	[self drawHelperTexts];
+	//[self drawHelperTexts];
 }
 
 
@@ -313,18 +283,20 @@
 	[fetchRequest setPredicate:	[NSPredicate predicateWithFormat:@"hidden = %@", [NSNumber numberWithInt:0]]];
 	
 	// Edit the sort key as appropriate.
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+	NSSortDescriptor *sortDescriptorTag = [[NSSortDescriptor alloc] initWithKey:@"isTag" ascending:YES];
+    NSSortDescriptor *sortDescriptorDate = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptorTag, sortDescriptorDate, nil];
 	[fetchRequest setSortDescriptors:sortDescriptors];
 	// Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:@"Root"];
+	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"sectionType" cacheName:@"Root"];
     aFetchedResultsController.delegate = self;
 	self.fetchedResultsController = aFetchedResultsController;
 	
 	[aFetchedResultsController release];
 	[fetchRequest release];
-	[sortDescriptor release];
+	[sortDescriptorTag release];
+    [sortDescriptorDate release];
 	[sortDescriptors release];
 	
 	return fetchedResultsController;
@@ -336,30 +308,9 @@
 {
 	// In the simplest, most efficient, case, reload the table view.
 	[self.tableView reloadData];
-	[self drawHelperTexts];
-    [self handleVisibilityOfEditButton];
+	//[self drawHelperTexts];
+    //[self handleVisibilityOfEditButton];
 }
-
-/*
- Instead of using controllerDidChangeContent: to respond to all changes, you can implement all the delegate methods to update the table view in response to individual changes.  This may have performance implications if a large number of changes are made simultaneously.
- 
- // Notifies the delegate that section and object changes are about to be processed and notifications will be sent. 
- - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
- [self.tableView beginUpdates];
- }
- 
- - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
- // Update the table view appropriately.
- }
- 
- - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
- // Update the table view appropriately.
- }
- 
- - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
- [self.tableView endUpdates];
- } 
- */
 
 
 #pragma mark -

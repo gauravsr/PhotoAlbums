@@ -12,7 +12,7 @@
 
 @implementation AlbumInformationController
 
-@synthesize titleLabel, hiddenSwitch, nameTextField;
+@synthesize titleLabel, hiddenSwitch, nameTextField, typeControl;
 @synthesize	album;
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -25,7 +25,10 @@
 	if(album)
 	{
 		[titleLabel setText: album.title];
-	}	
+        if(album.isTag.integerValue == 1) {
+            [self.typeControl setSelectedSegmentIndex:1];
+        }
+	}
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -69,10 +72,15 @@
 	NSManagedObjectContext *context = [appDelegate managedObjectContext];
 	NSError *error = nil;
 	
+    BOOL isTag = NO;
+    if(self.typeControl.selectedSegmentIndex == 1) {
+        isTag = YES;
+    }
+
 	if(album)
 	{
 		album.title = nameTextField.text;
-//		album.hidden = hiddenSwitch.on;
+        album.isTag = [NSNumber numberWithBool:isTag];
 	}
 	else
 	{
@@ -82,7 +90,10 @@
 		[newManagedObject setValue:[NSDate date] forKey:@"creationDate"];
 		
 		[newManagedObject setValue:[nameTextField text] forKey:@"title"];
-		[newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden" ];		
+		[newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden"];	      
+        [newManagedObject setValue:[NSNumber numberWithBool:isTag] forKey:@"isTag"];
+        [newManagedObject addPages:[[NSSet alloc] init]];
+
 	}
 	
     if (![context save:&error]) 
@@ -95,7 +106,7 @@
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }
-	
+
 	[self dismissModalViewControllerAnimated:true]; 
 }
 

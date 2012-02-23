@@ -2,38 +2,38 @@
 //  Album.h
 //  PhotoAlbums
 //
-//  Created by raheja on 29/06/10.
-//  Copyright 2010 Xebia IT Architects India Private Limited. All rights reserved.
+//  Created by Sourabh Raheja on 22/02/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
 @class Page;
 
-@interface Album :  NSManagedObject  
-{
-	NSString *albumID;
+@interface Album : NSManagedObject {
+    NSString *albumID;
+    NSString *sectionType;
 }
 
-@property (nonatomic, retain) NSString		*coverImagePath;
-@property (nonatomic, retain) NSString		*albumPath;
-@property (nonatomic, retain) NSString		*title;
-@property (nonatomic, retain) NSNumber		*albumOrder;
-@property (nonatomic, retain) NSDate		*creationDate;
-@property (nonatomic, retain) NSSet			*pages;
-@property (nonatomic, assign) BOOL           hidden;
+@property (nonatomic, retain) NSNumber * isTag;
+@property (nonatomic, retain) NSNumber * hidden;
+@property (nonatomic, retain) NSDate * creationDate;
+@property (nonatomic, retain) NSString * coverImagePath;
+@property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSNumber * albumOrder;
+@property (nonatomic, retain) NSSet *pages;
 
 //transient properties
 @property (nonatomic, retain) NSString		*albumID;
+@property (nonatomic, retain) NSString		*sectionType;
 
 @end
-
 
 @interface Album (CoreDataGeneratedAccessors)
+
 - (void)addPagesObject:(Page *)value;
 - (void)removePagesObject:(Page *)value;
-- (void)addPages:(NSSet *)value;
-- (void)removePages:(NSSet *)value;
-
+- (void)addPages:(NSSet *)values;
+- (void)removePages:(NSSet *)values;
 @end
-

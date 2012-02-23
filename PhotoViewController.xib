@@ -13,11 +13,11 @@
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>IBUIView</string>
+			<string>IBUIBarButtonItem</string>
 			<string>IBProxyObject</string>
-			<string>IBUILabel</string>
 			<string>IBUIToolbar</string>
 			<string>IBUIActivityIndicatorView</string>
-			<string>IBUIBarButtonItem</string>
+			<string>IBUILabel</string>
 			<string>IBUIScrollView</string>
 			<string>IBUIButton</string>
 		</object>
@@ -49,6 +49,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{320, 480}</string>
 						<reference key="NSSuperview" ref="774585933"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="131224824"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -83,6 +84,7 @@
 										<int key="NSvFlags">266</int>
 										<string key="NSFrameSize">{320, 44}</string>
 										<reference key="NSSuperview" ref="139236150"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="491215414"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -94,6 +96,12 @@
 												<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 												<reference key="IBUIToolbar" ref="332760333"/>
 												<int key="IBUISystemItemIdentifier">9</int>
+											</object>
+											<object class="IBUIBarButtonItem" id="809183948">
+												<string key="IBUITitle">T</string>
+												<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+												<int key="IBUIStyle">1</int>
+												<reference key="IBUIToolbar" ref="332760333"/>
 											</object>
 											<object class="IBUIBarButtonItem" id="474121921">
 												<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -112,6 +120,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{150, 11}, {22, 22}}</string>
 										<reference key="NSSuperview" ref="139236150"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="878266319"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -148,6 +157,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{148, 11}, {24, 24}}</string>
 										<reference key="NSSuperview" ref="139236150"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="1040925296"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -167,6 +177,7 @@
 								</object>
 								<string key="NSFrameSize">{320, 44}</string>
 								<reference key="NSSuperview" ref="131224824"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="332760333"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
@@ -187,6 +198,7 @@
 										<int key="NSvFlags">266</int>
 										<string key="NSFrameSize">{320, 44}</string>
 										<reference key="NSSuperview" ref="878266319"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="783807481"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -201,6 +213,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrameSize">{320, 44}</string>
 										<reference key="NSSuperview" ref="878266319"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="704900926"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -233,6 +246,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{287, 12}, {20, 20}}</string>
 										<reference key="NSSuperview" ref="878266319"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="772472232"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -253,6 +267,7 @@
 								</object>
 								<string key="NSFrameSize">{320, 44}</string>
 								<reference key="NSSuperview" ref="131224824"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1007316607"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
@@ -273,6 +288,7 @@
 										<int key="NSvFlags">266</int>
 										<string key="NSFrameSize">{320, 44}</string>
 										<reference key="NSSuperview" ref="772472232"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="939111119"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -287,6 +303,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{9, 12}, {20, 20}}</string>
 										<reference key="NSSuperview" ref="772472232"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="78202876"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -300,6 +317,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{37, 11}, {146, 21}}</string>
 										<reference key="NSSuperview" ref="772472232"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="224652050"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClipsSubviews">YES</bool>
@@ -330,6 +348,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{150, 12}, {20, 20}}</string>
 										<reference key="NSSuperview" ref="772472232"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="556796592"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -349,6 +368,7 @@
 										<int key="NSvFlags">292</int>
 										<string key="NSFrame">{{280, 6}, {32, 32}}</string>
 										<reference key="NSSuperview" ref="772472232"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView"/>
 										<bool key="IBUIOpaque">NO</bool>
 										<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -368,6 +388,7 @@
 								</object>
 								<string key="NSFrameSize">{320, 44}</string>
 								<reference key="NSSuperview" ref="131224824"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="257313302"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
@@ -381,6 +402,7 @@
 						</object>
 						<string key="NSFrame">{{0, 436}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="139236150"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -393,6 +415,7 @@
 				</object>
 				<string key="NSFrameSize">{320, 480}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="340107533"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
@@ -456,22 +479,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">recordAudioNoteToolBar</string>
-						<reference key="source" ref="131224824"/>
-						<reference key="destination" ref="878266319"/>
-					</object>
-					<int key="connectionID">114</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">playAudioNoteToolBar</string>
-						<reference key="source" ref="131224824"/>
-						<reference key="destination" ref="772472232"/>
-					</object>
-					<int key="connectionID">115</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">playAudioNoteButton</string>
 						<reference key="source" ref="131224824"/>
 						<reference key="destination" ref="1040925296"/>
@@ -485,6 +492,22 @@
 						<reference key="destination" ref="491215414"/>
 					</object>
 					<int key="connectionID">134</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">playAudioNoteToolBar</string>
+						<reference key="source" ref="131224824"/>
+						<reference key="destination" ref="772472232"/>
+					</object>
+					<int key="connectionID">115</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">recordAudioNoteToolBar</string>
+						<reference key="source" ref="131224824"/>
+						<reference key="destination" ref="878266319"/>
+					</object>
+					<int key="connectionID">114</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -544,7 +567,15 @@
 						<reference key="source" ref="900553879"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
-					<int key="connectionID">167</int>
+					<int key="connectionID">192</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">manageTagForThePhoto:</string>
+						<reference key="source" ref="809183948"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">206</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -610,6 +641,7 @@
 							<reference ref="113349461"/>
 							<reference ref="474121921"/>
 							<reference ref="900553879"/>
+							<reference ref="809183948"/>
 						</object>
 						<reference key="parent" ref="139236150"/>
 					</object>
@@ -626,16 +658,24 @@
 						<string key="objectName">addAudioNoteButton</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">111</int>
-						<reference key="object" ref="878266319"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1007316607"/>
-							<reference ref="704900926"/>
-							<reference ref="783807481"/>
-						</object>
-						<reference key="parent" ref="131224824"/>
-						<string key="objectName">recordAudioNoteToolBar</string>
+						<int key="objectID">163</int>
+						<reference key="object" ref="113349461"/>
+						<reference key="parent" ref="332760333"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">164</int>
+						<reference key="object" ref="474121921"/>
+						<reference key="parent" ref="332760333"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">95</int>
+						<reference key="object" ref="340107533"/>
+						<reference key="parent" ref="774585933"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">191</int>
+						<reference key="object" ref="900553879"/>
+						<reference key="parent" ref="332760333"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">112</int>
@@ -652,34 +692,19 @@
 						<string key="objectName">playAudioNoteToolBar</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">117</int>
-						<reference key="object" ref="1007316607"/>
-						<reference key="parent" ref="878266319"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">118</int>
-						<reference key="object" ref="704900926"/>
-						<reference key="parent" ref="878266319"/>
-						<string key="objectName">stopRecordingButton</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">119</int>
-						<reference key="object" ref="783807481"/>
-						<reference key="parent" ref="878266319"/>
-						<string key="objectName">recordingLabel</string>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">123</int>
 						<reference key="object" ref="224652050"/>
 						<reference key="parent" ref="772472232"/>
 						<string key="objectName">stopPlayingButton</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">139</int>
-						<reference key="object" ref="257313302"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-						</object>
+						<int key="objectID">161</int>
+						<reference key="object" ref="939111119"/>
+						<reference key="parent" ref="772472232"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">160</int>
+						<reference key="object" ref="78202876"/>
 						<reference key="parent" ref="772472232"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -689,34 +714,43 @@
 						<string key="objectName">removeAudioNoteButton</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">160</int>
-						<reference key="object" ref="78202876"/>
+						<int key="objectID">139</int>
+						<reference key="object" ref="257313302"/>
 						<reference key="parent" ref="772472232"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">161</int>
-						<reference key="object" ref="939111119"/>
-						<reference key="parent" ref="772472232"/>
+						<int key="objectID">111</int>
+						<reference key="object" ref="878266319"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="1007316607"/>
+							<reference ref="704900926"/>
+							<reference ref="783807481"/>
+						</object>
+						<reference key="parent" ref="131224824"/>
+						<string key="objectName">recordAudioNoteToolBar</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">163</int>
-						<reference key="object" ref="113349461"/>
+						<int key="objectID">118</int>
+						<reference key="object" ref="704900926"/>
+						<reference key="parent" ref="878266319"/>
+						<string key="objectName">stopRecordingButton</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">117</int>
+						<reference key="object" ref="1007316607"/>
+						<reference key="parent" ref="878266319"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">119</int>
+						<reference key="object" ref="783807481"/>
+						<reference key="parent" ref="878266319"/>
+						<string key="objectName">recordingLabel</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">205</int>
+						<reference key="object" ref="809183948"/>
 						<reference key="parent" ref="332760333"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">164</int>
-						<reference key="object" ref="474121921"/>
-						<reference key="parent" ref="332760333"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">166</int>
-						<reference key="object" ref="900553879"/>
-						<reference key="parent" ref="332760333"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">95</int>
-						<reference key="object" ref="340107533"/>
-						<reference key="parent" ref="774585933"/>
 					</object>
 				</object>
 			</object>
@@ -742,7 +776,8 @@
 					<string>161.IBPluginDependency</string>
 					<string>163.IBPluginDependency</string>
 					<string>164.IBPluginDependency</string>
-					<string>166.IBPluginDependency</string>
+					<string>191.IBPluginDependency</string>
+					<string>205.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
 					<string>60.IBPluginDependency</string>
 					<string>71.IBPluginDependency</string>
@@ -756,6 +791,7 @@
 					<string>PhotoViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>UIResponder</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -793,9 +829,245 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">167</int>
+			<int key="maxID">206</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">AlbumView</string>
+					<string key="superclassName">UIScrollView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/AlbumView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">PageToolBar</string>
+					<string key="superclassName">UIView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addAudioNoteButton</string>
+							<string>defaultToolBar</string>
+							<string>pauseAudioNotePlaybackButton</string>
+							<string>playAudioNoteButton</string>
+							<string>playAudioNoteToolBar</string>
+							<string>playingLabel</string>
+							<string>recordAudioNoteToolBar</string>
+							<string>recordingLabel</string>
+							<string>resumeAudioNotePlaybackButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UIButton</string>
+							<string>UIView</string>
+							<string>UIButton</string>
+							<string>UIButton</string>
+							<string>UIView</string>
+							<string>UILabel</string>
+							<string>UIView</string>
+							<string>UILabel</string>
+							<string>UIButton</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addAudioNoteButton</string>
+							<string>defaultToolBar</string>
+							<string>pauseAudioNotePlaybackButton</string>
+							<string>playAudioNoteButton</string>
+							<string>playAudioNoteToolBar</string>
+							<string>playingLabel</string>
+							<string>recordAudioNoteToolBar</string>
+							<string>recordingLabel</string>
+							<string>resumeAudioNotePlaybackButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">addAudioNoteButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">defaultToolBar</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">pauseAudioNotePlaybackButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">playAudioNoteButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">playAudioNoteToolBar</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">playingLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">recordAudioNoteToolBar</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">recordingLabel</string>
+								<string key="candidateClassName">UILabel</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">resumeAudioNotePlaybackButton</string>
+								<string key="candidateClassName">UIButton</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/PageToolBar.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">PhotoViewController</string>
+					<string key="superclassName">UIViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addAudioNote:</string>
+							<string>addCaption:</string>
+							<string>deleteAudioNote:</string>
+							<string>deletePage:</string>
+							<string>manageTagForThePhoto:</string>
+							<string>moreOptions:</string>
+							<string>pauseAudioNotePlayback:</string>
+							<string>playAudioNote:</string>
+							<string>resumeAudioNotePlayback:</string>
+							<string>saveRecordedAudioNote:</string>
+							<string>stopAudioNotePlayback:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addAudioNote:</string>
+							<string>addCaption:</string>
+							<string>deleteAudioNote:</string>
+							<string>deletePage:</string>
+							<string>manageTagForThePhoto:</string>
+							<string>moreOptions:</string>
+							<string>pauseAudioNotePlayback:</string>
+							<string>playAudioNote:</string>
+							<string>resumeAudioNotePlayback:</string>
+							<string>saveRecordedAudioNote:</string>
+							<string>stopAudioNotePlayback:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">addAudioNote:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">addCaption:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">deleteAudioNote:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">deletePage:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">manageTagForThePhoto:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">moreOptions:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">pauseAudioNotePlayback:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">playAudioNote:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">resumeAudioNotePlayback:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">saveRecordedAudioNote:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">stopAudioNotePlayback:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>albumView</string>
+							<string>pageToolBar</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>AlbumView</string>
+							<string>PageToolBar</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>albumView</string>
+							<string>pageToolBar</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">albumView</string>
+								<string key="candidateClassName">AlbumView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">pageToolBar</string>
+								<string key="candidateClassName">PageToolBar</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/PhotoViewController.h</string>
+					</object>
+				</object>
+			</object>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">

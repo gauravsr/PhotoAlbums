@@ -1,26 +1,27 @@
-// 
+//
 //  Album.m
 //  PhotoAlbums
 //
-//  Created by raheja on 29/06/10.
-//  Copyright 2010 Xebia IT Architects India Private Limited. All rights reserved.
+//  Created by Sourabh Raheja on 22/02/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "Album.h"
-
 #import "Page.h"
 
-@implementation Album 
 
-@synthesize albumID;
 
+@implementation Album
+
+@synthesize albumID, sectionType;
+
+@dynamic isTag;
+@dynamic hidden;
+@dynamic creationDate;
 @dynamic coverImagePath;
 @dynamic title;
 @dynamic albumOrder;
-@dynamic creationDate;
 @dynamic pages;
-@dynamic hidden;
-@dynamic albumPath;
 
 - (NSString *) albumID
 {
@@ -37,9 +38,13 @@
 	return albumID;
 }
 
-- (void) dealloc
-{
-	[super dealloc];
+- (NSString *) sectionType {
+    NSString *type = @"Album";
+    if(self.isTag.integerValue == 1) {
+        type = @"Tag";
+    }
+    
+    return type;
 }
 
 
