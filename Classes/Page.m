@@ -1,26 +1,27 @@
-// 
+//
 //  Page.m
 //  PhotoAlbums
 //
-//  Created by raheja on 29/06/10.
-//  Copyright 2010 Xebia IT Architects India Private Limited. All rights reserved.
+//  Created by Sourabh Raheja on 22/02/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "Page.h"
 #import "Album.h"
 #import "PhotoAlbumsAppDelegate.h"
 
-@implementation Page 
+@implementation Page
 
 @synthesize pageID, audioNoteURL;
 
 @dynamic audioNotePath;
-@dynamic pageOrder;
 @dynamic textCaption;
-@dynamic imagePath;
-@dynamic imageThumbnailPath;
-@dynamic album;
 @dynamic creationDate;
+@dynamic imageThumbnailPath;
+@dynamic pageOrder;
+@dynamic imagePath;
+@dynamic album;
+
 
 - (NSString *) pageID
 {

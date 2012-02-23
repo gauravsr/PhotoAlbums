@@ -7,16 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Album.h"
 
-@interface AlbumListViewController : UITableViewController {
+@interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+    NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
-    NSArray *albumTagData;
     UILabel *mHelpertextLabel;
+    Album                   *albumOfTypeTag;
 }
 
-@property (nonatomic, retain) NSArray *albumTagData;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) 	Album                   *albumOfTypeTag;
 
--(void)fetchAlbumsAndTagsFromCoredata;
 
 @end

@@ -12,7 +12,6 @@
 #import "Page.h"
 #import "PageToolBar.h"
 #import "AlbumView.h"
-#import "Tag.h"
 
 #import "AudioQueueObject.h"
 #import "AudioRecorder.h"
@@ -31,9 +30,8 @@
 	Album					*album;
 	NSString				*albumAudioDirectoryPath;
 	NSString				*albumPhotoDirectoryPath;
-	
 	NSManagedObjectContext	*applicationManagedObjectContext;
-	
+	Album *albumOfTypeTag;
 	NSUInteger				currentPageIndex;
 	NSUInteger				selectedIndex;
 	BOOL					interruptedOnPlayback;
@@ -41,6 +39,7 @@
     BOOL					slideshowMode;
     NSDate                  *previousSlideEndTime;
     NSArray          *fetchedTagsFromCoredata;
+    
     
 	//view 	
 	IBOutlet AlbumView		*albumView;
@@ -59,11 +58,10 @@
 
 //model
 @property (nonatomic, assign) Album							*album;
+@property (nonatomic, assign) Album *albumOfTypeTag;
 @property (nonatomic, retain) NSString						*albumAudioDirectoryPath;
 @property (nonatomic, retain) NSString						*albumPhotoDirectoryPath;
-
 @property (nonatomic, assign) NSManagedObjectContext		*applicationManagedObjectContext;
-
 @property (nonatomic) NSUInteger							currentPageIndex;
 @property (nonatomic) BOOL									interruptedOnPlayback;
 @property (nonatomic) BOOL									slideshowMode;

@@ -2,41 +2,65 @@
 //  AlbumListViewController.m
 //  PhotoAlbums
 //
-//  Created by Gaurav on 20/02/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by raheja on 23/06/10.
+//  Copyright Xebia IT Architects India Private Limited 2010. All rights reserved.
 //
 
 #import "AlbumListViewController.h"
-#import "AlbumInformationController.h"
-#import "Tag.h"
 #import "AlbumViewController.h"
+#import "Album.h"
+#import "AlbumInformationController.h"
+#import "PhotoRepository.h"
+#import "PhotoUtil.h"
 
 @implementation AlbumListViewController
 
-@synthesize albumTagData;
-@synthesize managedObjectContext;
+@synthesize fetchedResultsController, managedObjectContext;
+@synthesize albumOfTypeTag;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
+#pragma mark -
+#pragma mark View lifecycle
+
+-(void)editTableView:(UIBarButtonItem *)sender {
+    if([[sender title] isEqualToString:@"Edit"]) {
+        [self.tableView setEditing:YES animated:YES];
+        [sender setTitle:@"Done"];
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
-    return self;
+    else {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        [self.tableView setEditing:NO animated:YES];
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+        unsigned count =  [sectionInfo numberOfObjects];
+        [sender setTitle:@"Edit"];
+        if(count > 0) {
+            [sender setEnabled:YES];
+        }
+        else {
+            [sender setEnabled:NO];
+        }
+    }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
+//-(void)handleVisibilityOfEditButton {
+//    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+//    unsigned count =  [sectionInfo numberOfObjects];
+//    if(count > 0) {
+//        if([self.tableView isEditing]) {
+//            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
+//        }
+//        else {
+//            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleDone target:self action:@selector(editTableView:)];
+//        }
+//    }
+//    else {
+//        NSLog(@"count == 0");
+//    }
+//}
 
-#pragma mark - View
-
--(void)drawHelperTexts{
-    unsigned count =  [self.albumTagData count];
+- (void)drawHelperTexts{
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+    unsigned count =  [sectionInfo numberOfObjects];
 	if(count == 0){
 		if(mHelpertextLabel == nil)
 			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
@@ -53,291 +77,258 @@
 	}
 }
 
--(void)showAddButtonToAddAlbums {
+
+- (void) viewDidLoad 
+{
+    [super viewDidLoad];
+	
+    [[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewAlbum)];
 	self.navigationItem.rightBarButtonItem = addButton;
     [addButton release];
+	
+	self.title = @"Albums";
+	self.tableView.rowHeight = 70;
+	NSError *error = nil;
+	if (![[self fetchedResultsController] performFetch:&error])  	{
+		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		abort();
+	}
+	
+	//[self drawHelperTexts];
+    //[self handleVisibilityOfEditButton];
 }
 
--(void)addNewAlbum {
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    //update cellIcons
+}
+
+- (void) viewDidUnload {
+}
+
+#pragma mark -
+#pragma mark Add a new object
+
+- (void) addNewAlbum 
+{
 	AlbumInformationController *albumInformationController = [[AlbumInformationController alloc] init];
-    albumInformationController.tableView = self.tableView;
 	[self presentModalViewController:albumInformationController animated:true];
     [albumInformationController release];
+	//[self drawHelperTexts];
 }
 
--(NSInteger)getTotalNumberOfAlbums {
-    NSInteger count = 0;
-    for(NSManagedObject *object in self.albumTagData) {
-        if([object isKindOfClass:[Album class]]) {
-            count++;
-        }
-    }
-    return count;
-}
-
--(NSInteger)getTotalNumberOfTags {
-    NSInteger count = 0;
-    for(NSManagedObject *object in self.albumTagData) {
-        if([object isKindOfClass:[Tag class]]) {
-            count++;
-        }
-    }
-    return count;
-}
-
--(void)reloadAlbumViewController:(id)sender {
-    [self fetchAlbumsAndTagsFromCoredata];
-    [self.tableView reloadData];
-	[self drawHelperTexts];
-}
-
--(NSMutableArray *)filterAlbumsFromCoredata {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    
-    for(NSManagedObject *object in self.albumTagData) {
-        if([object isKindOfClass:[Album class]]) {
-            [arr addObject:object];
-        }
-    }
-    
-    return arr;
-}
-
--(NSMutableArray *)filterTagsFromCoredata {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    
-    for(NSManagedObject *object in self.albumTagData) {
-        if([object isKindOfClass:[Tag class]]) {
-            [arr addObject:object];
-        }
-    }
-    
-    return arr;
-}
-
-#pragma mark - Core data
-
--(void)fetchAlbumsAndTagsFromCoredata {
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"ListOfAlbumsAndTags" inManagedObjectContext:managedObjectContext];
-    NSError *error;
-	[fetchRequest setEntity:entity];
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"sorter" ascending:YES];
-    NSArray* sortDescriptors = [[[NSArray alloc] initWithObjects: sortDescriptor, nil] autorelease];
-    [fetchRequest setSortDescriptors:sortDescriptors];
-	albumTagData = [[managedObjectContext executeFetchRequest:fetchRequest error:&error] retain];
-}
-
-#pragma mark - View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self 
-                                             selector:@selector(reloadAlbumViewController:) 
-                                                 name:@"ReloadAlbumViewController" 
-                                               object:nil];
-    self.title = @"Albums";
-	self.tableView.rowHeight = 70;
-    [self fetchAlbumsAndTagsFromCoredata];
-    [self drawHelperTexts];
-    [self showAddButtonToAddAlbums];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self fetchAlbumsAndTagsFromCoredata];
-    [self.tableView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
-#pragma mark - Table view data source
+#pragma mark -
+#pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if([self.albumTagData count] > 0) {
-        return 2;
-    }
-    else {
-        return 1;
-    }
+    NSInteger count = [[fetchedResultsController sections] count];
+    return count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger numberOfRows;
-    
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if(section == 0) {
-        numberOfRows = [self getTotalNumberOfAlbums];
-    }
-    else if(section == 1) {
-        numberOfRows = [self getTotalNumberOfTags];
+        return @"Albums";
     }
     else {
-        numberOfRows = -1;
-    }
-    return numberOfRows;
-}
-
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if([self.albumTagData count] > 0) {
-        if(section == 0) {
-            return @"Albums";
-        }
-        else if(section == 1) {
-            return @"Tags";
-        }
-        else {
-            return @"";
-        }
-    }
-    else {
-        return @"";
+        return @"Tags";
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
+	id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+    return [sectionInfo numberOfObjects];
+}
+
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *) tableView: (UITableView *)tableView cellForRowAtIndexPath: (NSIndexPath *)indexPath 
+{    
     static NSString *CellIdentifier = @"Cell";
+	PhotoRepository *photoRepository = [PhotoRepository instance];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    }
+    if (cell == nil) 
+	{
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle	reuseIdentifier:CellIdentifier] autorelease];
+	}
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-
-    if(indexPath.section == 0) {
-        NSMutableArray *albumArray = [self filterAlbumsFromCoredata];
-        Album *album = [albumArray objectAtIndex:indexPath.row];
-        cell.textLabel.text = album.title;
-        NSUInteger count = [[album valueForKey:@"pages"] count];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
-    }
-    else if(indexPath.section == 1) {
-        NSMutableArray *tagArray = [self filterTagsFromCoredata];
-        Tag *tag = [tagArray objectAtIndex:indexPath.row];
-        cell.textLabel.text = tag.title;
-        
-        //NSUInteger count = [[tag valueForKey:@"page"] count];
-        //cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
-    }
+	// Configure the cell.
+	NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
+	NSUInteger count = [[managedObject valueForKey:@"pages"] count];
     
+	//cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[managedObject valueForKey:@"title"], count];
+	cell.textLabel.text = [managedObject valueForKey:@"title"];
+	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
+    
+	UIImage *cellIcon;
+	if(count > 0)
+	{
+		NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+		pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+		[sortDescriptor release];
+		
+		Page *lastPage = [pages objectAtIndex:(count - 1)];
+		
+		cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
+		if(!cellIcon)
+		{
+			cellIcon = [photoRepository getPhoto: lastPage.imagePath];
+			cellIcon =  [PhotoUtil createThumbnail:cellIcon];
+			[photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+            
+			//creting thumbnail image if its already not there
+			NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
+			[thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
+		}		
+	}
+	else
+	{
+		//This is cached by system, so no need to implement separate cache for it
+		cellIcon = [UIImage imageNamed:@"frame_small.png"];
+	}
+    
+	[cell.imageView setImage:cellIcon];	
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    AlbumViewController *albumViewController = nil;
-    
-    if(indexPath.section == 0) {
-        NSMutableArray *listOfAlbums = [self filterAlbumsFromCoredata];
-        NSManagedObject *managedObject = [listOfAlbums objectAtIndex:indexPath.row];
-        
-        if([managedObject isKindOfClass:[Album class]]) {
-            
-            if(!albumViewController) {
-                albumViewController = [[AlbumViewController alloc] init];
-                albumViewController.album = (Album *)managedObject;
-                [albumViewController validate];
-            }			
-        }
-        else {
-            NSLog(@"kuch to gadbad hai!");
-        }
-    }
-    else if(indexPath.section == 1) {
-        NSInteger numberOfAlbums = [[self filterAlbumsFromCoredata] count];
-        NSManagedObject *managedObject = [self.albumTagData objectAtIndex:(indexPath.row + numberOfAlbums)];
-        
-        if([managedObject isKindOfClass:[Tag class]]) {
-            
-            if(!albumViewController) {
-                albumViewController = [[AlbumViewController alloc] init];
-                //albumViewController.album = (Tag *)managedObject;
-                [albumViewController validate];
-            }			
-        }
-        else {
-            NSLog(@"kuch to gadbad hai!");
-        }
-    }
-    else {
-        
-    }
-    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{	
+	//this is the album object
+	Album *selectedObject = (Album *)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	
+	AlbumViewController *albumViewController = nil; //[albumControllerDictionary objectForKey:selectedObject.albumID];
+	if(!albumViewController)
+	{
+		albumViewController = [[AlbumViewController alloc] init];
+		albumViewController.album = selectedObject;
+        albumViewController.albumOfTypeTag = self.albumOfTypeTag;
+		[albumViewController validate];
+	}			
+	
 	[self.navigationController pushViewController:albumViewController animated:YES];
 	
 	[albumViewController release];	
 }
 
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
+{    
+    if (editingStyle == UITableViewCellEditingStyleDelete) 
+	{
+		Album *selectedObject = (Album *)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+		NSString *albumId = [selectedObject albumID];
+		NSString *applicationDocumentDirPath = [(PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate] applicationDocumentsDirectory];
+        
+		NSString *fullPath = [NSString stringWithFormat:@"%@/%@",applicationDocumentDirPath, albumId];
+		// Delete the folder
+		[[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
+		
+		// Delete the managed object for the given index path
+		NSManagedObjectContext *context = [fetchedResultsController managedObjectContext];
+		[context deleteObject:[fetchedResultsController objectAtIndexPath:indexPath]];
+		
+		// Save the context.
+		NSError *error = nil;
+		if (![context save:&error]) {
+			NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			abort();
+		}
+	}
+	
+	//[self drawHelperTexts];
+}
+
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+    // The table view should not be re-orderable.
+    return YES;
+}
+
+
+#pragma mark -
+#pragma mark Fetched results controller
+
+- (NSFetchedResultsController *)fetchedResultsController 
+{    
+    if (fetchedResultsController != nil) 
+	{
+        return fetchedResultsController;
+    }
+    
+    /*
+	 Set up the fetched results controller.
+	 */
+	// Create the fetch request for the entity.
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	// Edit the entity name as appropriate.
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Album" inManagedObjectContext:managedObjectContext];
+	[fetchRequest setEntity:entity];
+	
+	// Set the batch size to a suitable number.
+	[fetchRequest setFetchBatchSize:20];
+	[fetchRequest setPredicate:	[NSPredicate predicateWithFormat:@"hidden = %@", [NSNumber numberWithInt:0]]];
+	
+	// Edit the sort key as appropriate.
+	NSSortDescriptor *sortDescriptorTag = [[NSSortDescriptor alloc] initWithKey:@"isTag" ascending:YES];
+    NSSortDescriptor *sortDescriptorDate = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
+	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptorTag, sortDescriptorDate, nil];
+	[fetchRequest setSortDescriptors:sortDescriptors];
+	// Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+	NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectContext sectionNameKeyPath:@"sectionType" cacheName:@"Root"];
+    aFetchedResultsController.delegate = self;
+	self.fetchedResultsController = aFetchedResultsController;
+	
+	[aFetchedResultsController release];
+	[fetchRequest release];
+	[sortDescriptorTag release];
+    [sortDescriptorDate release];
+	[sortDescriptors release];
+	
+	return fetchedResultsController;
+}    
+
+
+// NSFetchedResultsControllerDelegate method to notify the delegate that all section and object changes have been processed. 
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller 
+{
+	// In the simplest, most efficient, case, reload the table view.
+	[self.tableView reloadData];
+	//[self drawHelperTexts];
+    //[self handleVisibilityOfEditButton];
+}
+
+
+#pragma mark -
+#pragma mark Memory management
+
+- (void)didReceiveMemoryWarning 
+{
+    [super didReceiveMemoryWarning];
+	// Relinquish ownership of any cached data, images, etc that aren't in use.
+}
+
+- (void)dealloc 
+{
+	[fetchedResultsController release];
+	[managedObjectContext release];
+    [super dealloc];
+}
+
+
 @end
+

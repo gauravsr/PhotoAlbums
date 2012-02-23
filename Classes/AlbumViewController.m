@@ -40,6 +40,7 @@
 @synthesize existingToolbarItems;
 @synthesize selectedPagesWhileDoingBulkOperations;
 @synthesize deleteButton;
+@synthesize albumOfTypeTag;
 
 /************************************************
  *					Globals						*
@@ -180,7 +181,7 @@
 	Page *newPage = [NSEntityDescription insertNewObjectForEntityForName:@"Page" inManagedObjectContext:context];
 	
 	//configure the new managed object.
-	[newPage setValue:self.album forKey:@"album"];
+	[newPage addAlbumObject:self.album];
 	[newPage setValue:[NSDate date] forKey:@"creationDate"];	
 	
 	UIImage *scaledImage = [PhotoUtil createSnapshot:image];
@@ -438,6 +439,7 @@
     else {
         PhotoViewController *photoViewController = [self preparePhotoViewController];
         photoViewController.selectedIndex = index;
+        photoViewController.albumOfTypeTag = self.albumOfTypeTag;
         
         [self.navigationController pushViewController:photoViewController animated:YES];
         [photoViewController release];

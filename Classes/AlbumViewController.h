@@ -25,6 +25,7 @@
 	Album								*album;	
     NSMutableArray                      *referenceURLArray;
     NSMutableArray                      *selectedPagesWhileDoingBulkOperations;
+    Album *albumOfTypeTag;
 //	PhotoViewController					*photoViewController;	
 	
 	//view
@@ -51,6 +52,7 @@
 @property (nonatomic, retain) UIImageView                   *noPhotoView;
 @property (nonatomic, retain) UILabel                       *noPhotoHeader;
 @property (nonatomic, retain) UILabel                       *noPhotoDescription;
+@property (nonatomic, retain) Album *albumOfTypeTag;
 @property (nonatomic, retain) AlbumThumbnailView            *albumThumbnailView;
 @property (nonatomic, retain) IBOutlet UIScrollView         *scrollview;
 @property (nonatomic, retain) IBOutlet UIToolbar            *toolbar;
