@@ -9,16 +9,24 @@
 #import <UIKit/UIKit.h>
 #import "Album.h"
 
-@interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+@interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate,
+                                                            UISearchBarDelegate> {
+    
+    IBOutlet UISearchBar *searchBar;
+    
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
     UILabel *mHelpertextLabel;
-    Album                   *albumOfTypeTag;
+    Album *albumOfTypeTag;
+    NSMutableArray *searchResults;
+    BOOL isSearching;
 }
+
+@property (nonatomic, assign) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, assign) 	Album                   *albumOfTypeTag;
-
-
+@property (nonatomic, assign) Album *albumOfTypeTag;
+@property (nonatomic, assign) NSMutableArray *searchResults;
+@property (nonatomic, assign) BOOL isSearching;
 @end

@@ -24,7 +24,9 @@
                                                     UIActionSheetDelegate, 
                                                     MFMailComposeViewControllerDelegate,
                                                     UITextFieldDelegate,
-                                                    NSFetchedResultsControllerDelegate>
+                                                    NSFetchedResultsControllerDelegate,
+                                                    UITableViewDelegate,
+                                                    UITableViewDataSource>
 {
 	//model
 	Album					*album;
@@ -39,7 +41,7 @@
     BOOL					slideshowMode;
     NSDate                  *previousSlideEndTime;
     NSArray          *fetchedTagsFromCoredata;
-    
+    NSMutableArray *matchingTags;
     
 	//view 	
 	IBOutlet AlbumView		*albumView;
@@ -48,7 +50,7 @@
 	UIView                  *tagsView;
     UITextField             *textFieldForEnteringTag;
     UIScrollView            *scrollViewForShowingAndDeletingTags;
-    
+    UITableView *tableViewForShowingAvailableTags;
 	//utils
 	AudioRecorder			*audioRecorder;
 	AudioPlayer				*audioPlayer;
@@ -66,15 +68,15 @@
 @property (nonatomic) BOOL									interruptedOnPlayback;
 @property (nonatomic) BOOL									slideshowMode;
 @property (nonatomic, retain) NSDate						*previousSlideEndTime;
-@property (nonatomic, retain) NSArray                *fetchedTagsFromCoredata;
-
+@property (nonatomic, retain) NSArray                       *fetchedTagsFromCoredata;
+@property (nonatomic, retain) NSMutableArray *matchingTags;
 //view
 @property (nonatomic, retain) AlbumView						*albumView;
 @property (nonatomic, retain) PageToolBar					*pageToolBar;
 @property (nonatomic, retain) NSMutableArray				*pageViewCollection;
 @property (nonatomic, retain) UIView                        *tagsView;
 @property (nonatomic, retain) UITextField                   *textFieldForEnteringTag;
-
+@property (nonatomic, retain) UITableView *tableViewForShowingAvailableTags;
 @property (nonatomic, retain) UIScrollView                  *scrollViewForShowingAndDeletingTags;
 //utils
 @property (nonatomic, retain) AudioRecorder					*audioRecorder;

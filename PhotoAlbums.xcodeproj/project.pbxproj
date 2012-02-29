@@ -70,6 +70,9 @@
 		F4C0043714CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */; };
 		F4C0043814CFDB3C0083D8CC /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042B14CFDB3C0083D8CC /* Overlay.png */; };
 		F4C0043914CFDB3C0083D8CC /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */; };
+		F4E701C014F6664200BA6E24 /* VideoUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E701BF14F6664200BA6E24 /* VideoUtil.m */; };
+		F4E701C314F666BF00BA6E24 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4E701C214F666BF00BA6E24 /* CoreMedia.framework */; };
+		F4E701C514F666E000BA6E24 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4E701C414F666E000BA6E24 /* CoreVideo.framework */; };
 		F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
 		F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */; };
 /* End PBXBuildFile section */
@@ -167,6 +170,10 @@
 		F4C0042A14CFDB3C0083D8CC /* ELCImagePickerDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerDemoViewController.m; sourceTree = "<group>"; };
 		F4C0042B14CFDB3C0083D8CC /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		F4C0042C14CFDB3C0083D8CC /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
+		F4E701BE14F6664200BA6E24 /* VideoUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoUtil.h; sourceTree = "<group>"; };
+		F4E701BF14F6664200BA6E24 /* VideoUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoUtil.m; sourceTree = "<group>"; };
+		F4E701C214F666BF00BA6E24 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		F4E701C414F666E000BA6E24 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PhotoAlbums.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,6 +182,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4E701C514F666E000BA6E24 /* CoreVideo.framework in Frameworks */,
+				F4E701C314F666BF00BA6E24 /* CoreMedia.framework in Frameworks */,
 				F4BA46BB14DE536700C04F8D /* AVFoundation.framework in Frameworks */,
 				F4BDBEAF14C8860300F76350 /* AssetsLibrary.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -215,6 +224,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				F4E701C414F666E000BA6E24 /* CoreVideo.framework */,
+				F4E701C214F666BF00BA6E24 /* CoreMedia.framework */,
 				F4BA46BA14DE536700C04F8D /* AVFoundation.framework */,
 				F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -262,6 +273,8 @@
 		34118B3111D1DB4800CFAAA5 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				F4E701BE14F6664200BA6E24 /* VideoUtil.h */,
+				F4E701BF14F6664200BA6E24 /* VideoUtil.m */,
 				344C8E381255B52900F1B29A /* PhotoUtil.h */,
 				344C8E391255B52900F1B29A /* PhotoUtil.m */,
 			);
@@ -526,6 +539,7 @@
 				F4976E1C14F258700054FD2D /* AlbumListViewController.m in Sources */,
 				F404243514F4D71E0043B90E /* Album.m in Sources */,
 				F404243614F4D71E0043B90E /* Page.m in Sources */,
+				F4E701C014F6664200BA6E24 /* VideoUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

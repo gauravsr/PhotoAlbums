@@ -15,6 +15,7 @@
 #import "PhotoAlbumsAppDelegate.h"
 #import "PageView.h"
 #import "XImageView.h"
+#import "VideoUtil.h"
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
@@ -461,11 +462,6 @@
         shareButtonLabel = [NSMutableString stringWithString:@"Share ("];
         [shareButtonLabel appendString:numberOfItemsSelected];
         [shareButtonLabel appendString:@")"];
-    }
-    else {
-        PhotoViewController *photoViewController = [self preparePhotoViewController];
-        photoViewController.selectedIndex = index;
-        photoViewController.albumOfTypeTag = self.albumOfTypeTag;
         
         [shareButton setTitle:shareButtonLabel];
         
@@ -510,7 +506,7 @@
 }
 
 - (IBAction) sharePhotos:(id)sender {     
-    //[VideoUtil createVideoForPages:(NSArray *)selectedPagesWhileDoingBulkOperations];    
+    [VideoUtil createVideoForPages:(NSArray *)selectedPagesWhileDoingBulkOperations];    
 }
 
 - (void) clearSelectedImages {

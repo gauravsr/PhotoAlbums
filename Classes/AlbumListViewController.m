@@ -17,6 +17,9 @@
 
 @synthesize fetchedResultsController, managedObjectContext;
 @synthesize albumOfTypeTag;
+@synthesize searchBar;
+@synthesize searchResults;
+@synthesize isSearching;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -95,8 +98,14 @@
 		abort();
 	}
 	
+    searchBar.delegate = self;
+    searchResults = [[NSMutableArray alloc] init];
+    
+    isSearching = NO;
+    
 	//[self drawHelperTexts];
     //[self handleVisibilityOfEditButton];
+    
 }
 
 
@@ -129,8 +138,13 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger count = [[fetchedResultsController sections] count];
-    return count;
+    if(isSearching) {
+        return 1;
+    }
+    else {
+        NSInteger count = [[fetchedResultsController sections] count];
+        return count;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -145,8 +159,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
-	id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
-    return [sectionInfo numberOfObjects];
+    if(isSearching) {
+        return [self.searchResults count];
+    }
+    else {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
+        return [sectionInfo numberOfObjects];
+    }
 }
 
 
@@ -161,52 +180,59 @@
 	{
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle	reuseIdentifier:CellIdentifier] autorelease];
 	}
-    
-	// Configure the cell.
-	NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
-	NSUInteger count = [[managedObject valueForKey:@"pages"] count];
-    
-	//cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[managedObject valueForKey:@"title"], count];
-	cell.textLabel.text = [managedObject valueForKey:@"title"];
-	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
-    
-	UIImage *cellIcon;
-	if(count > 0)
-	{
-		NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
-		pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
-		
-		Page *lastPage = [pages objectAtIndex:(count - 1)];
-		
-		cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
-		if(!cellIcon)
-		{
-			cellIcon = [photoRepository getPhoto: lastPage.imagePath];
-			cellIcon =  [PhotoUtil createThumbnail:cellIcon];
-			[photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+    if(isSearching) {
+        cell.textLabel.text = [self.searchResults objectAtIndex:indexPath.row];
+    }
+    else {
+        // Configure the cell.
+        NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
+        NSUInteger count = [[managedObject valueForKey:@"pages"] count];
+        
+        //cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[managedObject valueForKey:@"title"], count];
+        cell.textLabel.text = [managedObject valueForKey:@"title"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
+        
+        UIImage *cellIcon;
+        if(count > 0)
+        {
+            NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+            pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            [sortDescriptor release];
             
-			//creting thumbnail image if its already not there
-			NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
-			[thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
-		}		
-	}
-	else
-	{
-		//This is cached by system, so no need to implement separate cache for it
-		cellIcon = [UIImage imageNamed:@"frame_small.png"];
-	}
-    
-	[cell.imageView setImage:cellIcon];	
+            Page *lastPage = [pages objectAtIndex:(count - 1)];
+            
+            cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
+            if(!cellIcon)
+            {
+                cellIcon = [photoRepository getPhoto: lastPage.imagePath];
+                cellIcon =  [PhotoUtil createThumbnail:cellIcon];
+                [photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+                
+                //creting thumbnail image if its already not there
+                NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
+                [thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
+            }		
+        }
+        else
+        {
+            //This is cached by system, so no need to implement separate cache for it
+            cellIcon = [UIImage imageNamed:@"frame_small.png"];
+        }
+        
+        [cell.imageView setImage:cellIcon];	
+    }
     return cell;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
-	//this is the album object
+    if(isSearching) {
+        [searchBar resignFirstResponder];
+    }
+    
 	Album *selectedObject = (Album *)[[self fetchedResultsController] objectAtIndexPath:indexPath];
 	
 	AlbumViewController *albumViewController = nil; //[albumControllerDictionary objectForKey:selectedObject.albumID];
@@ -312,6 +338,49 @@
     //[self handleVisibilityOfEditButton];
 }
 
+-(NSMutableArray *)fetchLabelOfAllAlbumsAndTags {
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    for(NSManagedObject *managedObject in [fetchedResultsController fetchedObjects]) {
+        [list addObject:[(Album *)managedObject title]];
+    }
+    return list;
+}
+
+#pragma mark Search
+
+-(void)doSearch {
+    NSString *searchString = searchBar.text;
+    
+    for(NSString *temp in [self fetchLabelOfAllAlbumsAndTags]) {
+        NSRange searchResultsRange = [temp rangeOfString:searchString options:NSCaseInsensitiveSearch];
+        
+        if(searchResultsRange.length > 0) {
+            [searchResults addObject:temp];
+        }
+    }
+}
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar {
+    isSearching = YES;
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
+    [self doSearch];
+    [theSearchBar resignFirstResponder];
+}
+
+-(void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
+    if([searchText length] > 0) {
+        isSearching = YES;
+        [self doSearch];
+    }
+    else {
+        isSearching = NO;
+    }
+    [self.tableView reloadData];
+    
+    
+}
 
 #pragma mark -
 #pragma mark Memory management
