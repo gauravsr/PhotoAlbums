@@ -75,6 +75,7 @@
 		F4E701C514F666E000BA6E24 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4E701C414F666E000BA6E24 /* CoreVideo.framework */; };
 		F4F0306214EB9CC900D08D27 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E5B672121BB90F008DF821 /* PhotoViewController.m */; };
 		F4F76B4314F1863E0022CB68 /* PhotoAlbums.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */; };
+		F4F8B7B114FFBE66003AFF6B /* tag.png in Resources */ = {isa = PBXBuildFile; fileRef = F4F8B7B014FFBE66003AFF6B /* tag.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +176,7 @@
 		F4E701C214F666BF00BA6E24 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		F4E701C414F666E000BA6E24 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		F4F76B4214F1863E0022CB68 /* PhotoAlbums.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PhotoAlbums.xcdatamodel; sourceTree = "<group>"; };
+		F4F8B7B014FFBE66003AFF6B /* tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tag.png; path = ../../../Desktop/tag.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,6 +343,7 @@
 		34118B3E11D1DBC800CFAAA5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F4F8B7B014FFBE66003AFF6B /* tag.png */,
 				9F8D9DF314D018FB00597BB7 /* slideshow.png */,
 				9F8D9DF414D018FB00597BB7 /* slideshow2.png */,
 				B1D75BEA128A802900FF7496 /* Icon-72.png */,
@@ -502,6 +505,7 @@
 				9F8D9DF514D018FB00597BB7 /* slideshow.png in Resources */,
 				9F8D9DF614D018FB00597BB7 /* slideshow2.png in Resources */,
 				F404243814F4D78B0043B90E /* AlbumInformationController.xib in Resources */,
+				F4F8B7B114FFBE66003AFF6B /* tag.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -406,31 +406,32 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 #pragma mark Tag
 
 #define SCROLL_VIEW_HEIGHT 40
-#define TAG_WIDTH 100
+#define TAG_WIDTH 90
 #define TAG_HEIGHT 20
 
 -(CGRect)frameForTagsView {
     CGSize viewSize = [self.view bounds].size;
     CGRect frame = CGRectMake(currentPageIndex * viewSize.width, 
-                              viewSize.height/2 - 60, 
+                              viewSize.height/2 - 115, 
                               viewSize.width, 
-                              395);
+                              450);
     return frame;
 }
 
 -(CGRect)frameForShowingAndDeletingTags {
     CGRect frame = [[UIScreen mainScreen] bounds];
-    frame.size.height = 30;
+    frame.size.height = 100;
     return frame;
 }
 
 -(CGSize)contentSizeForTagScrollView:(int)index {
-    return CGSizeMake((TAG_WIDTH +20) * index, 0);
+    //return CGSizeMake((TAG_WIDTH +20) * index, 0);
+    return CGSizeMake(0, (TAG_HEIGHT + 20) * index);
 }
 
 -(CGRect)frameForTextFieldForEnteringTag {
     CGRect mainScreenFrame = [[UIScreen mainScreen] bounds];
-    return CGRectMake(20, 55, mainScreenFrame.size.width/2, 20);
+    return CGRectMake(20, 110, mainScreenFrame.size.width/2, 20);
 }
 
 -(void)scrollViewForPageViewTapped:(id)sender {
@@ -488,6 +489,44 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     return list;
 }
 
+#define TAGS_PER_ROW 3
+
+-(void)showTags {
+    
+    for(UIView *subViews in [scrollViewForShowingAndDeletingTags subviews]) {
+        [subViews removeFromSuperview];
+    }
+    
+    NSMutableArray *list = [self listOfAlbumLabelsOfTypeTag];
+    
+    int row = -1;
+    int col = 0;
+    int x,y;
+    
+    for(int i=0; i<[list count]; i++) {
+        
+        if(i % TAGS_PER_ROW == 0) {
+            row++;
+            col = 0;
+        }
+        else if(i > 0) {
+            col++;
+        }
+        
+        x = (TAG_WIDTH + 10) * col + 10;
+        y = (TAG_HEIGHT + 10) * row + 10;
+        
+        CGRect frameForUILabel = CGRectMake(x, y, TAG_WIDTH, TAG_HEIGHT);
+        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
+        label.text = [list objectAtIndex:i];
+        label.userInteractionEnabled = YES;
+        UILongPressGestureRecognizer *longPressGesture = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteTag:)] autorelease];
+        [label addGestureRecognizer:longPressGesture];
+        [scrollViewForShowingAndDeletingTags addSubview:label];
+        scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView:row];
+    }
+}
+
 -(void)deleteTag:(id)sender {
     UILabel *selectedTag = (UILabel *)[sender view];
     [selectedTag removeFromSuperview];
@@ -512,21 +551,8 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
             }
         }
     }
-}
-
--(void)showTags {
-    NSMutableArray *list = [self listOfAlbumLabelsOfTypeTag];
     
-    for(int i=0; i<[list count]; i++) {
-        CGRect frameForUILabel = CGRectMake(i * (TAG_WIDTH + 20), 5, TAG_WIDTH, TAG_HEIGHT);
-        UILabel *label = [[UILabel alloc] initWithFrame:frameForUILabel];
-        label.text = [list objectAtIndex:i];
-        label.userInteractionEnabled = YES;
-        UILongPressGestureRecognizer *longPressGesture = [[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteTag:)] autorelease];
-        [label addGestureRecognizer:longPressGesture];
-        [scrollViewForShowingAndDeletingTags addSubview:label];
-        scrollViewForShowingAndDeletingTags.contentSize = [self contentSizeForTagScrollView:i];        
-    }
+    //[self showTags];
 }
 
 -(NSMutableArray *)filterAlbumsOfTypeTag {
@@ -602,7 +628,6 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 
 -(void)addScrollViewForShowingAndDeletingTags {
     scrollViewForShowingAndDeletingTags = [[UIScrollView alloc] initWithFrame:[self frameForShowingAndDeletingTags]];
-    
     scrollViewForShowingAndDeletingTags.backgroundColor = [UIColor lightGrayColor];
     [tagsView addSubview:scrollViewForShowingAndDeletingTags];
 }
@@ -645,7 +670,7 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     [self addTextFieldForTag];
     [self addTableViewForAutoSuggestingTags];
     
-    CGRect frameForAddTagButton = CGRectMake(200, 55, 50 , 20);
+    CGRect frameForAddTagButton = CGRectMake(200, 110, 50 , 20);
     UIButton *addTagButton = [[UIButton alloc] initWithFrame:frameForAddTagButton];
     [addTagButton setTitle:@"Add" forState:UIControlStateNormal];
     [addTagButton setBackgroundColor:[UIColor blackColor]];
