@@ -62,22 +62,22 @@
 //}
 
 - (void)drawHelperTexts{
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
-    unsigned count =  [sectionInfo numberOfObjects];
-	if(count == 0){
-		if(mHelpertextLabel == nil)
-			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
-		
-		[mHelpertextLabel setText:@"Add albums and import photos from iPhone Library"];
-		[mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
-		[mHelpertextLabel setTextColor:[UIColor grayColor]];
-		[self.view addSubview:mHelpertextLabel];
-	}else
-	{
-		[mHelpertextLabel removeFromSuperview];
-		[mHelpertextLabel release];
-		mHelpertextLabel = nil;
-	}
+//    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+//    unsigned count =  [sectionInfo numberOfObjects];
+//	if(count == 0){
+//		if(mHelpertextLabel == nil)
+//			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
+//		
+//		[mHelpertextLabel setText:@"Add albums and import photos from iPhone Library"];
+//		[mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
+//		[mHelpertextLabel setTextColor:[UIColor grayColor]];
+//		[self.view addSubview:mHelpertextLabel];
+//	}else
+//	{
+//		[mHelpertextLabel removeFromSuperview];
+//		[mHelpertextLabel release];
+//		mHelpertextLabel = nil;
+//	}
 }
 
 
@@ -85,7 +85,9 @@
 {
     [super viewDidLoad];
 	
-    [[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
+    //[[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:nil];
+	self.navigationItem.leftBarButtonItem = editButton;
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewAlbum)];
 	self.navigationItem.rightBarButtonItem = addButton;
     [addButton release];
@@ -97,15 +99,21 @@
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
-	
+    
     searchBar.delegate = self;
-    searchResults = [[NSMutableArray alloc] init];
     
     isSearching = NO;
     
-	//[self drawHelperTexts];
+	[self drawHelperTexts];
     //[self handleVisibilityOfEditButton];
     
+    for (UIView *view in searchBar.subviews){        
+        if ([view isKindOfClass: [UITextField class]]) {
+            UITextField *tf = (UITextField *)view;
+            tf.delegate = self;
+            break;
+        }
+    }
 }
 
 
@@ -131,7 +139,7 @@
 	AlbumInformationController *albumInformationController = [[AlbumInformationController alloc] init];
 	[self presentModalViewController:albumInformationController animated:true];
     [albumInformationController release];
-	//[self drawHelperTexts];
+	[self drawHelperTexts];
 }
 
 #pragma mark -
@@ -148,6 +156,10 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if(isSearching) {
+        return @"";
+    }
+    
     if(section == 0) {
         return @"Albums";
     }
@@ -274,7 +286,7 @@
 		}
 	}
 	
-	//[self drawHelperTexts];
+	[self drawHelperTexts];
 }
 
 
@@ -334,7 +346,7 @@
 {
 	// In the simplest, most efficient, case, reload the table view.
 	[self.tableView reloadData];
-	//[self drawHelperTexts];
+	[self drawHelperTexts];
     //[self handleVisibilityOfEditButton];
 }
 
@@ -349,6 +361,7 @@
 #pragma mark Search
 
 -(void)doSearch {
+    searchResults = [[NSMutableArray alloc] init];
     NSString *searchString = searchBar.text;
     
     for(NSString *temp in [self fetchLabelOfAllAlbumsAndTags]) {
@@ -378,8 +391,13 @@
         isSearching = NO;
     }
     [self.tableView reloadData];
-    
-    
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    isSearching = NO;
+    [searchBar resignFirstResponder];
+    [self.tableView reloadData];
+    return YES;
 }
 
 #pragma mark -

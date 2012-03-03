@@ -10,7 +10,8 @@
 #import "Album.h"
 
 @interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate,
-                                                            UISearchBarDelegate> {
+                                                            UISearchBarDelegate,
+                                                            UITextFieldDelegate> {
     
     IBOutlet UISearchBar *searchBar;
     
