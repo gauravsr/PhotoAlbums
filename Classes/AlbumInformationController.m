@@ -81,33 +81,51 @@
 	{
 		album.title = nameTextField.text;
         album.isTag = [NSNumber numberWithBool:isTag];
+        [self dismissModalViewControllerAnimated:true]; 
 	}
 	else
 	{
-		Album *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Album" inManagedObjectContext:context];		
+        // fetching all the albums (their title, mainly) to check if it already exists
+        BOOL isAlbumAlreadyPresent = NO;
+        NSError *error;
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Album" 
+                                                  inManagedObjectContext:context];
+        [fetchRequest setEntity:entity];
+        NSArray *results = [[context executeFetchRequest:fetchRequest error:&error] retain];
+        
+        for(Album *albumObject in results) {
+            if([nameTextField.text isEqualToString:[albumObject title]]) {
+                isAlbumAlreadyPresent = YES;
+                break;
+            }
+        }
+        
+        if(!isAlbumAlreadyPresent) {
+            Album *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Album" inManagedObjectContext:context];
+            [newManagedObject setValue:[NSDate date] forKey:@"creationDate"];
 		
-		// If appropriate, configure the new managed object.
-		[newManagedObject setValue:[NSDate date] forKey:@"creationDate"];
-		
-		[newManagedObject setValue:[nameTextField text] forKey:@"title"];
-		[newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden"];	      
-        [newManagedObject setValue:[NSNumber numberWithBool:isTag] forKey:@"isTag"];
-        [newManagedObject addPages:[[NSSet alloc] init]];
+            [newManagedObject setValue:[nameTextField text] forKey:@"title"];
+            [newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden"];	      
+            [newManagedObject setValue:[NSNumber numberWithBool:isTag] forKey:@"isTag"];
+            [newManagedObject addPages:[[NSSet alloc] init]];
+            [self dismissModalViewControllerAnimated:true]; 
+        }
+        else {
+            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Duplicate Album" 
+                                                              message:@"Album with this name already exists!" 
+                                                             delegate:nil
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+            [message show];
+        }
 
 	}
 	
-    if (![context save:&error]) 
-	{
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-		 */
+    if (![context save:&error]) {
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }
-
-	[self dismissModalViewControllerAnimated:true]; 
 }
 
 - (IBAction) cancel: (id) sender

@@ -80,40 +80,23 @@
     return list;
 }
 
--(void)deleteTagWithLabel:(id)sender {
-    UILabel *selectedTag = [(UIButton *)sender titleLabel];
-    [sender removeFromSuperview];
-    
-    ScrollViewForPageView *scrollViewForPageView = [viewController.pageViewCollection objectAtIndex:currentPageIndex];
-    Page *currentPage = scrollViewForPageView.pageView.page;
-    
-    NSError *error;
-    for(Album *albumObject in self.fetchedTagsFromCoredata) {
-        if([albumObject.isTag isEqualToNumber:[NSNumber numberWithInt:1]]) {
-            for(Page *page in albumObject.pages) {
-                if([currentPage isEqual:page]) {
-                    if([[selectedTag text] isEqualToString:[albumObject title]]) {
-                        [albumObject removePagesObject:currentPage];
-                        if (![viewController.applicationManagedObjectContext save:&error]) {
-                            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-                            abort();
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
-    //[self showTags];
-}
-
 -(void)showTags {
     for(UIView *view in scrollView.subviews) {
         [view removeFromSuperview];
     }
     
     NSMutableArray *list = [self listOfAlbumLabelsOfTypeTag];
+    
+    UILabel *noTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 50, 250, 20)];
+    noTagLabel.text = @"No tags found for this photo.";
+    noTagLabel.textColor = [UIColor grayColor];
+    if([list count] == 0) {
+        [scrollView addSubview:noTagLabel];
+    }
+    else {
+        [noTagLabel removeFromSuperview];  
+    }
+    
     
     int row = -1;
     int col = 0;
@@ -138,7 +121,13 @@
         [button setTitle:(NSString *)[list objectAtIndex:i] forState:UIControlStateNormal];
         button.userInteractionEnabled = YES;
         [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [button addTarget:self action:@selector(deleteTagWithLabel:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(deleteTag:) forControlEvents:UIControlEventTouchUpInside];
+        for(UILabel *view in button.subviews) {
+            if([view isKindOfClass:[UILabel class]]) {
+                CGRect rect = view.frame;
+                rect.origin = CGPointMake(20, 0);
+            }
+        }
         [scrollView addSubview:button];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(TAG_WIDTH - 25, 3, 15, 15)];
@@ -147,6 +136,34 @@
         
         scrollView.contentSize = [self contentSizeForTagScrollView:row];
     }
+}
+
+-(void)deleteTag:(id)sender {
+    UILabel *selectedTag = [(UIButton *)sender titleLabel];
+    [sender removeFromSuperview];
+    
+    ScrollViewForPageView *scrollViewForPageView = [viewController.pageViewCollection objectAtIndex:currentPageIndex];
+    Page *currentPage = scrollViewForPageView.pageView.page;
+    
+    NSError *error;
+    for(Album *albumObject in self.fetchedTagsFromCoredata) {
+        if([albumObject.isTag isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            for(Page *page in albumObject.pages) {
+                if([currentPage isEqual:page]) {
+                    if([[selectedTag text] isEqualToString:[albumObject title]]) {
+                        [albumObject removePagesObject:currentPage];
+                        if (![viewController.applicationManagedObjectContext save:&error]) {
+                            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                            abort();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    [self showTags];
 }
 
 -(NSMutableArray *)filterAlbumsOfTypeTag {
@@ -271,8 +288,6 @@
     }
     
     [fetchRequest release];
-    
-    
     return list;
 }
 

@@ -8,26 +8,30 @@
 
 #import <UIKit/UIKit.h>
 #import "Album.h"
+#import "OverlayViewController.h"
+
+@class OverlayViewController;
 
 @interface AlbumListViewController : UITableViewController <NSFetchedResultsControllerDelegate,
                                                             UISearchBarDelegate,
-                                                            UITextFieldDelegate> {
-    
+                                                            UITextFieldDelegate> 
+{
     IBOutlet UISearchBar *searchBar;
-    
+    NSMutableArray *searchResults;
+    BOOL searching;
+    BOOL letUserSelectRow;
+    OverlayViewController *ovController;
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
     UILabel *mHelpertextLabel;
     Album *albumOfTypeTag;
-    NSMutableArray *searchResults;
-    BOOL isSearching;
 }
-
-@property (nonatomic, assign) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, assign) Album *albumOfTypeTag;
-@property (nonatomic, assign) NSMutableArray *searchResults;
-@property (nonatomic, assign) BOOL isSearching;
+
+-(void)searchTableView;
+-(void)doneSearching_Clicked:(id)sender;
+
 @end

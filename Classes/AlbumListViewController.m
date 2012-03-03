@@ -12,14 +12,12 @@
 #import "AlbumInformationController.h"
 #import "PhotoRepository.h"
 #import "PhotoUtil.h"
+#import "OverlayViewController.h"
 
 @implementation AlbumListViewController
 
 @synthesize fetchedResultsController, managedObjectContext;
 @synthesize albumOfTypeTag;
-@synthesize searchBar;
-@synthesize searchResults;
-@synthesize isSearching;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -30,6 +28,7 @@
         [sender setTitle:@"Done"];
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
+    
     else {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [self.tableView setEditing:NO animated:YES];
@@ -62,22 +61,22 @@
 //}
 
 - (void)drawHelperTexts{
-//    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
-//    unsigned count =  [sectionInfo numberOfObjects];
-//	if(count == 0){
-//		if(mHelpertextLabel == nil)
-//			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
-//		
-//		[mHelpertextLabel setText:@"Add albums and import photos from iPhone Library"];
-//		[mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
-//		[mHelpertextLabel setTextColor:[UIColor grayColor]];
-//		[self.view addSubview:mHelpertextLabel];
-//	}else
-//	{
-//		[mHelpertextLabel removeFromSuperview];
-//		[mHelpertextLabel release];
-//		mHelpertextLabel = nil;
-//	}
+    //    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
+    //    unsigned count =  [sectionInfo numberOfObjects];
+    //	if(count == 0){
+    //		if(mHelpertextLabel == nil)
+    //			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
+    //		
+    //		[mHelpertextLabel setText:@"Add albums and import photos from iPhone Library"];
+    //		[mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
+    //		[mHelpertextLabel setTextColor:[UIColor grayColor]];
+    //		[self.view addSubview:mHelpertextLabel];
+    //	}else
+    //	{
+    //		[mHelpertextLabel removeFromSuperview];
+    //		[mHelpertextLabel release];
+    //		mHelpertextLabel = nil;
+    //	}
 }
 
 
@@ -100,20 +99,13 @@
 		abort();
 	}
     
-    searchBar.delegate = self;
-    
-    isSearching = NO;
-    
 	[self drawHelperTexts];
     //[self handleVisibilityOfEditButton];
     
-    for (UIView *view in searchBar.subviews){        
-        if ([view isKindOfClass: [UITextField class]]) {
-            UITextField *tf = (UITextField *)view;
-            tf.delegate = self;
-            break;
-        }
-    }
+    searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+    searchResults = [[NSMutableArray alloc] init];
+    searching = NO;
+    letUserSelectRow = YES;
 }
 
 
@@ -146,7 +138,7 @@
 #pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if(isSearching) {
+    if(searching) {
         return 1;
     }
     else {
@@ -156,9 +148,8 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if(isSearching) {
+    if(searching)
         return @"";
-    }
     
     if(section == 0) {
         return @"Albums";
@@ -169,11 +160,9 @@
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
-{
-    if(isSearching) {
-        return [self.searchResults count];
-    }
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (searching)
+        return [searchResults count];
     else {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:section];
         return [sectionInfo numberOfObjects];
@@ -192,62 +181,75 @@
 	{
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle	reuseIdentifier:CellIdentifier] autorelease];
 	}
-    if(isSearching) {
-        cell.textLabel.text = [self.searchResults objectAtIndex:indexPath.row];
+    
+    NSUInteger count;
+    NSManagedObject *managedObject;
+    
+    if(searching) {
+        managedObject = [searchResults objectAtIndex:indexPath.row];
+        count = [[managedObject valueForKey:@"pages"] count];
+        cell.textLabel.text = [managedObject valueForKey:@"title"];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", [[managedObject valueForKey:@"pages"] count]];
     }
     else {
-        // Configure the cell.
-        NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
-        NSUInteger count = [[managedObject valueForKey:@"pages"] count];
+        managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
+        count = [[managedObject valueForKey:@"pages"] count];
         
         //cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[managedObject valueForKey:@"title"], count];
         cell.textLabel.text = [managedObject valueForKey:@"title"];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d Photos", count];
+    }   
+    UIImage *cellIcon;
+    if(count > 0)
+    {
+        NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
+        pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        [sortDescriptor release];
         
-        UIImage *cellIcon;
-        if(count > 0)
-        {
-            NSArray *pages = [[managedObject valueForKey:@"pages"] allObjects];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:YES];
-            pages = [pages sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-            [sortDescriptor release];
-            
-            Page *lastPage = [pages objectAtIndex:(count - 1)];
-            
-            cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
-            if(!cellIcon)
-            {
-                cellIcon = [photoRepository getPhoto: lastPage.imagePath];
-                cellIcon =  [PhotoUtil createThumbnail:cellIcon];
-                [photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
-                
-                //creting thumbnail image if its already not there
-                NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
-                [thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
-            }		
-        }
-        else
-        {
-            //This is cached by system, so no need to implement separate cache for it
-            cellIcon = [UIImage imageNamed:@"frame_small.png"];
-        }
+        Page *lastPage = [pages objectAtIndex:(count - 1)];
         
-        [cell.imageView setImage:cellIcon];	
+        cellIcon = [photoRepository getPhoto: lastPage.imageThumbnailPath];
+        if(!cellIcon)
+        {
+            cellIcon = [photoRepository getPhoto: lastPage.imagePath];
+            cellIcon =  [PhotoUtil createThumbnail:cellIcon];
+            [photoRepository addPhoto:cellIcon withPhotoID:lastPage.imageThumbnailPath];
+            
+            //creting thumbnail image if its already not there
+            NSData *thumbnailData = [NSData dataWithData:UIImagePNGRepresentation(cellIcon)];	
+            [thumbnailData writeToFile:lastPage.imageThumbnailPath atomically:NO];			
+        }		
     }
+    else
+    {
+        //This is cached by system, so no need to implement separate cache for it
+        cellIcon = [UIImage imageNamed:@"frame_small.png"];
+    }
+    
+    [cell.imageView setImage:cellIcon];	
+    
     return cell;
 }
 
+- (NSIndexPath *)tableView :(UITableView *)theTableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if(letUserSelectRow)
+        return indexPath;
+    else
+        return nil;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {	
-    if(isSearching) {
-        [searchBar resignFirstResponder];
+    Album *selectedObject = nil;
+    if(searching) {
+        selectedObject = [searchResults objectAtIndex:indexPath.row];
     }
-    
-	Album *selectedObject = (Album *)[[self fetchedResultsController] objectAtIndexPath:indexPath];
-	
-	AlbumViewController *albumViewController = nil; //[albumControllerDictionary objectForKey:selectedObject.albumID];
+    else {
+        selectedObject = (Album *)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	}
+	AlbumViewController *albumViewController = nil;
 	if(!albumViewController)
 	{
 		albumViewController = [[AlbumViewController alloc] init];
@@ -350,54 +352,121 @@
     //[self handleVisibilityOfEditButton];
 }
 
+#pragma mark Search
+
 -(NSMutableArray *)fetchLabelOfAllAlbumsAndTags {
+    
     NSMutableArray *list = [[NSMutableArray alloc] init];
+    NSMutableArray *albumObject = [[NSMutableArray alloc] init];
+    NSMutableArray *albumTitle = [[NSMutableArray alloc] init];
+    
     for(NSManagedObject *managedObject in [fetchedResultsController fetchedObjects]) {
-        [list addObject:[(Album *)managedObject title]];
+        [albumObject addObject:managedObject];
+        [albumTitle addObject:[(Album *)managedObject title]];
     }
+    NSDictionary *albumObjectDict = [NSDictionary dictionaryWithObject:albumObject forKey:@"object"];
+    NSDictionary *albumTitleDict = [NSDictionary dictionaryWithObject:albumTitle forKey:@"title"];
+    
+    [list addObject:albumObjectDict];
+    [list addObject:albumTitleDict];
+    
     return list;
 }
 
-#pragma mark Search
-
--(void)doSearch {
-    searchResults = [[NSMutableArray alloc] init];
-    NSString *searchString = searchBar.text;
+- (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar {
     
-    for(NSString *temp in [self fetchLabelOfAllAlbumsAndTags]) {
-        NSRange searchResultsRange = [temp rangeOfString:searchString options:NSCaseInsensitiveSearch];
-        
-        if(searchResultsRange.length > 0) {
-            [searchResults addObject:temp];
-        }
-    }
+    if(ovController == nil)
+        ovController = [[OverlayViewController alloc] initWithNibName:@"OverlayView" bundle:[NSBundle mainBundle]];
+    
+    CGFloat yaxis = self.navigationController.navigationBar.frame.size.height;
+    CGFloat width = self.view.frame.size.width;
+    CGFloat height = self.view.frame.size.height;
+    
+    CGRect frame = CGRectMake(0, yaxis, width, height);
+    ovController.view.frame = frame;
+    ovController.view.backgroundColor = [UIColor grayColor];
+    ovController.view.alpha = 0.5;
+    
+    ovController.viewController = self;
+    
+    [self.tableView insertSubview:ovController.view aboveSubview:self.parentViewController.view];
+    
+    searching = YES;
+    letUserSelectRow = NO;
+    self.tableView.scrollEnabled = NO;
+    
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]
+                                               initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                               target:self action:@selector(doneSearching_Clicked:)] autorelease];
 }
 
--(void)searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar {
-    isSearching = YES;
-}
-
--(void)searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
-    [self doSearch];
-    [theSearchBar resignFirstResponder];
-}
-
--(void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
+- (void)searchBar:(UISearchBar *)theSearchBar textDidChange:(NSString *)searchText {
+    [searchResults removeAllObjects];
+    
     if([searchText length] > 0) {
-        isSearching = YES;
-        [self doSearch];
+        [ovController.view removeFromSuperview];
+        searching = YES;
+        letUserSelectRow = YES;
+        self.tableView.scrollEnabled = YES;
+        [self searchTableView];
     }
     else {
-        isSearching = NO;
+        [self.tableView insertSubview:ovController.view aboveSubview:self.parentViewController.view];
+        searching = NO;
+        letUserSelectRow = NO;
+        self.tableView.scrollEnabled = NO;
     }
+    
     [self.tableView reloadData];
 }
 
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-    isSearching = NO;
+- (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
+    
+    [self searchTableView];
+}
+
+-(void)searchTableView {
+    
+    NSString *searchText = searchBar.text;
+    NSMutableArray *searchArray = [[NSMutableArray alloc] init];
+    
+    NSMutableArray *albumTitleArray = [[NSMutableArray alloc] init];
+    NSMutableArray *albumObjectArray = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *dictionary in [self fetchLabelOfAllAlbumsAndTags]) {
+        [albumTitleArray addObjectsFromArray:[dictionary objectForKey:@"title"]];
+        [albumObjectArray addObjectsFromArray:[dictionary objectForKey:@"object"]];
+    }
+    
+    for (NSString *sTemp in albumTitleArray){
+        NSRange titleResultsRange = [sTemp rangeOfString:searchText options:NSCaseInsensitiveSearch];
+        
+        if (titleResultsRange.length > 0) {
+            int indexInAlbumTitleArray = [albumTitleArray indexOfObject:sTemp];
+            [searchResults addObject:[albumObjectArray objectAtIndex:indexInAlbumTitleArray]];
+        }
+        
+    }
+    
+    [searchArray release];
+    searchArray = nil;
+}
+
+- (void) doneSearching_Clicked:(id)sender {
+    
+    searchBar.text = @"";
     [searchBar resignFirstResponder];
+    
+    letUserSelectRow = YES;
+    searching = NO;
+    self.navigationItem.rightBarButtonItem = nil;
+    self.tableView.scrollEnabled = YES;
+    
+    [ovController.view removeFromSuperview];
+    [ovController release];
+    ovController = nil;
+    
     [self.tableView reloadData];
-    return YES;
 }
 
 #pragma mark -

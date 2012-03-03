@@ -56,6 +56,8 @@
 		F47A1CBA14E83E2700A8DC0D /* ScrollViewForPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F47A1CB914E83E2700A8DC0D /* ScrollViewForPageView.m */; };
 		F4976E1C14F258700054FD2D /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4976E1B14F258700054FD2D /* AlbumListViewController.m */; };
 		F4B7C775150238D20029E964 /* tag.png in Resources */ = {isa = PBXBuildFile; fileRef = F4B7C774150238D20029E964 /* tag.png */; };
+		F4B7C779150292ED0029E964 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4B7C777150292ED0029E964 /* OverlayViewController.m */; };
+		F4B7C77A150292ED0029E964 /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4B7C778150292ED0029E964 /* OverlayView.xib */; };
 		F4BA46BB14DE536700C04F8D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BA46BA14DE536700C04F8D /* AVFoundation.framework */; };
 		F4BDBEAF14C8860300F76350 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */; };
 		F4C0042D14CFDB3C0083D8CC /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C0041A14CFDB3C0083D8CC /* ELCAlbumPickerController.m */; };
@@ -153,6 +155,9 @@
 		F4976E1A14F258700054FD2D /* AlbumListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumListViewController.h; sourceTree = "<group>"; };
 		F4976E1B14F258700054FD2D /* AlbumListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumListViewController.m; sourceTree = "<group>"; };
 		F4B7C774150238D20029E964 /* tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag.png; sourceTree = "<group>"; };
+		F4B7C776150292ED0029E964 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayViewController.h; sourceTree = "<group>"; };
+		F4B7C777150292ED0029E964 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayViewController.m; sourceTree = "<group>"; };
+		F4B7C778150292ED0029E964 /* OverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OverlayView.xib; path = Classes/OverlayView.xib; sourceTree = "<group>"; };
 		F4BA46BA14DE536700C04F8D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F4BDBEAE14C8860300F76350 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F4C0041914CFDB3C0083D8CC /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
@@ -333,6 +338,8 @@
 				F4976E1B14F258700054FD2D /* AlbumListViewController.m */,
 				F4F8B81E14FFC3A3003AFF6B /* TagViewController.h */,
 				F4F8B81F14FFC3A3003AFF6B /* TagViewController.m */,
+				F4B7C776150292ED0029E964 /* OverlayViewController.h */,
+				F4B7C777150292ED0029E964 /* OverlayViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -340,6 +347,7 @@
 		34118B3D11D1DBB000CFAAA5 /* Nibs */ = {
 			isa = PBXGroup;
 			children = (
+				F4B7C778150292ED0029E964 /* OverlayView.xib */,
 				F4F8B82014FFC3A3003AFF6B /* TagViewController.xib */,
 				F404243714F4D78B0043B90E /* AlbumInformationController.xib */,
 				34E5B66E121BB901008DF821 /* AlbumViewController.xib */,
@@ -519,6 +527,7 @@
 				F4F8B82214FFC3A3003AFF6B /* TagViewController.xib in Resources */,
 				F4F8B8251500A942003AFF6B /* delete.gif in Resources */,
 				F4B7C775150238D20029E964 /* tag.png in Resources */,
+				F4B7C77A150292ED0029E964 /* OverlayView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -558,6 +567,7 @@
 				F404243614F4D71E0043B90E /* Page.m in Sources */,
 				F4E701C014F6664200BA6E24 /* VideoUtil.m in Sources */,
 				F4F8B82114FFC3A3003AFF6B /* TagViewController.m in Sources */,
+				F4B7C779150292ED0029E964 /* OverlayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
