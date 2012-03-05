@@ -314,13 +314,13 @@
     
     if(isPhotoAlreadyPresentInTheAlbum) {
 	
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Duplicate photos"
-                                                      message:@"This album contains duplicate photos."
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-    
-        [message show];
+//        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Duplicate photos"
+//                                                      message:@"This album contains duplicate photos."
+//                                                     delegate:nil
+//                                            cancelButtonTitle:@"OK"
+//                                            otherButtonTitles:nil];
+//    
+//        [message show];
     }
 }
 

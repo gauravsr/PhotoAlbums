@@ -61,37 +61,36 @@
 //}
 
 - (void)drawHelperTexts{
-    //    id <NSFetchedResultsSectionInfo> sectionInfo = [[fetchedResultsController sections] objectAtIndex:0];
-    //    unsigned count =  [sectionInfo numberOfObjects];
-    //	if(count == 0){
-    //		if(mHelpertextLabel == nil)
-    //			mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 300, 50)];
-    //		
-    //		[mHelpertextLabel setText:@"Add albums and import photos from iPhone Library"];
-    //		[mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
-    //		[mHelpertextLabel setTextColor:[UIColor grayColor]];
-    //		[self.view addSubview:mHelpertextLabel];
-    //	}else
-    //	{
-    //		[mHelpertextLabel removeFromSuperview];
-    //		[mHelpertextLabel release];
-    //		mHelpertextLabel = nil;
-    //	}
+    int count = [[fetchedResultsController sections] count];
+    if(count == 0){
+        if(mHelpertextLabel == nil)
+            mHelpertextLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+        
+        [mHelpertextLabel setText:@"      Add albums and import photos from iPhone Library"];
+        [mHelpertextLabel setFont:[UIFont systemFontOfSize:12]];
+        [mHelpertextLabel setTextColor:[UIColor grayColor]];
+        [self.view addSubview:mHelpertextLabel];
+        searchBar.hidden = YES;
+    }else
+    {
+        [mHelpertextLabel removeFromSuperview];
+        [mHelpertextLabel release];
+        mHelpertextLabel = nil;
+        searchBar.hidden = NO;
+    }
 }
-
 
 - (void) viewDidLoad 
 {
     [super viewDidLoad];
 	
-    //[[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:nil];
-	self.navigationItem.leftBarButtonItem = editButton;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewAlbum)];
 	self.navigationItem.rightBarButtonItem = addButton;
     [addButton release];
 	
-	self.title = @"Albums";
+	self.title = @"Collections";
 	self.tableView.rowHeight = 70;
 	NSError *error = nil;
 	if (![[self fetchedResultsController] performFetch:&error])  	{
@@ -259,7 +258,6 @@
 	}			
 	
 	[self.navigationController pushViewController:albumViewController animated:YES];
-	
 	[albumViewController release];	
 }
 
@@ -423,6 +421,7 @@
 - (void) searchBarSearchButtonClicked:(UISearchBar *)theSearchBar {
     
     [self searchTableView];
+
 }
 
 -(void)searchTableView {
@@ -459,7 +458,11 @@
     
     letUserSelectRow = YES;
     searching = NO;
-    self.navigationItem.rightBarButtonItem = nil;
+    
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewAlbum)];
+	self.navigationItem.rightBarButtonItem = addButton;
+    [addButton release];    
+
     self.tableView.scrollEnabled = YES;
     
     [ovController.view removeFromSuperview];

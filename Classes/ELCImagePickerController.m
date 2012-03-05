@@ -25,11 +25,14 @@
 -(void)selectedAssets:(NSArray*)_assets {
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    activityIndicator.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    //activityIndicator.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    activityIndicator.center = CGPointMake(290, 20);
     [activityIndicator setHidden:NO];
     [self.view addSubview:activityIndicator];
     [self.view bringSubviewToFront:activityIndicator];
     [activityIndicator startAnimating];
+    
+    self.navigationItem.rightBarButtonItem = nil;
     
     [self performSelector:@selector(doProcess:) withObject:_assets afterDelay:2.1];
 }
@@ -56,6 +59,9 @@
     if([delegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
         [delegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:[NSArray arrayWithArray:returnArray]];
     }
+    
+    UIBarButtonItem *doneButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)] autorelease];
+	[self.navigationItem setRightBarButtonItem:doneButtonItem];
 }
 
 #pragma mark -

@@ -308,6 +308,11 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 							);
     tagViewController = [[TagViewController alloc] init];
     isTagViewControllerShown = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(scrollViewForPageViewTapped:) 
+                                                 name:@"ScrollViewForPageViewTapped"
+                                               object:nil];
 }
 
 - (void) viewWillAppear: (BOOL) animated
@@ -715,6 +720,12 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
 	}
 }
 
+-(void)scrollViewForPageViewTapped:(NSNotification *) notification {
+    if(slideShowTimer != nil && [slideShowTimer isValid]) {
+        [self stopSlideShow];
+    }
+}
+
 #pragma mark -
 #pragma mark Slideshow
 
@@ -727,12 +738,10 @@ void interruptionListenerCallback ( void	*inUserData, UInt32	interruptionState)
     slideShowTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(slideShowTimerCallback:) userInfo:nil repeats:YES];
 }
 
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if(slideShowTimer != nil && [slideShowTimer isValid])
-    {
-        [self stopSlideShow];
-    }
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+//    if(slideShowTimer != nil && [slideShowTimer isValid]) {
+//        [self stopSlideShow];
+//    }
 }
 
 - (void)stopSlideShow

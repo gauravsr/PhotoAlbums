@@ -56,19 +56,15 @@
 
 #pragma mark Save and Cancel
 
-- (IBAction) save: (id) sender
-{	
+-(IBAction) save:(id)sender {	
 	NSString *text = [nameTextField text];
     text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
    
-	if( [text isEqualToString:@""])
-	{
+	if( [text isEqualToString:@""]) {
 		return;
 	}
 	
 	PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];	
-	
-	// Create a new instance of the entity managed by the fetched results controller.
 	NSManagedObjectContext *context = [appDelegate managedObjectContext];
 	NSError *error = nil;
 	
@@ -85,7 +81,7 @@
 	}
 	else
 	{
-        // fetching all the albums (their title, mainly) to check if it already exists
+        // fetching all the albums (their title, to be specific) to check if they already exists
         BOOL isAlbumAlreadyPresent = NO;
         NSError *error;
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -95,20 +91,30 @@
         NSArray *results = [[context executeFetchRequest:fetchRequest error:&error] retain];
         
         for(Album *albumObject in results) {
-            if([nameTextField.text isEqualToString:[albumObject title]]) {
-                isAlbumAlreadyPresent = YES;
-                break;
+            if(self.typeControl.selectedSegmentIndex == 0) {
+                if([albumObject.isTag isEqualToNumber:[NSNumber numberWithInt:0]]) {
+                    if([nameTextField.text isEqualToString:[albumObject title]]) {
+                        isAlbumAlreadyPresent = YES;
+                        break;
+                    }
+                }
+                else {
+                    if([nameTextField.text isEqualToString:[albumObject title]]) {
+                        isAlbumAlreadyPresent = YES;
+                        break;
+                    }
+                }
             }
         }
         
         if(!isAlbumAlreadyPresent) {
-            Album *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Album" inManagedObjectContext:context];
-            [newManagedObject setValue:[NSDate date] forKey:@"creationDate"];
+            Album *albumManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Album" inManagedObjectContext:context];
+            [albumManagedObject setValue:[NSDate date] forKey:@"creationDate"];
 		
-            [newManagedObject setValue:[nameTextField text] forKey:@"title"];
-            [newManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden"];	      
-            [newManagedObject setValue:[NSNumber numberWithBool:isTag] forKey:@"isTag"];
-            [newManagedObject addPages:[[NSSet alloc] init]];
+            [albumManagedObject setValue:[nameTextField text] forKey:@"title"];
+            [albumManagedObject setValue:[NSNumber numberWithBool:[hiddenSwitch isOn]] forKey:@"hidden"];	      
+            [albumManagedObject setValue:[NSNumber numberWithBool:isTag] forKey:@"isTag"];
+            [albumManagedObject addPages:[[NSSet alloc] init]];
             [self dismissModalViewControllerAnimated:true]; 
         }
         else {

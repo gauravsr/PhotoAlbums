@@ -42,6 +42,11 @@
     return YES;
 }
 
+-(NSString *)getTrimmedString:(NSString *)str {
+    NSString *trimmedString = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return trimmedString;
+}
+
 -(CGSize)contentSizeForTagScrollView:(int)index {
     return CGSizeMake(0, (TAG_HEIGHT + 20) * index);
 }
@@ -87,8 +92,9 @@
     
     NSMutableArray *list = [self listOfAlbumLabelsOfTypeTag];
     
-    UILabel *noTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 50, 250, 20)];
+    UILabel *noTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 50, 250, 20)];
     noTagLabel.text = @"No tags found for this photo.";
+    [noTagLabel setFont:[UIFont systemFontOfSize:12]];
     noTagLabel.textColor = [UIColor grayColor];
     if([list count] == 0) {
         [scrollView addSubview:noTagLabel];
@@ -118,23 +124,28 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         button.frame = CGRectMake(x, y, TAG_WIDTH, TAG_HEIGHT);
         
-        [button setTitle:(NSString *)[list objectAtIndex:i] forState:UIControlStateNormal];
-        button.userInteractionEnabled = YES;
+        NSMutableString *title = [[NSMutableString alloc] init];
+        [title appendString:@"    "];
+        [title appendString:(NSString *)[list objectAtIndex:i]];
+        [button setTitle:title forState:UIControlStateNormal];
         [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+        button.userInteractionEnabled = YES;
         [button addTarget:self action:@selector(deleteTag:) forControlEvents:UIControlEventTouchUpInside];
-        for(UILabel *view in button.subviews) {
-            if([view isKindOfClass:[UILabel class]]) {
-                CGRect rect = view.frame;
-                rect.origin = CGPointMake(20, 0);
-            }
-        }
-        [scrollView addSubview:button];
+        [scrollView addSubview:button]; 
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(TAG_WIDTH - 25, 3, 15, 15)];
         [imageView setImage:[UIImage imageNamed:@"delete.gif"]];
         [button addSubview:imageView];
         
         scrollView.contentSize = [self contentSizeForTagScrollView:row];
+        
+        for(UIView *label in button.subviews) {
+            if([label isKindOfClass:[UILabel class]]) {
+                CGRect rect = label.frame;
+                rect.origin.x = -50;
+                label.frame = rect;
+            }
+        }
     }
 }
 
@@ -150,7 +161,7 @@
         if([albumObject.isTag isEqualToNumber:[NSNumber numberWithInt:1]]) {
             for(Page *page in albumObject.pages) {
                 if([currentPage isEqual:page]) {
-                    if([[selectedTag text] isEqualToString:[albumObject title]]) {
+                    if([[self getTrimmedString:[selectedTag text]] isEqualToString:[albumObject title]]) {
                         [albumObject removePagesObject:currentPage];
                         if (![viewController.applicationManagedObjectContext save:&error]) {
                             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -250,7 +261,6 @@
 -(IBAction)cancel:(id)sender {
 	[self dismissModalViewControllerAnimated:true];
 }
-
 
 #pragma mark - View lifecycle
 
