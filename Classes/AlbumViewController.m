@@ -539,6 +539,8 @@
     cancelButton.tintColor = [UIColor blueColor];
     self.navigationItem.rightBarButtonItem = cancelButton;
     
+    [self.navigationItem setBackBarButtonItem:nil];
+    
     [self manageToolbar];
 }
 

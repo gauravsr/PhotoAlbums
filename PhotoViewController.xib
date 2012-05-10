@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">784</int>
 		<string key="IBDocument.SystemVersion">11D50b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
 		<string key="IBDocument.AppKitVersion">1138.32</string>
 		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">933</string>
+			<string key="NS.object.0">1181</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -112,7 +112,7 @@
 									<object class="IBUIButton" id="946054877">
 										<reference key="NSNextResponder" ref="139236150"/>
 										<int key="NSvFlags">292</int>
-										<string key="NSFrame">{{100, 11}, {22, 22}}</string>
+										<string key="NSFrame">{{89, 0}, {48, 48}}</string>
 										<reference key="NSSuperview" ref="139236150"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="1040925296"/>
@@ -695,9 +695,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="257313302"/>
 							<reference ref="556796592"/>
-							<reference ref="78202876"/>
 							<reference ref="939111119"/>
 							<reference ref="224652050"/>
+							<reference ref="78202876"/>
 						</object>
 						<reference key="parent" ref="131224824"/>
 						<string key="objectName">playAudioNoteToolBar</string>
@@ -804,7 +804,7 @@
 					<string>99.CustomClassName</string>
 					<string>99.IBPluginDependency</string>
 				</object>
-				<object class="NSMutableArray" key="dict.values">
+				<object class="NSArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>PhotoViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -877,7 +877,7 @@
 							<string>recordingLabel</string>
 							<string>resumeAudioNotePlaybackButton</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIButton</string>
 							<string>UIView</string>
@@ -904,7 +904,7 @@
 							<string>recordingLabel</string>
 							<string>resumeAudioNotePlaybackButton</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">addAudioNoteButton</string>
@@ -967,7 +967,7 @@
 							<string>saveRecordedAudioNote:</string>
 							<string>stopAudioNotePlayback:</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
@@ -996,7 +996,7 @@
 							<string>saveRecordedAudioNote:</string>
 							<string>stopAudioNotePlayback:</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">addAudioNote:</string>
@@ -1047,7 +1047,7 @@
 							<string>albumView</string>
 							<string>pageToolBar</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>AlbumView</string>
 							<string>PageToolBar</string>
@@ -1060,7 +1060,7 @@
 							<string>albumView</string>
 							<string>pageToolBar</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">albumView</string>
@@ -1087,7 +1087,7 @@
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.iPhoneOS</string>
-			<real value="1280" key="NS.object.0"/>
+			<real value="1296" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaTouchPlugin.InterfaceBuilder3</string>
@@ -1105,15 +1105,15 @@
 				<string>stopGrayIcon.png</string>
 				<string>tag.png</string>
 			</object>
-			<object class="NSMutableArray" key="dict.values">
+			<object class="NSArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>{64, 64}</string>
 				<string>{64, 64}</string>
 				<string>{64, 64}</string>
 				<string>{64, 64}</string>
-				<string>{64, 64}</string>
+				<string>{16, 16}</string>
 			</object>
 		</object>
-		<string key="IBCocoaTouchPluginVersion">933</string>
+		<string key="IBCocoaTouchPluginVersion">1181</string>
 	</data>
 </archive>
