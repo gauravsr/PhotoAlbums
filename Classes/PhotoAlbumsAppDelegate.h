@@ -6,6 +6,8 @@
 //  Copyright Xebia IT Architects India Private Limited 2010. All rights reserved.
 //
 
+#import "FBConnect.h"
+
 @interface PhotoAlbumsAppDelegate : NSObject <UIApplicationDelegate> 
 {    
     NSManagedObjectModel			*managedObjectModel;
@@ -14,6 +16,8 @@
 
     UIWindow						*window;
     UINavigationController			*navigationController;	
+    
+    Facebook *facebook;
 }
 
 @property (nonatomic, retain, readonly) NSManagedObjectModel			*managedObjectModel;
@@ -22,6 +26,8 @@
 
 @property (nonatomic, retain) IBOutlet UIWindow							*window;
 @property (nonatomic, retain) IBOutlet UINavigationController			*navigationController;
+
+@property (nonatomic, retain) Facebook *facebook;
 
 - (NSString *)applicationDocumentsDirectory;
 - (NSString *)relativePhotoPathForAlbumId: (NSString *)albumId;

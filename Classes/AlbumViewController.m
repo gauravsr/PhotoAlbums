@@ -16,6 +16,7 @@
 #import "PageView.h"
 #import "XImageView.h"
 #import "VideoUtil.h"
+#import "FacebookPhotosViewController.h"
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
@@ -44,8 +45,9 @@
 @synthesize existingToolbarItems;
 @synthesize selectedPagesWhileDoingBulkOperations;
 @synthesize deleteButton, shareButton;
-
+@synthesize facebookPhotos;
 @synthesize albumOfTypeTag;
+@synthesize facebookPhotosViewController;
 
 #pragma mark -
 #pragma mark Globals
@@ -113,6 +115,7 @@
     isPhotoAlreadyPresentInTheAlbum = NO;
     isDeleteModeActive = NO;
     selectedPagesWhileDoingBulkOperations = [[NSMutableArray array] retain];
+    facebookPhotos = [[NSMutableArray alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -250,6 +253,48 @@
     [albumInformationController release];	
 }
 
+-(void)loginFacebook {
+    facebookPhotosViewController = [[FacebookPhotosViewController alloc] init];
+    [self.navigationController pushViewController:facebookPhotosViewController animated:YES];
+    
+    PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if(![[appDelegate facebook] isSessionValid]) {
+        NSArray *permissions = [[NSArray alloc] initWithObjects:@"read_stream", @"user_photos", @"friends_photos", nil];
+        [[appDelegate facebook] authorize:permissions];
+    }
+    else {
+        [[appDelegate facebook] requestWithGraphPath:@"me/photos" andDelegate:self];
+    }
+}
+
+-(void)fbDidLogin {
+    PhotoAlbumsAppDelegate *appDelegate = (PhotoAlbumsAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[appDelegate facebook] requestWithGraphPath:@"me/photos" andDelegate:self];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[[appDelegate facebook] accessToken] forKey:@"FBAccessTokenKey"];
+    [defaults setObject:[[appDelegate facebook] expirationDate] forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+    
+    
+}
+
+- (void)request:(FBRequest *)request didLoad:(id)result {
+    NSMutableArray *data = [result valueForKey:@"data"];
+    for(int i=0; i<[data count]; i++) {
+        NSMutableDictionary *body = [data objectAtIndex:i];
+        NSLog(@"URL: %@", [body valueForKey:@"source"]);
+        [facebookPhotos addObject:[body valueForKey:@"source"]];
+    }
+    facebookPhotosViewController.list = facebookPhotos;
+    [facebookPhotosViewController show];
+}
+
+- (void)request:(FBRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"Err message: %@", [[error userInfo] objectForKey:@"error_msg"]);
+    NSLog(@"Err code: %d", [error code]);
+}
+
 #pragma mark ELCImagePickerControllerDelegate Methods
 
 /************************************************
@@ -262,7 +307,7 @@
                                                         delegate:self 
                                                         cancelButtonTitle:@"Cancel" 
                                                         destructiveButtonTitle:nil 
-                                                        otherButtonTitles:@"Camera", @"Photo Gallery", nil];
+                                                        otherButtonTitles:@"Camera", @"Photo Gallery", @"Facebook", nil];
     
 	actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
     actionSheet.delegate = self;
@@ -288,6 +333,9 @@
 	}
 	else if(buttonIndex == 1){
         [self addPhotoFromPhotoGallery];
+	}
+    else if(buttonIndex == 2){
+        [self loginFacebook];
 	}
 }
 

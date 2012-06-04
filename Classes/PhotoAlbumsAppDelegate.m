@@ -8,13 +8,13 @@
 
 #import "PhotoAlbumsAppDelegate.h"
 #import "AlbumListViewController.h"
-
+#import "AlbumViewController.h"
 
 @implementation PhotoAlbumsAppDelegate
 
 @synthesize window;
 @synthesize navigationController;
-
+@synthesize facebook;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -28,6 +28,15 @@
 	
 	[window addSubview:[navigationController view]];
     [window makeKeyAndVisible];
+    
+    AlbumViewController *albumViewController = [[AlbumViewController alloc] init];
+    facebook = [[Facebook alloc] initWithAppId:@"467135239968275" andDelegate:albumViewController];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]) {
+        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+    }
 }
 
 /**
@@ -53,6 +62,17 @@
     }
 }
 
+-(void)applicationDidBecomeActive:(UIApplication *)application {
+    [[self facebook] extendAccessTokenIfNeeded];
+}
+
+-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [self.facebook handleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [self.facebook handleOpenURL:url];
+}
 
 #pragma mark -
 #pragma mark Core Data stack

@@ -15,12 +15,15 @@
 #import "AlbumThumbnailView.h"
 #import "ELCImagePickerController.h"
 #import "VideoUtil.h"
+#import "FBConnect.h"
+#import "FacebookPhotosViewController.h"
 
 @interface AlbumViewController : UIViewController <ELCImagePickerControllerDelegate, 
                                                     UINavigationControllerDelegate, 
                                                     UIScrollViewDelegate,
                                                     UIActionSheetDelegate,
-                                                    UIImagePickerControllerDelegate>
+                                                    UIImagePickerControllerDelegate,
+                                                    FBRequestDelegate, FBDialogDelegate, FBSessionDelegate>
 {	
 	//model
 	Album								*album;	
@@ -40,6 +43,8 @@
     NSArray                             *existingToolbarItems;
     UIBarButtonItem                     *deleteButton;
     UIBarButtonItem                     *shareButton;
+    NSMutableArray *facebookPhotos;
+    FacebookPhotosViewController *facebookPhotosViewController;
     
 	//NSMutableArray						*mThreadQueue;
 	int									mPhotoSourceType;
@@ -66,6 +71,8 @@
 // data
 @property (nonatomic, retain) NSMutableArray            *referenceURLArray;
 @property (nonatomic, retain) NSMutableArray            *selectedPagesWhileDoingBulkOperations;
+@property (nonatomic, retain) NSMutableArray *facebookPhotos;
+@property (nonatomic, retain) FacebookPhotosViewController *facebookPhotosViewController;
 
 //globals
 - (NSString *) albumAudioDirectoryPath;
